@@ -8,7 +8,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(pybind11 CONFIG REQUIRED)
 
 # Build the Python extension module
-pybind11_add_module(chaoshash chaos_stub.cpp)
+pybind11_add_module(chaoshash chaos.cpp bindings.cpp)
+
+# Strict floating-point flags for cross-platform bit-exact determinism
+if(MSVC)
+    target_compile_options(chaoshash PRIVATE /fp:strict)
+else()
+    target_compile_options(chaoshash PRIVATE -ffp-contract=off)
+endif()
 
 # Direct build output so it is placed into src/chaos/
 set_target_properties(chaoshash PROPERTIES

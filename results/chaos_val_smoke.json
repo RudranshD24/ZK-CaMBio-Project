@@ -1,0 +1,57 @@
+{
+  "phase": 4,
+  "description": "Smoke evaluation of C++ Chaos Engine on 30 validation subjects and property checks",
+  "timing_ms_per_transform": 5.21942300000228,
+  "timing_throughput_transforms_per_sec": 191.5920591221603,
+  "property_check": {
+    "m_64": {
+      "pearson_r": 0.5281060913239134,
+      "mean_hd": 0.500428125,
+      "std_hd": 0.07426766355291767
+    },
+    "m_128": {
+      "pearson_r": 0.6460158472784384,
+      "mean_hd": 0.4995359375,
+      "std_hd": 0.05979266730933521
+    },
+    "m_256": {
+      "pearson_r": 0.7580380176382755,
+      "mean_hd": 0.4991328125,
+      "std_hd": 0.051393412982105195
+    },
+    "m_512": {
+      "pearson_r": 0.8426589940431527,
+      "mean_hd": 0.499624609375,
+      "std_hd": 0.04584751410281651
+    },
+    "m_768": {
+      "pearson_r": 0.8727483202872623,
+      "mean_hd": 0.49927890625,
+      "std_hd": 0.04405472501386922
+    }
+  },
+  "scenario_k_validation": {
+    "m": 512,
+    "n_keys": 10,
+    "val_subjects": 30,
+    "genuine_trials_per_key": 90,
+    "impostor_trials_per_key": 810,
+    "key_eers": [
+      0.008641975308641955,
+      0.011111111111111092,
+      0.00925925925925924,
+      0.022839506172839523,
+      0.0012345679012345679,
+      0.0024691358024691358,
+      0.0006172839506172839,
+      0.011111111111111092,
+      0.001851851851851852,
+      0.00925925925925924
+    ],
+    "mean_eer": 0.0078395061728395,
+    "std_eer": 0.006415299975000585,
+    "mean_eer_percent": 0.7839506172839499,
+    "std_eer_percent": 0.6415299975000585
+  },
+  "unprotected_val_eer_at_w06": 0.0
+}

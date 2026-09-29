@@ -1,6 +1,37 @@
 # CHANGELOG.md
 Format: `## [phase-N] YYYY-MM-DD` then bullets Added / Changed / Fixed.
 
+## [phase-4] 2026-09-30
+- Pre-Phase 4 statistical analysis and protocol alignment (D-012):
+  - Completed paired bootstrap over test subjects (1000 resamples, seed 42) for EER difference fused-minus-face: difference = -0.89%, 95% CI [-2.23%, -0.38%] (strictly excludes 0, confirming statistically significant fusion gain).
+  - Explained face-only CI shift ([1.11%, 3.89%] -> [1.11%, 3.60%]) from Protocol D-009 same-DB impostor stratification; refactored bootstrap CIs to shared unified function with seed 42.
+  - Documented chimeric synthetic pairing and validation-only weight selection limitations.
+  - Updated docs/EVALUATION_PLAN.md replacing S4/S5/S6 with Scenario K (known key, headline worst-case) and Scenario U (unknown/unique per-user keys).
+- Implemented C++ Chaos Engine (`chaoshash`, cpp/chaos.hpp, cpp/chaos.cpp, cpp/bindings.cpp, src/chaos/):
+  - Fully integer fixed-point Q64 pipeline ensuring bit-exact cross-platform determinism across MSVC and GCC.
+  - Key derivation in Python using HMAC-SHA256 (`zkcambio|{app_salt}|v{key_version}`) producing 64-bit initial state and map parameter; zero crypto in C++.
+  - Portable 64x64->high-64 multiplication without `__int128`.
+  - 8192-entry direct-mapped cache guarding against degenerate states and cycles with golden-ratio Weyl reseed; discards first 1,000 iterations.
+  - Rademacher random projection matrix sampled from chaotic bit 32 (exact 50.0% balance, zero autocorrelation, chi-square p > 0.05).
+  - Public train-only mean centering (data/processed/chaos_mean_vector.npy) and $2^{20}$ fixed-scale integer quantization.
+  - Compiled with strict flags (MSVC `/fp:strict`, GCC `-ffp-contract=off`).
+- Validated with comprehensive tests in tests/test_chaos.py (7 tests, all passing; 31 total tests in suite):
+  - Known-Answer Test (KAT) matching pure-Python big-integer reference bit-for-bit (first 4 bytes hex: 83ec0508).
+  - Determinism across processes, runs, and Hamming symmetry.
+  - Avalanche effect: 1-bit key flip produces 49.9% bit differences; 1 LSB state perturbation decorrelates within 60 steps.
+  - Randomness sanity: 50.0% bit balance, lag-1..10 autocorrelation < 0.003, chi-square p > 0.05.
+  - Cycle test: 0 cycles detected within 2,000,000 steps across 100 random keys.
+  - Train population bit balance: 0.0% biased bit positions.
+- Smoke evaluation on 30 validation subjects ONLY (experiments/04_chaos_smoke_eval.py):
+  - Property check on all 300 subjects: HD vs angle ($\theta/\pi$) plotted across $m \in \{64, 128, 256, 512, 768\} \to$ results/chaos_hd_vs_angle.png.
+  - Scenario K on 30 validation subjects ($m=512$, 10 random keys): Mean EER = 0.784% +/- 0.642%, histogram saved to results/chaos_val_hamming_hist.png.
+  - Timing benchmark: 5.22 ms per transform (~192 transforms/sec).
+  - Saved results/chaos_val_smoke.json.
+- Documentation:
+  - Documented engine architecture, parameters, build commands, and limitations in docs/ARCHITECTURE.md.
+  - Recorded ADRs D-012 and D-013 in docs/DECISIONS.md.
+  - Updated docs/TRACEABILITY_REPORT.md (FR-05 partial, NFR-05).
+
 ## [phase-3] 2026-09-30
 - Implemented feature-level and score-level multimodal biometric fusion (src/fusion/fuse.py, src/fusion/extractor.py):
   - Feature-level fusion concatenates $[\sqrt{w} f_{face}, \sqrt{1-w} f_{finger}]$ into 768-d unit-norm vectors, preserving inner-product linearity $\cos(fused) = w \cos_{face} + (1-w) \cos_{finger}$.

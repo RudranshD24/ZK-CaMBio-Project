@@ -1,7 +1,12 @@
 # EVALUATION_PLAN.md  (also the paper's Results skeleton)
 
 ## Systems compared
-S1 face-only | S2 finger-only | S3 fused-unprotected (cosine) | S4 fused-cancelable, **legit key** (Hamming) | S5 cancelable, **stolen key / impostor uses victim key** | S6 cancelable, **wrong key** (attacker guesses key)
+- **S1**: Face-only baseline (512-d InceptionResnetV1, cosine similarity)
+- **S2**: Fingerprint-only baseline (256-d FingerResNet18 V2, cosine similarity)
+- **S3**: Fused unprotected baseline (768-d feature-level fusion, w=0.60, cosine similarity)
+- **S3b**: Fused score-level baseline (z-score normalized weighted sum)
+- **Scenario K (Known Key, HEADLINE, worst case)**: ONE master key is applied to every genuine and every impostor comparison (impostor biometrics transformed with the exact same key). Repeat across 10 random keys and report mean +/- SD of EER; this directly measures biometric discriminability and performance preservation versus S3.
+- **Scenario U (Unknown Key / Unique per-user keys)**: Each subject has their own unique key; impostor comparisons cross different keys. Expected Hamming distance is ~0.50 and EER is ~0.0%. Reported for completeness but clearly labeled as NOT a measure of biometric recognition accuracy.
 
 ## Metrics (test subjects only, 120)
 - **Evaluation Protocol (D-009)**: FVC databases (DB1_A, DB2_A, DB3_A) come from different physical sensors. Cross-DB impostor pairs are trivially separated by sensor noise, artificially suppressing EER. For all fingerprint and fusion evaluations, impostors MUST be **same-DB only** (40 test subjects per DB).
@@ -10,11 +15,12 @@ S1 face-only | S2 finger-only | S3 fused-unprotected (cosine) | S4 fused-cancela
   - Headline metrics (EER, ROC) are reported for the pooled same-DB scores, along with individual per-DB numbers.
   - CMC curves are computed per-DB (closed-set gallery = 40), and pooled CMC is reported clearly labeled as an easier cross-sensor task.
 - Genuine/impostor score histograms, d-prime
-- **EER** (with bootstrap 95% CI over subjects, 1000 resamples)
+- **EER** (with paired bootstrap 95% CI over subjects, 1000 resamples, seed=42)
 - FNMR at FMR = 1% and 0.1%
 - **ROC** (TPR vs FPR) for all systems on one plot
 - **CMC** (rank-1..rank-20 identification, per-DB gallery = 40; pooled gallery = 120 clearly marked)
-- Table: EER of S3 vs S4, showing the "performance preservation" gap (target: within about 1-2 percentage points; report honestly whatever you get)
+- Table: EER of S3 vs Scenario K, showing the "performance preservation" gap (target: within ~1-2 percentage points; reported transparently)
+
 
 ## Criteria experiments
 1. **Non-invertibility**: attacks in SECURITY_THREAT_MODEL.md. Report reconstruction cosine and attack success rate. Also report information-loss argument (d, m, bits).
