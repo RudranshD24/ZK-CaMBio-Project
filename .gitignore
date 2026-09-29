@@ -9,6 +9,7 @@ dataset/
 # === Processed data (git-ignored, except split manifest) ===
 data/processed/*
 !data/processed/split_manifest.json
+!data/processed/finger_train_val_split.json
 
 # === Model weights ===
 *.pt

@@ -1,28 +1,61 @@
 {
-  "eer": 0.0199,
-  "eer_ci_95": [
-    0.011116,
-    0.038874
-  ],
-  "eer_ci_95_percent": [
-    1.11,
-    3.89
-  ],
-  "eer_percent": 1.99,
-  "eer_threshold": 0.368918,
-  "embedding_dim": 512,
-  "genuine_mean": 0.7514,
-  "genuine_std": 0.1433,
-  "impostor_mean": 0.0338,
-  "impostor_std": 0.1564,
-  "input_resolution": "112x112 resized to 160x160",
-  "model": "InceptionResnetV1",
-  "normalization": "(x - 127.5) / 128.0",
-  "num_genuine_scores": 360,
-  "num_impostor_scores": 42840,
-  "num_test_subjects": 120,
-  "pretrained_dataset": "VGGFace2 (Cao et al., BMVC 2018)",
-  "rank_10_accuracy": 0.9861,
-  "rank_1_accuracy": 0.9472,
-  "rank_5_accuracy": 0.9833
+  "all_120_protocol": {
+    "model": "InceptionResnetV1",
+    "pretrained_dataset": "VGGFace2 (Cao et al., BMVC 2018)",
+    "embedding_dim": 512,
+    "input_resolution": "112x112 resized to 160x160",
+    "normalization": "(x - 127.5) / 128.0",
+    "num_test_subjects": 120,
+    "num_genuine_scores": 360,
+    "num_impostor_scores": 42840,
+    "eer": 0.0199,
+    "eer_percent": 1.99,
+    "eer_threshold": 0.368918,
+    "eer_ci_95": [0.011116, 0.038874],
+    "eer_ci_95_percent": [1.11, 3.89],
+    "rank_1_accuracy": 0.9472,
+    "rank_5_accuracy": 0.9833,
+    "rank_10_accuracy": 0.9861,
+    "genuine_mean": 0.7514,
+    "genuine_std": 0.1433,
+    "impostor_mean": 0.0338,
+    "impostor_std": 0.1564
+  },
+  "same_db_protocol": {
+    "description": "Restricted to same-DB impostor pairs per D-009 (40 subjects per DB)",
+    "pooled": {
+      "num_test_subjects": 120,
+      "num_genuine_scores": 360,
+      "num_impostor_scores": 14040,
+      "eer": 0.02,
+      "eer_percent": 2.0,
+      "eer_threshold": 0.368918,
+      "rank_1_accuracy": 0.9722,
+      "rank_5_accuracy": 0.9889,
+      "rank_10_accuracy": 0.9917
+    },
+    "per_db": {
+      "DB1_A": {
+        "num_subjects": 40,
+        "num_genuine": 120,
+        "num_impostor": 4680,
+        "eer_percent": 1.56,
+        "rank_1_percent": 97.5
+      },
+      "DB2_A": {
+        "num_subjects": 40,
+        "num_genuine": 120,
+        "num_impostor": 4680,
+        "eer_percent": 1.73,
+        "rank_1_percent": 96.67
+      },
+      "DB3_A": {
+        "num_subjects": 40,
+        "num_genuine": 120,
+        "num_impostor": 4680,
+        "eer_percent": 1.54,
+        "rank_1_percent": 97.5
+      }
+    }
+  }
 }

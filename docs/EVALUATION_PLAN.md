@@ -4,11 +4,16 @@
 S1 face-only | S2 finger-only | S3 fused-unprotected (cosine) | S4 fused-cancelable, **legit key** (Hamming) | S5 cancelable, **stolen key / impostor uses victim key** | S6 cancelable, **wrong key** (attacker guesses key)
 
 ## Metrics (test subjects only, 120)
+- **Evaluation Protocol (D-009)**: FVC databases (DB1_A, DB2_A, DB3_A) come from different physical sensors. Cross-DB impostor pairs are trivially separated by sensor noise, artificially suppressing EER. For all fingerprint and fusion evaluations, impostors MUST be **same-DB only** (40 test subjects per DB).
+  - Impostor pairs per DB: 40 templates x 39 other subjects x 3 probes = 4,680 impostor comparisons per DB (total 14,040 pooled same-DB impostors across 3 DBs).
+  - Genuine pairs per DB: 40 subjects x 3 probes = 120 genuine comparisons per DB (total 360 pooled genuine comparisons).
+  - Headline metrics (EER, ROC) are reported for the pooled same-DB scores, along with individual per-DB numbers.
+  - CMC curves are computed per-DB (closed-set gallery = 40), and pooled CMC is reported clearly labeled as an easier cross-sensor task.
 - Genuine/impostor score histograms, d-prime
 - **EER** (with bootstrap 95% CI over subjects, 1000 resamples)
 - FNMR at FMR = 1% and 0.1%
 - **ROC** (TPR vs FPR) for all systems on one plot
-- **CMC** (rank-1..rank-20 identification, closed set, gallery = 120 templates)
+- **CMC** (rank-1..rank-20 identification, per-DB gallery = 40; pooled gallery = 120 clearly marked)
 - Table: EER of S3 vs S4, showing the "performance preservation" gap (target: within about 1-2 percentage points; report honestly whatever you get)
 
 ## Criteria experiments

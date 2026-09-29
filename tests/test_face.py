@@ -60,7 +60,10 @@ def test_face_baseline_metrics_and_separation():
     assert metrics_path.is_file(), "results/face_eer.json must exist"
 
     with open(metrics_path, encoding="utf-8") as f:
-        metrics = json.load(f)
+        data = json.load(f)
+
+    # Support nested protocol format
+    metrics = data.get("all_120_protocol", data)
 
     assert metrics["num_test_subjects"] == 120
     assert metrics["num_genuine_scores"] == 360
@@ -78,3 +81,8 @@ def test_face_baseline_metrics_and_separation():
     gen_mean = metrics["genuine_mean"]
     imp_mean = metrics["impostor_mean"]
     assert gen_mean - imp_mean > 0.5, f"Separation between genuine and impostor should be > 0.5, got {gen_mean - imp_mean:.4f}"
+
+    if "same_db_protocol" in data:
+        same_db = data["same_db_protocol"]
+        assert same_db["pooled"]["eer"] < 0.05
+        assert len(same_db["per_db"]) == 3

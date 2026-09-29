@@ -1,0 +1,165 @@
+{
+  "protocol": "D-009 (Same-DB Impostors Only, 40 subjects/DB, 14,040 impostor comparisons pooled)",
+  "input_resolution": "128x128 (intensity normalized, block-variance cropped, CLAHE)",
+  "embedding_dim": 256,
+  "test_subjects": 120,
+  "baseline_a_gabor": {
+    "pooled": {
+      "num_test_subjects": 120,
+      "num_genuine_scores": 360,
+      "num_impostor_scores": 14040,
+      "eer": 0.4107905982905983,
+      "eer_percent": 41.08,
+      "eer_threshold": 0.562078595161438,
+      "eer_ci_95": [
+        0.38673889494581243,
+        0.4331597661996843
+      ],
+      "eer_ci_95_percent": [
+        38.67,
+        43.32
+      ],
+      "rank_1_accuracy_fair_gallery40": 0.21666666666666665,
+      "rank_1_percent_fair_gallery40": 21.67,
+      "rank_5_accuracy_fair_gallery40": 0.4444444444444445,
+      "rank_1_accuracy_pooled_gallery120": 0.2111111111111111,
+      "rank_1_percent_pooled_gallery120": 21.11,
+      "genuine_mean": 0.5494505763053894,
+      "genuine_std": 0.2545012831687927,
+      "impostor_mean": 0.44655436277389526,
+      "impostor_std": 0.2703847885131836
+    },
+    "per_db": {
+      "DB1_A": {
+        "num_subjects": 40,
+        "num_genuine": 120,
+        "num_impostor": 4680,
+        "eer": 0.4388888888888889,
+        "eer_percent": 43.89,
+        "eer_threshold": 0.6185283660888672,
+        "rank_1_accuracy": 0.075,
+        "rank_1_percent": 7.5,
+        "rank_5_accuracy": 0.3,
+        "rank_10_accuracy": 0.4666666666666667,
+        "genuine_mean": 0.5114983916282654,
+        "genuine_std": 0.32852301001548767,
+        "impostor_mean": 0.4379718005657196,
+        "impostor_std": 0.3321938216686249
+      },
+      "DB2_A": {
+        "num_subjects": 40,
+        "num_genuine": 120,
+        "num_impostor": 4680,
+        "eer": 0.45523504273504267,
+        "eer_percent": 45.52,
+        "eer_threshold": 0.6634194850921631,
+        "rank_1_accuracy": 0.20833333333333334,
+        "rank_1_percent": 20.83,
+        "rank_5_accuracy": 0.43333333333333335,
+        "rank_10_accuracy": 0.5833333333333334,
+        "genuine_mean": 0.6796509623527527,
+        "genuine_std": 0.12784437835216522,
+        "impostor_mean": 0.6283298134803772,
+        "impostor_std": 0.1371074914932251
+      },
+      "DB3_A": {
+        "num_subjects": 40,
+        "num_genuine": 120,
+        "num_impostor": 4680,
+        "eer": 0.3261752136752136,
+        "eer_percent": 32.62,
+        "eer_threshold": 0.34982797503471375,
+        "rank_1_accuracy": 0.36666666666666664,
+        "rank_1_percent": 36.67,
+        "rank_5_accuracy": 0.6,
+        "rank_10_accuracy": 0.7333333333333333,
+        "genuine_mean": 0.45720237493515015,
+        "genuine_std": 0.20769909024238586,
+        "impostor_mean": 0.273361474275589,
+        "impostor_std": 0.16450175642967224
+      }
+    }
+  },
+  "baseline_b_resnet18": {
+    "pooled": {
+      "num_test_subjects": 120,
+      "num_genuine_scores": 360,
+      "num_impostor_scores": 14040,
+      "eer": 0.2637108262108262,
+      "eer_percent": 26.37,
+      "eer_threshold": 0.8545358180999756,
+      "eer_ci_95": [
+        0.23605145018830684,
+        0.29084111593577544
+      ],
+      "eer_ci_95_percent": [
+        23.61,
+        29.08
+      ],
+      "rank_1_accuracy_fair_gallery40": 0.37222222222222223,
+      "rank_1_percent_fair_gallery40": 37.22,
+      "rank_5_accuracy_fair_gallery40": 0.6916666666666665,
+      "rank_1_accuracy_pooled_gallery120": 0.36944444444444446,
+      "rank_1_percent_pooled_gallery120": 36.94,
+      "genuine_mean": 0.8454062342643738,
+      "genuine_std": 0.24977552890777588,
+      "impostor_mean": 0.5655659437179565,
+      "impostor_std": 0.3555842339992523
+    },
+    "per_db": {
+      "DB1_A": {
+        "num_subjects": 40,
+        "num_genuine": 120,
+        "num_impostor": 4680,
+        "eer": 0.35459401709401706,
+        "eer_percent": 35.46,
+        "eer_threshold": 0.9300192594528198,
+        "rank_1_accuracy": 0.2,
+        "rank_1_percent": 20.0,
+        "rank_5_accuracy": 0.49166666666666664,
+        "rank_10_accuracy": 0.6583333333333333,
+        "genuine_mean": 0.8607215285301208,
+        "genuine_std": 0.30281707644462585,
+        "impostor_mean": 0.8014106154441833,
+        "impostor_std": 0.2925151586532593
+      },
+      "DB2_A": {
+        "num_subjects": 40,
+        "num_genuine": 120,
+        "num_impostor": 4680,
+        "eer": 0.15352564102564104,
+        "eer_percent": 15.35,
+        "eer_threshold": 0.8072034120559692,
+        "rank_1_accuracy": 0.48333333333333334,
+        "rank_1_percent": 48.33,
+        "rank_5_accuracy": 0.85,
+        "rank_10_accuracy": 0.9166666666666666,
+        "genuine_mean": 0.8937666416168213,
+        "genuine_std": 0.08809463679790497,
+        "impostor_mean": 0.4967088997364044,
+        "impostor_std": 0.29174065589904785
+      },
+      "DB3_A": {
+        "num_subjects": 40,
+        "num_genuine": 120,
+        "num_impostor": 4680,
+        "eer": 0.21784188034188032,
+        "eer_percent": 21.78,
+        "eer_threshold": 0.7190711498260498,
+        "rank_1_accuracy": 0.43333333333333335,
+        "rank_1_percent": 43.33,
+        "rank_5_accuracy": 0.7333333333333333,
+        "rank_10_accuracy": 0.8416666666666667,
+        "genuine_mean": 0.7817305326461792,
+        "genuine_std": 0.28473973274230957,
+        "impostor_mean": 0.3985782861709595,
+        "impostor_std": 0.346978098154068
+      }
+    }
+  },
+  "comparison": {
+    "winner": "Baseline B (FingerResNet18)",
+    "delta_eer_percent": 14.71,
+    "interpretation": "ResNet18 achieves 26.37% EER vs Gabor's 41.08% EER (delta = +14.71%). ResNet18 Rank-1 on gallery 40 is 37.22% vs Gabor's 21.67%."
+  }
+}

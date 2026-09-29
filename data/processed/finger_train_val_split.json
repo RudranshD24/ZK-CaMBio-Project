@@ -1,0 +1,5597 @@
+{
+  "fit": [
+    {
+      "face_enroll_files": [
+        "282939.jpg",
+        "282953.jpg",
+        "282957.jpg",
+        "282981.jpg",
+        "282985.jpg"
+      ],
+      "face_id": "06043",
+      "face_probe_files": [
+        "282950.jpg",
+        "282969.jpg",
+        "282992.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "83_1.tif",
+        "83_2.tif",
+        "83_3.tif",
+        "83_4.tif",
+        "83_5.tif"
+      ],
+      "fingerprint_id": 83,
+      "fingerprint_probe_files": [
+        "83_6.tif",
+        "83_7.tif",
+        "83_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0001"
+    },
+    {
+      "face_enroll_files": [
+        "049424.jpg",
+        "049430.jpg",
+        "049434.jpg",
+        "049440.jpg",
+        "049441.jpg"
+      ],
+      "face_id": "01058",
+      "face_probe_files": [
+        "049423.jpg",
+        "049425.jpg",
+        "049458.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "50_1.tif",
+        "50_2.tif",
+        "50_3.tif",
+        "50_4.tif",
+        "50_5.tif"
+      ],
+      "fingerprint_id": 50,
+      "fingerprint_probe_files": [
+        "50_6.tif",
+        "50_7.tif",
+        "50_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0002"
+    },
+    {
+      "face_enroll_files": [
+        "260289.jpg",
+        "260302.jpg",
+        "260309.jpg",
+        "260311.jpg",
+        "260323.jpg"
+      ],
+      "face_id": "05534",
+      "face_probe_files": [
+        "260299.jpg",
+        "260328.jpg",
+        "260333.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "99_1.tif",
+        "99_2.tif",
+        "99_3.tif",
+        "99_4.tif",
+        "99_5.tif"
+      ],
+      "fingerprint_id": 99,
+      "fingerprint_probe_files": [
+        "99_6.tif",
+        "99_7.tif",
+        "99_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0003"
+    },
+    {
+      "face_enroll_files": [
+        "200201.jpg",
+        "200202.jpg",
+        "200213.jpg",
+        "200218.jpg",
+        "200220.jpg"
+      ],
+      "face_id": "04151",
+      "face_probe_files": [
+        "200195.jpg",
+        "200204.jpg",
+        "200210.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "53_1.tif",
+        "53_2.tif",
+        "53_3.tif",
+        "53_4.tif",
+        "53_5.tif"
+      ],
+      "fingerprint_id": 53,
+      "fingerprint_probe_files": [
+        "53_6.tif",
+        "53_7.tif",
+        "53_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0005"
+    },
+    {
+      "face_enroll_files": [
+        "330885.jpg",
+        "330893.jpg",
+        "330896.jpg",
+        "330901.jpg",
+        "330911.jpg"
+      ],
+      "face_id": "07196",
+      "face_probe_files": [
+        "330899.jpg",
+        "330907.jpg",
+        "330908.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "56_1.tif",
+        "56_2.tif",
+        "56_3.tif",
+        "56_4.tif",
+        "56_5.tif"
+      ],
+      "fingerprint_id": 56,
+      "fingerprint_probe_files": [
+        "56_6.tif",
+        "56_7.tif",
+        "56_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0006"
+    },
+    {
+      "face_enroll_files": [
+        "269539.jpg",
+        "269543.jpg",
+        "269545.jpg",
+        "269548.jpg",
+        "269554.jpg"
+      ],
+      "face_id": "05736",
+      "face_probe_files": [
+        "269541.jpg",
+        "269555.jpg",
+        "269557.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "48_1.tif",
+        "48_2.tif",
+        "48_3.tif",
+        "48_4.tif",
+        "48_5.tif"
+      ],
+      "fingerprint_id": 48,
+      "fingerprint_probe_files": [
+        "48_6.tif",
+        "48_7.tif",
+        "48_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0007"
+    },
+    {
+      "face_enroll_files": [
+        "358917.jpg",
+        "358919.jpg",
+        "358920.jpg",
+        "358923.jpg",
+        "358934.jpg"
+      ],
+      "face_id": "08032",
+      "face_probe_files": [
+        "358881.jpg",
+        "358882.jpg",
+        "358936.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "62_1.tif",
+        "62_2.tif",
+        "62_3.tif",
+        "62_4.tif",
+        "62_5.tif"
+      ],
+      "fingerprint_id": 62,
+      "fingerprint_probe_files": [
+        "62_6.tif",
+        "62_7.tif",
+        "62_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0008"
+    },
+    {
+      "face_enroll_files": [
+        "321764.jpg",
+        "321769.jpg",
+        "321772.jpg",
+        "321775.jpg",
+        "321776.jpg"
+      ],
+      "face_id": "06942",
+      "face_probe_files": [
+        "321759.jpg",
+        "321766.jpg",
+        "321773.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "6_1.tif",
+        "6_2.tif",
+        "6_3.tif",
+        "6_4.tif",
+        "6_5.tif"
+      ],
+      "fingerprint_id": 6,
+      "fingerprint_probe_files": [
+        "6_6.tif",
+        "6_7.tif",
+        "6_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0009"
+    },
+    {
+      "face_enroll_files": [
+        "257685.jpg",
+        "257686.jpg",
+        "257687.jpg",
+        "257719.jpg",
+        "257734.jpg"
+      ],
+      "face_id": "05474",
+      "face_probe_files": [
+        "257684.jpg",
+        "257695.jpg",
+        "257711.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "3_1.tif",
+        "3_2.tif",
+        "3_3.tif",
+        "3_4.tif",
+        "3_5.tif"
+      ],
+      "fingerprint_id": 3,
+      "fingerprint_probe_files": [
+        "3_6.tif",
+        "3_7.tif",
+        "3_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0010"
+    },
+    {
+      "face_enroll_files": [
+        "285262.jpg",
+        "285272.jpg",
+        "285276.jpg",
+        "285289.jpg",
+        "285345.jpg"
+      ],
+      "face_id": "06091",
+      "face_probe_files": [
+        "285265.jpg",
+        "285301.jpg",
+        "285344.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "54_1.tif",
+        "54_2.tif",
+        "54_3.tif",
+        "54_4.tif",
+        "54_5.tif"
+      ],
+      "fingerprint_id": 54,
+      "fingerprint_probe_files": [
+        "54_6.tif",
+        "54_7.tif",
+        "54_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0011"
+    },
+    {
+      "face_enroll_files": [
+        "198579.jpg",
+        "198580.jpg",
+        "198586.jpg",
+        "198592.jpg",
+        "198599.jpg"
+      ],
+      "face_id": "04114",
+      "face_probe_files": [
+        "198584.jpg",
+        "198589.jpg",
+        "198598.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "65_1.tif",
+        "65_2.tif",
+        "65_3.tif",
+        "65_4.tif",
+        "65_5.tif"
+      ],
+      "fingerprint_id": 65,
+      "fingerprint_probe_files": [
+        "65_6.tif",
+        "65_7.tif",
+        "65_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0012"
+    },
+    {
+      "face_enroll_files": [
+        "228932.jpg",
+        "228933.jpg",
+        "228937.jpg",
+        "228941.jpg",
+        "228945.jpg"
+      ],
+      "face_id": "04827",
+      "face_probe_files": [
+        "228935.jpg",
+        "228948.jpg",
+        "228951.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "30_1.tif",
+        "30_2.tif",
+        "30_3.tif",
+        "30_4.tif",
+        "30_5.tif"
+      ],
+      "fingerprint_id": 30,
+      "fingerprint_probe_files": [
+        "30_6.tif",
+        "30_7.tif",
+        "30_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0014"
+    },
+    {
+      "face_enroll_files": [
+        "229070.jpg",
+        "229090.jpg",
+        "229091.jpg",
+        "229092.jpg",
+        "229095.jpg"
+      ],
+      "face_id": "04830",
+      "face_probe_files": [
+        "229080.jpg",
+        "229094.jpg",
+        "229101.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "33_1.tif",
+        "33_2.tif",
+        "33_3.tif",
+        "33_4.tif",
+        "33_5.tif"
+      ],
+      "fingerprint_id": 33,
+      "fingerprint_probe_files": [
+        "33_6.tif",
+        "33_7.tif",
+        "33_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0016"
+    },
+    {
+      "face_enroll_files": [
+        "193894.jpg",
+        "193924.jpg",
+        "193935.jpg",
+        "193940.jpg",
+        "193944.jpg"
+      ],
+      "face_id": "04006",
+      "face_probe_files": [
+        "193889.jpg",
+        "193928.jpg",
+        "193939.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "72_1.tif",
+        "72_2.tif",
+        "72_3.tif",
+        "72_4.tif",
+        "72_5.tif"
+      ],
+      "fingerprint_id": 72,
+      "fingerprint_probe_files": [
+        "72_6.tif",
+        "72_7.tif",
+        "72_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0017"
+    },
+    {
+      "face_enroll_files": [
+        "347713.jpg",
+        "347720.jpg",
+        "347723.jpg",
+        "347728.jpg",
+        "347730.jpg"
+      ],
+      "face_id": "07677",
+      "face_probe_files": [
+        "347716.jpg",
+        "347718.jpg",
+        "347732.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "40_1.tif",
+        "40_2.tif",
+        "40_3.tif",
+        "40_4.tif",
+        "40_5.tif"
+      ],
+      "fingerprint_id": 40,
+      "fingerprint_probe_files": [
+        "40_6.tif",
+        "40_7.tif",
+        "40_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0018"
+    },
+    {
+      "face_enroll_files": [
+        "271361.jpg",
+        "271372.jpg",
+        "271379.jpg",
+        "271383.jpg",
+        "271404.jpg"
+      ],
+      "face_id": "05780",
+      "face_probe_files": [
+        "271358.jpg",
+        "271366.jpg",
+        "271373.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "81_1.tif",
+        "81_2.tif",
+        "81_3.tif",
+        "81_4.tif",
+        "81_5.tif"
+      ],
+      "fingerprint_id": 81,
+      "fingerprint_probe_files": [
+        "81_6.tif",
+        "81_7.tif",
+        "81_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0019"
+    },
+    {
+      "face_enroll_files": [
+        "017174.jpg",
+        "017185.jpg",
+        "017186.jpg",
+        "017191.jpg",
+        "017201.jpg"
+      ],
+      "face_id": "00361",
+      "face_probe_files": [
+        "017184.jpg",
+        "017187.jpg",
+        "017200.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "17_1.tif",
+        "17_2.tif",
+        "17_3.tif",
+        "17_4.tif",
+        "17_5.tif"
+      ],
+      "fingerprint_id": 17,
+      "fingerprint_probe_files": [
+        "17_6.tif",
+        "17_7.tif",
+        "17_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0021"
+    },
+    {
+      "face_enroll_files": [
+        "035874.jpg",
+        "035882.jpg",
+        "035888.jpg",
+        "035899.jpg",
+        "035904.jpg"
+      ],
+      "face_id": "00767",
+      "face_probe_files": [
+        "035866.jpg",
+        "035877.jpg",
+        "035896.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "66_1.tif",
+        "66_2.tif",
+        "66_3.tif",
+        "66_4.tif",
+        "66_5.tif"
+      ],
+      "fingerprint_id": 66,
+      "fingerprint_probe_files": [
+        "66_6.tif",
+        "66_7.tif",
+        "66_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0022"
+    },
+    {
+      "face_enroll_files": [
+        "314288.jpg",
+        "314295.jpg",
+        "314296.jpg",
+        "314301.jpg",
+        "314308.jpg"
+      ],
+      "face_id": "06748",
+      "face_probe_files": [
+        "314280.jpg",
+        "314286.jpg",
+        "314317.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "1_1.tif",
+        "1_2.tif",
+        "1_3.tif",
+        "1_4.tif",
+        "1_5.tif"
+      ],
+      "fingerprint_id": 1,
+      "fingerprint_probe_files": [
+        "1_6.tif",
+        "1_7.tif",
+        "1_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0023"
+    },
+    {
+      "face_enroll_files": [
+        "242949.jpg",
+        "242957.jpg",
+        "242960.jpg",
+        "242962.jpg",
+        "242965.jpg"
+      ],
+      "face_id": "05153",
+      "face_probe_files": [
+        "242931.jpg",
+        "242943.jpg",
+        "242944.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "81_1.tif",
+        "81_2.tif",
+        "81_3.tif",
+        "81_4.tif",
+        "81_5.tif"
+      ],
+      "fingerprint_id": 81,
+      "fingerprint_probe_files": [
+        "81_6.tif",
+        "81_7.tif",
+        "81_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0025"
+    },
+    {
+      "face_enroll_files": [
+        "103376.jpg",
+        "103383.jpg",
+        "103387.jpg",
+        "103392.jpg",
+        "103407.jpg"
+      ],
+      "face_id": "02205",
+      "face_probe_files": [
+        "103359.jpg",
+        "103385.jpg",
+        "103406.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "77_1.tif",
+        "77_2.tif",
+        "77_3.tif",
+        "77_4.tif",
+        "77_5.tif"
+      ],
+      "fingerprint_id": 77,
+      "fingerprint_probe_files": [
+        "77_6.tif",
+        "77_7.tif",
+        "77_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0026"
+    },
+    {
+      "face_enroll_files": [
+        "245546.jpg",
+        "245565.jpg",
+        "245568.jpg",
+        "245573.jpg",
+        "245577.jpg"
+      ],
+      "face_id": "05210",
+      "face_probe_files": [
+        "245528.jpg",
+        "245542.jpg",
+        "245582.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "68_1.tif",
+        "68_2.tif",
+        "68_3.tif",
+        "68_4.tif",
+        "68_5.tif"
+      ],
+      "fingerprint_id": 68,
+      "fingerprint_probe_files": [
+        "68_6.tif",
+        "68_7.tif",
+        "68_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0027"
+    },
+    {
+      "face_enroll_files": [
+        "234295.jpg",
+        "234317.jpg",
+        "234329.jpg",
+        "234340.jpg",
+        "234352.jpg"
+      ],
+      "face_id": "04961",
+      "face_probe_files": [
+        "234332.jpg",
+        "234345.jpg",
+        "234357.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "63_1.tif",
+        "63_2.tif",
+        "63_3.tif",
+        "63_4.tif",
+        "63_5.tif"
+      ],
+      "fingerprint_id": 63,
+      "fingerprint_probe_files": [
+        "63_6.tif",
+        "63_7.tif",
+        "63_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0029"
+    },
+    {
+      "face_enroll_files": [
+        "110831.jpg",
+        "110833.jpg",
+        "110845.jpg",
+        "110854.jpg",
+        "110855.jpg"
+      ],
+      "face_id": "02364",
+      "face_probe_files": [
+        "110838.jpg",
+        "110839.jpg",
+        "110846.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "69_1.tif",
+        "69_2.tif",
+        "69_3.tif",
+        "69_4.tif",
+        "69_5.tif"
+      ],
+      "fingerprint_id": 69,
+      "fingerprint_probe_files": [
+        "69_6.tif",
+        "69_7.tif",
+        "69_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0031"
+    },
+    {
+      "face_enroll_files": [
+        "340881.jpg",
+        "340884.jpg",
+        "340890.jpg",
+        "340891.jpg",
+        "340897.jpg"
+      ],
+      "face_id": "07476",
+      "face_probe_files": [
+        "340885.jpg",
+        "340888.jpg",
+        "340898.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "41_1.tif",
+        "41_2.tif",
+        "41_3.tif",
+        "41_4.tif",
+        "41_5.tif"
+      ],
+      "fingerprint_id": 41,
+      "fingerprint_probe_files": [
+        "41_6.tif",
+        "41_7.tif",
+        "41_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0032"
+    },
+    {
+      "face_enroll_files": [
+        "354804.jpg",
+        "354808.jpg",
+        "354815.jpg",
+        "354816.jpg",
+        "354825.jpg"
+      ],
+      "face_id": "07898",
+      "face_probe_files": [
+        "354771.jpg",
+        "354783.jpg",
+        "354802.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "93_1.tif",
+        "93_2.tif",
+        "93_3.tif",
+        "93_4.tif",
+        "93_5.tif"
+      ],
+      "fingerprint_id": 93,
+      "fingerprint_probe_files": [
+        "93_6.tif",
+        "93_7.tif",
+        "93_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0034"
+    },
+    {
+      "face_enroll_files": [
+        "313529.jpg",
+        "313530.jpg",
+        "313537.jpg",
+        "313541.jpg",
+        "313546.jpg"
+      ],
+      "face_id": "06730",
+      "face_probe_files": [
+        "313532.jpg",
+        "313534.jpg",
+        "313544.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "61_1.tif",
+        "61_2.tif",
+        "61_3.tif",
+        "61_4.tif",
+        "61_5.tif"
+      ],
+      "fingerprint_id": 61,
+      "fingerprint_probe_files": [
+        "61_6.tif",
+        "61_7.tif",
+        "61_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0035"
+    },
+    {
+      "face_enroll_files": [
+        "313647.jpg",
+        "313660.jpg",
+        "313676.jpg",
+        "313680.jpg",
+        "313684.jpg"
+      ],
+      "face_id": "06733",
+      "face_probe_files": [
+        "313659.jpg",
+        "313669.jpg",
+        "313693.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "68_1.tif",
+        "68_2.tif",
+        "68_3.tif",
+        "68_4.tif",
+        "68_5.tif"
+      ],
+      "fingerprint_id": 68,
+      "fingerprint_probe_files": [
+        "68_6.tif",
+        "68_7.tif",
+        "68_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0036"
+    },
+    {
+      "face_enroll_files": [
+        "065223.jpg",
+        "065225.jpg",
+        "065226.jpg",
+        "065245.jpg",
+        "065249.jpg"
+      ],
+      "face_id": "01394",
+      "face_probe_files": [
+        "065216.jpg",
+        "065252.jpg",
+        "065253.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "54_1.tif",
+        "54_2.tif",
+        "54_3.tif",
+        "54_4.tif",
+        "54_5.tif"
+      ],
+      "fingerprint_id": 54,
+      "fingerprint_probe_files": [
+        "54_6.tif",
+        "54_7.tif",
+        "54_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0037"
+    },
+    {
+      "face_enroll_files": [
+        "071743.jpg",
+        "071746.jpg",
+        "071747.jpg",
+        "071766.jpg",
+        "071777.jpg"
+      ],
+      "face_id": "01528",
+      "face_probe_files": [
+        "071744.jpg",
+        "071764.jpg",
+        "071775.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "61_1.tif",
+        "61_2.tif",
+        "61_3.tif",
+        "61_4.tif",
+        "61_5.tif"
+      ],
+      "fingerprint_id": 61,
+      "fingerprint_probe_files": [
+        "61_6.tif",
+        "61_7.tif",
+        "61_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0038"
+    },
+    {
+      "face_enroll_files": [
+        "106765.jpg",
+        "106786.jpg",
+        "106790.jpg",
+        "106791.jpg",
+        "106798.jpg"
+      ],
+      "face_id": "02278",
+      "face_probe_files": [
+        "106771.jpg",
+        "106785.jpg",
+        "106793.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "22_1.tif",
+        "22_2.tif",
+        "22_3.tif",
+        "22_4.tif",
+        "22_5.tif"
+      ],
+      "fingerprint_id": 22,
+      "fingerprint_probe_files": [
+        "22_6.tif",
+        "22_7.tif",
+        "22_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0039"
+    },
+    {
+      "face_enroll_files": [
+        "080165.jpg",
+        "080174.jpg",
+        "080178.jpg",
+        "080185.jpg",
+        "080198.jpg"
+      ],
+      "face_id": "01713",
+      "face_probe_files": [
+        "080162.jpg",
+        "080171.jpg",
+        "080184.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "99_1.tif",
+        "99_2.tif",
+        "99_3.tif",
+        "99_4.tif",
+        "99_5.tif"
+      ],
+      "fingerprint_id": 99,
+      "fingerprint_probe_files": [
+        "99_6.tif",
+        "99_7.tif",
+        "99_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0040"
+    },
+    {
+      "face_enroll_files": [
+        "138751.jpg",
+        "138758.jpg",
+        "138761.jpg",
+        "138765.jpg",
+        "138790.jpg"
+      ],
+      "face_id": "02960",
+      "face_probe_files": [
+        "138737.jpg",
+        "138776.jpg",
+        "138782.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "51_1.tif",
+        "51_2.tif",
+        "51_3.tif",
+        "51_4.tif",
+        "51_5.tif"
+      ],
+      "fingerprint_id": 51,
+      "fingerprint_probe_files": [
+        "51_6.tif",
+        "51_7.tif",
+        "51_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0041"
+    },
+    {
+      "face_enroll_files": [
+        "230016.jpg",
+        "230035.jpg",
+        "230038.jpg",
+        "230047.jpg",
+        "230066.jpg"
+      ],
+      "face_id": "04856",
+      "face_probe_files": [
+        "230049.jpg",
+        "230056.jpg",
+        "230065.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "75_1.tif",
+        "75_2.tif",
+        "75_3.tif",
+        "75_4.tif",
+        "75_5.tif"
+      ],
+      "fingerprint_id": 75,
+      "fingerprint_probe_files": [
+        "75_6.tif",
+        "75_7.tif",
+        "75_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0042"
+    },
+    {
+      "face_enroll_files": [
+        "192494.jpg",
+        "192499.jpg",
+        "192512.jpg",
+        "192515.jpg",
+        "192542.jpg"
+      ],
+      "face_id": "03971",
+      "face_probe_files": [
+        "192469.jpg",
+        "192479.jpg",
+        "192544.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "45_1.tif",
+        "45_2.tif",
+        "45_3.tif",
+        "45_4.tif",
+        "45_5.tif"
+      ],
+      "fingerprint_id": 45,
+      "fingerprint_probe_files": [
+        "45_6.tif",
+        "45_7.tif",
+        "45_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0043"
+    },
+    {
+      "face_enroll_files": [
+        "005935.jpg",
+        "005949.jpg",
+        "005979.jpg",
+        "005985.jpg",
+        "005986.jpg"
+      ],
+      "face_id": "00126",
+      "face_probe_files": [
+        "005927.jpg",
+        "005933.jpg",
+        "005975.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "2_1.tif",
+        "2_2.tif",
+        "2_3.tif",
+        "2_4.tif",
+        "2_5.tif"
+      ],
+      "fingerprint_id": 2,
+      "fingerprint_probe_files": [
+        "2_6.tif",
+        "2_7.tif",
+        "2_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0044"
+    },
+    {
+      "face_enroll_files": [
+        "257885.jpg",
+        "257887.jpg",
+        "257904.jpg",
+        "257911.jpg",
+        "257937.jpg"
+      ],
+      "face_id": "05477",
+      "face_probe_files": [
+        "257882.jpg",
+        "257886.jpg",
+        "257901.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "86_1.tif",
+        "86_2.tif",
+        "86_3.tif",
+        "86_4.tif",
+        "86_5.tif"
+      ],
+      "fingerprint_id": 86,
+      "fingerprint_probe_files": [
+        "86_6.tif",
+        "86_7.tif",
+        "86_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0045"
+    },
+    {
+      "face_enroll_files": [
+        "092507.jpg",
+        "092515.jpg",
+        "092524.jpg",
+        "092535.jpg",
+        "092537.jpg"
+      ],
+      "face_id": "01970",
+      "face_probe_files": [
+        "092531.jpg",
+        "092533.jpg",
+        "092557.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "56_1.tif",
+        "56_2.tif",
+        "56_3.tif",
+        "56_4.tif",
+        "56_5.tif"
+      ],
+      "fingerprint_id": 56,
+      "fingerprint_probe_files": [
+        "56_6.tif",
+        "56_7.tif",
+        "56_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0046"
+    },
+    {
+      "face_enroll_files": [
+        "222514.jpg",
+        "222521.jpg",
+        "222532.jpg",
+        "222534.jpg",
+        "222542.jpg"
+      ],
+      "face_id": "04673",
+      "face_probe_files": [
+        "222527.jpg",
+        "222536.jpg",
+        "222537.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "91_1.tif",
+        "91_2.tif",
+        "91_3.tif",
+        "91_4.tif",
+        "91_5.tif"
+      ],
+      "fingerprint_id": 91,
+      "fingerprint_probe_files": [
+        "91_6.tif",
+        "91_7.tif",
+        "91_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0047"
+    },
+    {
+      "face_enroll_files": [
+        "223289.jpg",
+        "223291.jpg",
+        "223297.jpg",
+        "223298.jpg",
+        "223299.jpg"
+      ],
+      "face_id": "04687",
+      "face_probe_files": [
+        "223285.jpg",
+        "223300.jpg",
+        "223301.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "14_1.tif",
+        "14_2.tif",
+        "14_3.tif",
+        "14_4.tif",
+        "14_5.tif"
+      ],
+      "fingerprint_id": 14,
+      "fingerprint_probe_files": [
+        "14_6.tif",
+        "14_7.tif",
+        "14_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0048"
+    },
+    {
+      "face_enroll_files": [
+        "102361.jpg",
+        "102366.jpg",
+        "102394.jpg",
+        "102396.jpg",
+        "102404.jpg"
+      ],
+      "face_id": "02184",
+      "face_probe_files": [
+        "102378.jpg",
+        "102384.jpg",
+        "102408.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "98_1.tif",
+        "98_2.tif",
+        "98_3.tif",
+        "98_4.tif",
+        "98_5.tif"
+      ],
+      "fingerprint_id": 98,
+      "fingerprint_probe_files": [
+        "98_6.tif",
+        "98_7.tif",
+        "98_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0049"
+    },
+    {
+      "face_enroll_files": [
+        "256841.jpg",
+        "256862.jpg",
+        "256865.jpg",
+        "256871.jpg",
+        "256872.jpg"
+      ],
+      "face_id": "05450",
+      "face_probe_files": [
+        "256849.jpg",
+        "256855.jpg",
+        "256870.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "18_1.tif",
+        "18_2.tif",
+        "18_3.tif",
+        "18_4.tif",
+        "18_5.tif"
+      ],
+      "fingerprint_id": 18,
+      "fingerprint_probe_files": [
+        "18_6.tif",
+        "18_7.tif",
+        "18_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0050"
+    },
+    {
+      "face_enroll_files": [
+        "005477.jpg",
+        "005502.jpg",
+        "005503.jpg",
+        "005514.jpg",
+        "005522.jpg"
+      ],
+      "face_id": "00118",
+      "face_probe_files": [
+        "005490.jpg",
+        "005504.jpg",
+        "005510.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "11_1.tif",
+        "11_2.tif",
+        "11_3.tif",
+        "11_4.tif",
+        "11_5.tif"
+      ],
+      "fingerprint_id": 11,
+      "fingerprint_probe_files": [
+        "11_6.tif",
+        "11_7.tif",
+        "11_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0051"
+    },
+    {
+      "face_enroll_files": [
+        "018301.jpg",
+        "018303.jpg",
+        "018306.jpg",
+        "018310.jpg",
+        "018313.jpg"
+      ],
+      "face_id": "00387",
+      "face_probe_files": [
+        "018307.jpg",
+        "018309.jpg",
+        "018323.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "74_1.tif",
+        "74_2.tif",
+        "74_3.tif",
+        "74_4.tif",
+        "74_5.tif"
+      ],
+      "fingerprint_id": 74,
+      "fingerprint_probe_files": [
+        "74_6.tif",
+        "74_7.tif",
+        "74_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0052"
+    },
+    {
+      "face_enroll_files": [
+        "365308.jpg",
+        "365313.jpg",
+        "365352.jpg",
+        "365364.jpg",
+        "365366.jpg"
+      ],
+      "face_id": "08218",
+      "face_probe_files": [
+        "365330.jpg",
+        "365344.jpg",
+        "365395.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "27_1.tif",
+        "27_2.tif",
+        "27_3.tif",
+        "27_4.tif",
+        "27_5.tif"
+      ],
+      "fingerprint_id": 27,
+      "fingerprint_probe_files": [
+        "27_6.tif",
+        "27_7.tif",
+        "27_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0053"
+    },
+    {
+      "face_enroll_files": [
+        "044056.jpg",
+        "044060.jpg",
+        "044073.jpg",
+        "044076.jpg",
+        "044083.jpg"
+      ],
+      "face_id": "00944",
+      "face_probe_files": [
+        "044034.jpg",
+        "044039.jpg",
+        "044045.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "79_1.tif",
+        "79_2.tif",
+        "79_3.tif",
+        "79_4.tif",
+        "79_5.tif"
+      ],
+      "fingerprint_id": 79,
+      "fingerprint_probe_files": [
+        "79_6.tif",
+        "79_7.tif",
+        "79_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0055"
+    },
+    {
+      "face_enroll_files": [
+        "131326.jpg",
+        "131328.jpg",
+        "131337.jpg",
+        "131342.jpg",
+        "131359.jpg"
+      ],
+      "face_id": "02803",
+      "face_probe_files": [
+        "131345.jpg",
+        "131352.jpg",
+        "131360.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "96_1.tif",
+        "96_2.tif",
+        "96_3.tif",
+        "96_4.tif",
+        "96_5.tif"
+      ],
+      "fingerprint_id": 96,
+      "fingerprint_probe_files": [
+        "96_6.tif",
+        "96_7.tif",
+        "96_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0056"
+    },
+    {
+      "face_enroll_files": [
+        "347880.jpg",
+        "347882.jpg",
+        "347885.jpg",
+        "347890.jpg",
+        "347894.jpg"
+      ],
+      "face_id": "07683",
+      "face_probe_files": [
+        "347860.jpg",
+        "347865.jpg",
+        "347876.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "79_1.tif",
+        "79_2.tif",
+        "79_3.tif",
+        "79_4.tif",
+        "79_5.tif"
+      ],
+      "fingerprint_id": 79,
+      "fingerprint_probe_files": [
+        "79_6.tif",
+        "79_7.tif",
+        "79_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0057"
+    },
+    {
+      "face_enroll_files": [
+        "016164.jpg",
+        "016175.jpg",
+        "016180.jpg",
+        "016182.jpg",
+        "016191.jpg"
+      ],
+      "face_id": "00340",
+      "face_probe_files": [
+        "016160.jpg",
+        "016168.jpg",
+        "016184.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "76_1.tif",
+        "76_2.tif",
+        "76_3.tif",
+        "76_4.tif",
+        "76_5.tif"
+      ],
+      "fingerprint_id": 76,
+      "fingerprint_probe_files": [
+        "76_6.tif",
+        "76_7.tif",
+        "76_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0058"
+    },
+    {
+      "face_enroll_files": [
+        "274953.jpg",
+        "274956.jpg",
+        "274968.jpg",
+        "275005.jpg",
+        "275008.jpg"
+      ],
+      "face_id": "05866",
+      "face_probe_files": [
+        "274964.jpg",
+        "274971.jpg",
+        "275000.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "7_1.tif",
+        "7_2.tif",
+        "7_3.tif",
+        "7_4.tif",
+        "7_5.tif"
+      ],
+      "fingerprint_id": 7,
+      "fingerprint_probe_files": [
+        "7_6.tif",
+        "7_7.tif",
+        "7_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0059"
+    },
+    {
+      "face_enroll_files": [
+        "246749.jpg",
+        "246763.jpg",
+        "246770.jpg",
+        "246790.jpg",
+        "246792.jpg"
+      ],
+      "face_id": "05238",
+      "face_probe_files": [
+        "246773.jpg",
+        "246776.jpg",
+        "246797.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "91_1.tif",
+        "91_2.tif",
+        "91_3.tif",
+        "91_4.tif",
+        "91_5.tif"
+      ],
+      "fingerprint_id": 91,
+      "fingerprint_probe_files": [
+        "91_6.tif",
+        "91_7.tif",
+        "91_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0060"
+    },
+    {
+      "face_enroll_files": [
+        "139986.jpg",
+        "140003.jpg",
+        "140004.jpg",
+        "140012.jpg",
+        "140018.jpg"
+      ],
+      "face_id": "02986",
+      "face_probe_files": [
+        "139985.jpg",
+        "139990.jpg",
+        "140014.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "24_1.tif",
+        "24_2.tif",
+        "24_3.tif",
+        "24_4.tif",
+        "24_5.tif"
+      ],
+      "fingerprint_id": 24,
+      "fingerprint_probe_files": [
+        "24_6.tif",
+        "24_7.tif",
+        "24_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0061"
+    },
+    {
+      "face_enroll_files": [
+        "304593.jpg",
+        "304600.jpg",
+        "304601.jpg",
+        "304620.jpg",
+        "304626.jpg"
+      ],
+      "face_id": "06494",
+      "face_probe_files": [
+        "304596.jpg",
+        "304609.jpg",
+        "304612.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "81_1.tif",
+        "81_2.tif",
+        "81_3.tif",
+        "81_4.tif",
+        "81_5.tif"
+      ],
+      "fingerprint_id": 81,
+      "fingerprint_probe_files": [
+        "81_6.tif",
+        "81_7.tif",
+        "81_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0062"
+    },
+    {
+      "face_enroll_files": [
+        "085642.jpg",
+        "085644.jpg",
+        "085656.jpg",
+        "085666.jpg",
+        "085671.jpg"
+      ],
+      "face_id": "01827",
+      "face_probe_files": [
+        "085636.jpg",
+        "085637.jpg",
+        "085651.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "38_1.tif",
+        "38_2.tif",
+        "38_3.tif",
+        "38_4.tif",
+        "38_5.tif"
+      ],
+      "fingerprint_id": 38,
+      "fingerprint_probe_files": [
+        "38_6.tif",
+        "38_7.tif",
+        "38_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0063"
+    },
+    {
+      "face_enroll_files": [
+        "268800.jpg",
+        "268801.jpg",
+        "268806.jpg",
+        "268810.jpg",
+        "268819.jpg"
+      ],
+      "face_id": "05723",
+      "face_probe_files": [
+        "268812.jpg",
+        "268813.jpg",
+        "268815.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "7_1.tif",
+        "7_2.tif",
+        "7_3.tif",
+        "7_4.tif",
+        "7_5.tif"
+      ],
+      "fingerprint_id": 7,
+      "fingerprint_probe_files": [
+        "7_6.tif",
+        "7_7.tif",
+        "7_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0064"
+    },
+    {
+      "face_enroll_files": [
+        "140261.jpg",
+        "140270.jpg",
+        "140276.jpg",
+        "140298.jpg",
+        "140299.jpg"
+      ],
+      "face_id": "02992",
+      "face_probe_files": [
+        "140291.jpg",
+        "140292.jpg",
+        "140297.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "34_1.tif",
+        "34_2.tif",
+        "34_3.tif",
+        "34_4.tif",
+        "34_5.tif"
+      ],
+      "fingerprint_id": 34,
+      "fingerprint_probe_files": [
+        "34_6.tif",
+        "34_7.tif",
+        "34_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0065"
+    },
+    {
+      "face_enroll_files": [
+        "189096.jpg",
+        "189097.jpg",
+        "189098.jpg",
+        "189100.jpg",
+        "189104.jpg"
+      ],
+      "face_id": "03885",
+      "face_probe_files": [
+        "189091.jpg",
+        "189092.jpg",
+        "189109.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "12_1.tif",
+        "12_2.tif",
+        "12_3.tif",
+        "12_4.tif",
+        "12_5.tif"
+      ],
+      "fingerprint_id": 12,
+      "fingerprint_probe_files": [
+        "12_6.tif",
+        "12_7.tif",
+        "12_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0066"
+    },
+    {
+      "face_enroll_files": [
+        "279515.jpg",
+        "279528.jpg",
+        "279536.jpg",
+        "279539.jpg",
+        "279563.jpg"
+      ],
+      "face_id": "05960",
+      "face_probe_files": [
+        "279504.jpg",
+        "279517.jpg",
+        "279519.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "97_1.tif",
+        "97_2.tif",
+        "97_3.tif",
+        "97_4.tif",
+        "97_5.tif"
+      ],
+      "fingerprint_id": 97,
+      "fingerprint_probe_files": [
+        "97_6.tif",
+        "97_7.tif",
+        "97_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0067"
+    },
+    {
+      "face_enroll_files": [
+        "297329.jpg",
+        "297330.jpg",
+        "297331.jpg",
+        "297335.jpg",
+        "297336.jpg"
+      ],
+      "face_id": "06312",
+      "face_probe_files": [
+        "297326.jpg",
+        "297334.jpg",
+        "297344.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "58_1.tif",
+        "58_2.tif",
+        "58_3.tif",
+        "58_4.tif",
+        "58_5.tif"
+      ],
+      "fingerprint_id": 58,
+      "fingerprint_probe_files": [
+        "58_6.tif",
+        "58_7.tif",
+        "58_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0068"
+    },
+    {
+      "face_enroll_files": [
+        "020891.jpg",
+        "020911.jpg",
+        "020912.jpg",
+        "020916.jpg",
+        "020918.jpg"
+      ],
+      "face_id": "00443",
+      "face_probe_files": [
+        "020887.jpg",
+        "020894.jpg",
+        "020903.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "60_1.tif",
+        "60_2.tif",
+        "60_3.tif",
+        "60_4.tif",
+        "60_5.tif"
+      ],
+      "fingerprint_id": 60,
+      "fingerprint_probe_files": [
+        "60_6.tif",
+        "60_7.tif",
+        "60_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0069"
+    },
+    {
+      "face_enroll_files": [
+        "269020.jpg",
+        "269045.jpg",
+        "269046.jpg",
+        "269058.jpg",
+        "269059.jpg"
+      ],
+      "face_id": "05728",
+      "face_probe_files": [
+        "269032.jpg",
+        "269037.jpg",
+        "269060.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "17_1.tif",
+        "17_2.tif",
+        "17_3.tif",
+        "17_4.tif",
+        "17_5.tif"
+      ],
+      "fingerprint_id": 17,
+      "fingerprint_probe_files": [
+        "17_6.tif",
+        "17_7.tif",
+        "17_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0070"
+    },
+    {
+      "face_enroll_files": [
+        "052745.jpg",
+        "052749.jpg",
+        "052755.jpg",
+        "052762.jpg",
+        "052765.jpg"
+      ],
+      "face_id": "01131",
+      "face_probe_files": [
+        "052752.jpg",
+        "052757.jpg",
+        "052760.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "82_1.tif",
+        "82_2.tif",
+        "82_3.tif",
+        "82_4.tif",
+        "82_5.tif"
+      ],
+      "fingerprint_id": 82,
+      "fingerprint_probe_files": [
+        "82_6.tif",
+        "82_7.tif",
+        "82_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0071"
+    },
+    {
+      "face_enroll_files": [
+        "223640.jpg",
+        "223648.jpg",
+        "223651.jpg",
+        "223653.jpg",
+        "223660.jpg"
+      ],
+      "face_id": "04697",
+      "face_probe_files": [
+        "223634.jpg",
+        "223646.jpg",
+        "223659.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "26_1.tif",
+        "26_2.tif",
+        "26_3.tif",
+        "26_4.tif",
+        "26_5.tif"
+      ],
+      "fingerprint_id": 26,
+      "fingerprint_probe_files": [
+        "26_6.tif",
+        "26_7.tif",
+        "26_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0072"
+    },
+    {
+      "face_enroll_files": [
+        "270233.jpg",
+        "270237.jpg",
+        "270270.jpg",
+        "270274.jpg",
+        "270281.jpg"
+      ],
+      "face_id": "05754",
+      "face_probe_files": [
+        "270241.jpg",
+        "270254.jpg",
+        "270255.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "71_1.tif",
+        "71_2.tif",
+        "71_3.tif",
+        "71_4.tif",
+        "71_5.tif"
+      ],
+      "fingerprint_id": 71,
+      "fingerprint_probe_files": [
+        "71_6.tif",
+        "71_7.tif",
+        "71_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0073"
+    },
+    {
+      "face_enroll_files": [
+        "059034.jpg",
+        "059043.jpg",
+        "059050.jpg",
+        "059052.jpg",
+        "059059.jpg"
+      ],
+      "face_id": "01265",
+      "face_probe_files": [
+        "059021.jpg",
+        "059025.jpg",
+        "059047.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "38_1.tif",
+        "38_2.tif",
+        "38_3.tif",
+        "38_4.tif",
+        "38_5.tif"
+      ],
+      "fingerprint_id": 38,
+      "fingerprint_probe_files": [
+        "38_6.tif",
+        "38_7.tif",
+        "38_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0074"
+    },
+    {
+      "face_enroll_files": [
+        "344512.jpg",
+        "344513.jpg",
+        "344524.jpg",
+        "344528.jpg",
+        "344530.jpg"
+      ],
+      "face_id": "07585",
+      "face_probe_files": [
+        "344510.jpg",
+        "344515.jpg",
+        "344533.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "28_1.tif",
+        "28_2.tif",
+        "28_3.tif",
+        "28_4.tif",
+        "28_5.tif"
+      ],
+      "fingerprint_id": 28,
+      "fingerprint_probe_files": [
+        "28_6.tif",
+        "28_7.tif",
+        "28_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0075"
+    },
+    {
+      "face_enroll_files": [
+        "074059.jpg",
+        "074075.jpg",
+        "074080.jpg",
+        "074081.jpg",
+        "074092.jpg"
+      ],
+      "face_id": "01580",
+      "face_probe_files": [
+        "074063.jpg",
+        "074068.jpg",
+        "074076.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "12_1.tif",
+        "12_2.tif",
+        "12_3.tif",
+        "12_4.tif",
+        "12_5.tif"
+      ],
+      "fingerprint_id": 12,
+      "fingerprint_probe_files": [
+        "12_6.tif",
+        "12_7.tif",
+        "12_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0076"
+    },
+    {
+      "face_enroll_files": [
+        "267428.jpg",
+        "267431.jpg",
+        "267444.jpg",
+        "267448.jpg",
+        "267451.jpg"
+      ],
+      "face_id": "05695",
+      "face_probe_files": [
+        "267429.jpg",
+        "267439.jpg",
+        "267449.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "43_1.tif",
+        "43_2.tif",
+        "43_3.tif",
+        "43_4.tif",
+        "43_5.tif"
+      ],
+      "fingerprint_id": 43,
+      "fingerprint_probe_files": [
+        "43_6.tif",
+        "43_7.tif",
+        "43_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0077"
+    },
+    {
+      "face_enroll_files": [
+        "324973.jpg",
+        "324978.jpg",
+        "324990.jpg",
+        "324992.jpg",
+        "324996.jpg"
+      ],
+      "face_id": "07029",
+      "face_probe_files": [
+        "324976.jpg",
+        "324983.jpg",
+        "324988.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "78_1.tif",
+        "78_2.tif",
+        "78_3.tif",
+        "78_4.tif",
+        "78_5.tif"
+      ],
+      "fingerprint_id": 78,
+      "fingerprint_probe_files": [
+        "78_6.tif",
+        "78_7.tif",
+        "78_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0078"
+    },
+    {
+      "face_enroll_files": [
+        "203579.jpg",
+        "203594.jpg",
+        "203595.jpg",
+        "203603.jpg",
+        "203615.jpg"
+      ],
+      "face_id": "04235",
+      "face_probe_files": [
+        "203578.jpg",
+        "203592.jpg",
+        "203600.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "95_1.tif",
+        "95_2.tif",
+        "95_3.tif",
+        "95_4.tif",
+        "95_5.tif"
+      ],
+      "fingerprint_id": 95,
+      "fingerprint_probe_files": [
+        "95_6.tif",
+        "95_7.tif",
+        "95_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0079"
+    },
+    {
+      "face_enroll_files": [
+        "115239.jpg",
+        "115265.jpg",
+        "115280.jpg",
+        "115285.jpg",
+        "115288.jpg"
+      ],
+      "face_id": "02455",
+      "face_probe_files": [
+        "115237.jpg",
+        "115267.jpg",
+        "115292.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "29_1.tif",
+        "29_2.tif",
+        "29_3.tif",
+        "29_4.tif",
+        "29_5.tif"
+      ],
+      "fingerprint_id": 29,
+      "fingerprint_probe_files": [
+        "29_6.tif",
+        "29_7.tif",
+        "29_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0080"
+    },
+    {
+      "face_enroll_files": [
+        "228041.jpg",
+        "228043.jpg",
+        "228053.jpg",
+        "228057.jpg",
+        "228078.jpg"
+      ],
+      "face_id": "04806",
+      "face_probe_files": [
+        "228050.jpg",
+        "228051.jpg",
+        "228073.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "6_1.tif",
+        "6_2.tif",
+        "6_3.tif",
+        "6_4.tif",
+        "6_5.tif"
+      ],
+      "fingerprint_id": 6,
+      "fingerprint_probe_files": [
+        "6_6.tif",
+        "6_7.tif",
+        "6_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0082"
+    },
+    {
+      "face_enroll_files": [
+        "086106.jpg",
+        "086127.jpg",
+        "086130.jpg",
+        "086134.jpg",
+        "086151.jpg"
+      ],
+      "face_id": "01836",
+      "face_probe_files": [
+        "086112.jpg",
+        "086116.jpg",
+        "086117.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "89_1.tif",
+        "89_2.tif",
+        "89_3.tif",
+        "89_4.tif",
+        "89_5.tif"
+      ],
+      "fingerprint_id": 89,
+      "fingerprint_probe_files": [
+        "89_6.tif",
+        "89_7.tif",
+        "89_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0084"
+    },
+    {
+      "face_enroll_files": [
+        "131810.jpg",
+        "131816.jpg",
+        "131817.jpg",
+        "131824.jpg",
+        "131833.jpg"
+      ],
+      "face_id": "02813",
+      "face_probe_files": [
+        "131813.jpg",
+        "131819.jpg",
+        "131829.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "73_1.tif",
+        "73_2.tif",
+        "73_3.tif",
+        "73_4.tif",
+        "73_5.tif"
+      ],
+      "fingerprint_id": 73,
+      "fingerprint_probe_files": [
+        "73_6.tif",
+        "73_7.tif",
+        "73_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0085"
+    },
+    {
+      "face_enroll_files": [
+        "228954.jpg",
+        "228958.jpg",
+        "228964.jpg",
+        "228966.jpg",
+        "228969.jpg"
+      ],
+      "face_id": "04828",
+      "face_probe_files": [
+        "228952.jpg",
+        "228957.jpg",
+        "228961.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "67_1.tif",
+        "67_2.tif",
+        "67_3.tif",
+        "67_4.tif",
+        "67_5.tif"
+      ],
+      "fingerprint_id": 67,
+      "fingerprint_probe_files": [
+        "67_6.tif",
+        "67_7.tif",
+        "67_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0086"
+    },
+    {
+      "face_enroll_files": [
+        "236493.jpg",
+        "236499.jpg",
+        "236505.jpg",
+        "236538.jpg",
+        "236542.jpg"
+      ],
+      "face_id": "05009",
+      "face_probe_files": [
+        "236496.jpg",
+        "236552.jpg",
+        "236554.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "45_1.tif",
+        "45_2.tif",
+        "45_3.tif",
+        "45_4.tif",
+        "45_5.tif"
+      ],
+      "fingerprint_id": 45,
+      "fingerprint_probe_files": [
+        "45_6.tif",
+        "45_7.tif",
+        "45_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0087"
+    },
+    {
+      "face_enroll_files": [
+        "342284.jpg",
+        "342287.jpg",
+        "342288.jpg",
+        "342295.jpg",
+        "342307.jpg"
+      ],
+      "face_id": "07522",
+      "face_probe_files": [
+        "342304.jpg",
+        "342321.jpg",
+        "342323.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "97_1.tif",
+        "97_2.tif",
+        "97_3.tif",
+        "97_4.tif",
+        "97_5.tif"
+      ],
+      "fingerprint_id": 97,
+      "fingerprint_probe_files": [
+        "97_6.tif",
+        "97_7.tif",
+        "97_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0089"
+    },
+    {
+      "face_enroll_files": [
+        "343723.jpg",
+        "343728.jpg",
+        "343733.jpg",
+        "343747.jpg",
+        "343748.jpg"
+      ],
+      "face_id": "07559",
+      "face_probe_files": [
+        "343724.jpg",
+        "343731.jpg",
+        "343745.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "91_1.tif",
+        "91_2.tif",
+        "91_3.tif",
+        "91_4.tif",
+        "91_5.tif"
+      ],
+      "fingerprint_id": 91,
+      "fingerprint_probe_files": [
+        "91_6.tif",
+        "91_7.tif",
+        "91_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0090"
+    },
+    {
+      "face_enroll_files": [
+        "319733.jpg",
+        "319737.jpg",
+        "319743.jpg",
+        "319758.jpg",
+        "319770.jpg"
+      ],
+      "face_id": "06888",
+      "face_probe_files": [
+        "319725.jpg",
+        "319736.jpg",
+        "319779.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "32_1.tif",
+        "32_2.tif",
+        "32_3.tif",
+        "32_4.tif",
+        "32_5.tif"
+      ],
+      "fingerprint_id": 32,
+      "fingerprint_probe_files": [
+        "32_6.tif",
+        "32_7.tif",
+        "32_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0091"
+    },
+    {
+      "face_enroll_files": [
+        "046958.jpg",
+        "046974.jpg",
+        "046975.jpg",
+        "046994.jpg",
+        "046997.jpg"
+      ],
+      "face_id": "01003",
+      "face_probe_files": [
+        "046973.jpg",
+        "046989.jpg",
+        "047004.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "100_1.tif",
+        "100_2.tif",
+        "100_3.tif",
+        "100_4.tif",
+        "100_5.tif"
+      ],
+      "fingerprint_id": 100,
+      "fingerprint_probe_files": [
+        "100_6.tif",
+        "100_7.tif",
+        "100_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0092"
+    },
+    {
+      "face_enroll_files": [
+        "246182.jpg",
+        "246184.jpg",
+        "246189.jpg",
+        "246192.jpg",
+        "246195.jpg"
+      ],
+      "face_id": "05226",
+      "face_probe_files": [
+        "246185.jpg",
+        "246188.jpg",
+        "246193.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "59_1.tif",
+        "59_2.tif",
+        "59_3.tif",
+        "59_4.tif",
+        "59_5.tif"
+      ],
+      "fingerprint_id": 59,
+      "fingerprint_probe_files": [
+        "59_6.tif",
+        "59_7.tif",
+        "59_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0093"
+    },
+    {
+      "face_enroll_files": [
+        "235906.jpg",
+        "235907.jpg",
+        "235911.jpg",
+        "235916.jpg",
+        "235923.jpg"
+      ],
+      "face_id": "04995",
+      "face_probe_files": [
+        "235909.jpg",
+        "235919.jpg",
+        "235922.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "36_1.tif",
+        "36_2.tif",
+        "36_3.tif",
+        "36_4.tif",
+        "36_5.tif"
+      ],
+      "fingerprint_id": 36,
+      "fingerprint_probe_files": [
+        "36_6.tif",
+        "36_7.tif",
+        "36_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0094"
+    },
+    {
+      "face_enroll_files": [
+        "004693.jpg",
+        "004695.jpg",
+        "004701.jpg",
+        "004702.jpg",
+        "004707.jpg"
+      ],
+      "face_id": "00104",
+      "face_probe_files": [
+        "004717.jpg",
+        "004735.jpg",
+        "004742.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "26_1.tif",
+        "26_2.tif",
+        "26_3.tif",
+        "26_4.tif",
+        "26_5.tif"
+      ],
+      "fingerprint_id": 26,
+      "fingerprint_probe_files": [
+        "26_6.tif",
+        "26_7.tif",
+        "26_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0095"
+    },
+    {
+      "face_enroll_files": [
+        "034166.jpg",
+        "034167.jpg",
+        "034172.jpg",
+        "034182.jpg",
+        "034183.jpg"
+      ],
+      "face_id": "00729",
+      "face_probe_files": [
+        "034169.jpg",
+        "034179.jpg",
+        "034181.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "32_1.tif",
+        "32_2.tif",
+        "32_3.tif",
+        "32_4.tif",
+        "32_5.tif"
+      ],
+      "fingerprint_id": 32,
+      "fingerprint_probe_files": [
+        "32_6.tif",
+        "32_7.tif",
+        "32_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0097"
+    },
+    {
+      "face_enroll_files": [
+        "285181.jpg",
+        "285187.jpg",
+        "285193.jpg",
+        "285213.jpg",
+        "285220.jpg"
+      ],
+      "face_id": "06090",
+      "face_probe_files": [
+        "285162.jpg",
+        "285205.jpg",
+        "285216.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "44_1.tif",
+        "44_2.tif",
+        "44_3.tif",
+        "44_4.tif",
+        "44_5.tif"
+      ],
+      "fingerprint_id": 44,
+      "fingerprint_probe_files": [
+        "44_6.tif",
+        "44_7.tif",
+        "44_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0099"
+    },
+    {
+      "face_enroll_files": [
+        "331222.jpg",
+        "331223.jpg",
+        "331225.jpg",
+        "331232.jpg",
+        "331240.jpg"
+      ],
+      "face_id": "07208",
+      "face_probe_files": [
+        "331224.jpg",
+        "331238.jpg",
+        "331247.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "58_1.tif",
+        "58_2.tif",
+        "58_3.tif",
+        "58_4.tif",
+        "58_5.tif"
+      ],
+      "fingerprint_id": 58,
+      "fingerprint_probe_files": [
+        "58_6.tif",
+        "58_7.tif",
+        "58_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0100"
+    },
+    {
+      "face_enroll_files": [
+        "071377.jpg",
+        "071405.jpg",
+        "071410.jpg",
+        "071416.jpg",
+        "071442.jpg"
+      ],
+      "face_id": "01521",
+      "face_probe_files": [
+        "071383.jpg",
+        "071397.jpg",
+        "071406.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "67_1.tif",
+        "67_2.tif",
+        "67_3.tif",
+        "67_4.tif",
+        "67_5.tif"
+      ],
+      "fingerprint_id": 67,
+      "fingerprint_probe_files": [
+        "67_6.tif",
+        "67_7.tif",
+        "67_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0101"
+    },
+    {
+      "face_enroll_files": [
+        "076474.jpg",
+        "076480.jpg",
+        "076493.jpg",
+        "076516.jpg",
+        "076522.jpg"
+      ],
+      "face_id": "01634",
+      "face_probe_files": [
+        "076473.jpg",
+        "076479.jpg",
+        "076508.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "83_1.tif",
+        "83_2.tif",
+        "83_3.tif",
+        "83_4.tif",
+        "83_5.tif"
+      ],
+      "fingerprint_id": 83,
+      "fingerprint_probe_files": [
+        "83_6.tif",
+        "83_7.tif",
+        "83_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0102"
+    },
+    {
+      "face_enroll_files": [
+        "266734.jpg",
+        "266746.jpg",
+        "266755.jpg",
+        "266759.jpg",
+        "266761.jpg"
+      ],
+      "face_id": "05682",
+      "face_probe_files": [
+        "266736.jpg",
+        "266739.jpg",
+        "266757.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "43_1.tif",
+        "43_2.tif",
+        "43_3.tif",
+        "43_4.tif",
+        "43_5.tif"
+      ],
+      "fingerprint_id": 43,
+      "fingerprint_probe_files": [
+        "43_6.tif",
+        "43_7.tif",
+        "43_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0104"
+    },
+    {
+      "face_enroll_files": [
+        "217040.jpg",
+        "217058.jpg",
+        "217061.jpg",
+        "217065.jpg",
+        "217067.jpg"
+      ],
+      "face_id": "04544",
+      "face_probe_files": [
+        "217034.jpg",
+        "217036.jpg",
+        "217052.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "28_1.tif",
+        "28_2.tif",
+        "28_3.tif",
+        "28_4.tif",
+        "28_5.tif"
+      ],
+      "fingerprint_id": 28,
+      "fingerprint_probe_files": [
+        "28_6.tif",
+        "28_7.tif",
+        "28_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0105"
+    },
+    {
+      "face_enroll_files": [
+        "198828.jpg",
+        "198834.jpg",
+        "198838.jpg",
+        "198862.jpg",
+        "198878.jpg"
+      ],
+      "face_id": "04120",
+      "face_probe_files": [
+        "198830.jpg",
+        "198857.jpg",
+        "198859.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "30_1.tif",
+        "30_2.tif",
+        "30_3.tif",
+        "30_4.tif",
+        "30_5.tif"
+      ],
+      "fingerprint_id": 30,
+      "fingerprint_probe_files": [
+        "30_6.tif",
+        "30_7.tif",
+        "30_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0108"
+    },
+    {
+      "face_enroll_files": [
+        "095046.jpg",
+        "095058.jpg",
+        "095074.jpg",
+        "095085.jpg",
+        "095093.jpg"
+      ],
+      "face_id": "02024",
+      "face_probe_files": [
+        "095048.jpg",
+        "095053.jpg",
+        "095056.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "31_1.tif",
+        "31_2.tif",
+        "31_3.tif",
+        "31_4.tif",
+        "31_5.tif"
+      ],
+      "fingerprint_id": 31,
+      "fingerprint_probe_files": [
+        "31_6.tif",
+        "31_7.tif",
+        "31_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0109"
+    },
+    {
+      "face_enroll_files": [
+        "317562.jpg",
+        "317564.jpg",
+        "317593.jpg",
+        "317597.jpg",
+        "317598.jpg"
+      ],
+      "face_id": "06827",
+      "face_probe_files": [
+        "317569.jpg",
+        "317599.jpg",
+        "317606.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "47_1.tif",
+        "47_2.tif",
+        "47_3.tif",
+        "47_4.tif",
+        "47_5.tif"
+      ],
+      "fingerprint_id": 47,
+      "fingerprint_probe_files": [
+        "47_6.tif",
+        "47_7.tif",
+        "47_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0110"
+    },
+    {
+      "face_enroll_files": [
+        "077654.jpg",
+        "077660.jpg",
+        "077665.jpg",
+        "077670.jpg",
+        "077671.jpg"
+      ],
+      "face_id": "01660",
+      "face_probe_files": [
+        "077653.jpg",
+        "077666.jpg",
+        "077672.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "75_1.tif",
+        "75_2.tif",
+        "75_3.tif",
+        "75_4.tif",
+        "75_5.tif"
+      ],
+      "fingerprint_id": 75,
+      "fingerprint_probe_files": [
+        "75_6.tif",
+        "75_7.tif",
+        "75_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0111"
+    },
+    {
+      "face_enroll_files": [
+        "091310.jpg",
+        "091311.jpg",
+        "091315.jpg",
+        "091321.jpg",
+        "091332.jpg"
+      ],
+      "face_id": "01943",
+      "face_probe_files": [
+        "091304.jpg",
+        "091306.jpg",
+        "091330.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "30_1.tif",
+        "30_2.tif",
+        "30_3.tif",
+        "30_4.tif",
+        "30_5.tif"
+      ],
+      "fingerprint_id": 30,
+      "fingerprint_probe_files": [
+        "30_6.tif",
+        "30_7.tif",
+        "30_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0112"
+    },
+    {
+      "face_enroll_files": [
+        "201362.jpg",
+        "201377.jpg",
+        "201390.jpg",
+        "201395.jpg",
+        "201423.jpg"
+      ],
+      "face_id": "04180",
+      "face_probe_files": [
+        "201349.jpg",
+        "201371.jpg",
+        "201418.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "24_1.tif",
+        "24_2.tif",
+        "24_3.tif",
+        "24_4.tif",
+        "24_5.tif"
+      ],
+      "fingerprint_id": 24,
+      "fingerprint_probe_files": [
+        "24_6.tif",
+        "24_7.tif",
+        "24_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0113"
+    },
+    {
+      "face_enroll_files": [
+        "321500.jpg",
+        "321515.jpg",
+        "321530.jpg",
+        "321535.jpg",
+        "321539.jpg"
+      ],
+      "face_id": "06936",
+      "face_probe_files": [
+        "321524.jpg",
+        "321527.jpg",
+        "321543.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "52_1.tif",
+        "52_2.tif",
+        "52_3.tif",
+        "52_4.tif",
+        "52_5.tif"
+      ],
+      "fingerprint_id": 52,
+      "fingerprint_probe_files": [
+        "52_6.tif",
+        "52_7.tif",
+        "52_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0114"
+    },
+    {
+      "face_enroll_files": [
+        "116918.jpg",
+        "116920.jpg",
+        "116921.jpg",
+        "116929.jpg",
+        "116937.jpg"
+      ],
+      "face_id": "02489",
+      "face_probe_files": [
+        "116919.jpg",
+        "116951.jpg",
+        "116972.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "61_1.tif",
+        "61_2.tif",
+        "61_3.tif",
+        "61_4.tif",
+        "61_5.tif"
+      ],
+      "fingerprint_id": 61,
+      "fingerprint_probe_files": [
+        "61_6.tif",
+        "61_7.tif",
+        "61_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0115"
+    },
+    {
+      "face_enroll_files": [
+        "323653.jpg",
+        "323655.jpg",
+        "323667.jpg",
+        "323669.jpg",
+        "323670.jpg"
+      ],
+      "face_id": "06995",
+      "face_probe_files": [
+        "323668.jpg",
+        "323687.jpg",
+        "323689.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "88_1.tif",
+        "88_2.tif",
+        "88_3.tif",
+        "88_4.tif",
+        "88_5.tif"
+      ],
+      "fingerprint_id": 88,
+      "fingerprint_probe_files": [
+        "88_6.tif",
+        "88_7.tif",
+        "88_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0116"
+    },
+    {
+      "face_enroll_files": [
+        "341571.jpg",
+        "341591.jpg",
+        "341610.jpg",
+        "341611.jpg",
+        "341618.jpg"
+      ],
+      "face_id": "07501",
+      "face_probe_files": [
+        "341617.jpg",
+        "341619.jpg",
+        "341620.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "39_1.tif",
+        "39_2.tif",
+        "39_3.tif",
+        "39_4.tif",
+        "39_5.tif"
+      ],
+      "fingerprint_id": 39,
+      "fingerprint_probe_files": [
+        "39_6.tif",
+        "39_7.tif",
+        "39_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0117"
+    },
+    {
+      "face_enroll_files": [
+        "006691.jpg",
+        "006715.jpg",
+        "006718.jpg",
+        "006725.jpg",
+        "006735.jpg"
+      ],
+      "face_id": "00142",
+      "face_probe_files": [
+        "006721.jpg",
+        "006740.jpg",
+        "006744.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "59_1.tif",
+        "59_2.tif",
+        "59_3.tif",
+        "59_4.tif",
+        "59_5.tif"
+      ],
+      "fingerprint_id": 59,
+      "fingerprint_probe_files": [
+        "59_6.tif",
+        "59_7.tif",
+        "59_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0119"
+    },
+    {
+      "face_enroll_files": [
+        "292194.jpg",
+        "292211.jpg",
+        "292213.jpg",
+        "292222.jpg",
+        "292223.jpg"
+      ],
+      "face_id": "06183",
+      "face_probe_files": [
+        "292221.jpg",
+        "292227.jpg",
+        "292229.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "21_1.tif",
+        "21_2.tif",
+        "21_3.tif",
+        "21_4.tif",
+        "21_5.tif"
+      ],
+      "fingerprint_id": 21,
+      "fingerprint_probe_files": [
+        "21_6.tif",
+        "21_7.tif",
+        "21_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0120"
+    },
+    {
+      "face_enroll_files": [
+        "192980.jpg",
+        "192981.jpg",
+        "192991.jpg",
+        "192998.jpg",
+        "193004.jpg"
+      ],
+      "face_id": "03982",
+      "face_probe_files": [
+        "192986.jpg",
+        "192996.jpg",
+        "192999.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "69_1.tif",
+        "69_2.tif",
+        "69_3.tif",
+        "69_4.tif",
+        "69_5.tif"
+      ],
+      "fingerprint_id": 69,
+      "fingerprint_probe_files": [
+        "69_6.tif",
+        "69_7.tif",
+        "69_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0121"
+    },
+    {
+      "face_enroll_files": [
+        "142884.jpg",
+        "142898.jpg",
+        "142914.jpg",
+        "142920.jpg",
+        "142922.jpg"
+      ],
+      "face_id": "03047",
+      "face_probe_files": [
+        "142880.jpg",
+        "142902.jpg",
+        "142924.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "57_1.tif",
+        "57_2.tif",
+        "57_3.tif",
+        "57_4.tif",
+        "57_5.tif"
+      ],
+      "fingerprint_id": 57,
+      "fingerprint_probe_files": [
+        "57_6.tif",
+        "57_7.tif",
+        "57_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0122"
+    },
+    {
+      "face_enroll_files": [
+        "177425.jpg",
+        "177426.jpg",
+        "177455.jpg",
+        "177456.jpg",
+        "177474.jpg"
+      ],
+      "face_id": "03601",
+      "face_probe_files": [
+        "177437.jpg",
+        "177454.jpg",
+        "177477.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "31_1.tif",
+        "31_2.tif",
+        "31_3.tif",
+        "31_4.tif",
+        "31_5.tif"
+      ],
+      "fingerprint_id": 31,
+      "fingerprint_probe_files": [
+        "31_6.tif",
+        "31_7.tif",
+        "31_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0123"
+    },
+    {
+      "face_enroll_files": [
+        "104713.jpg",
+        "104721.jpg",
+        "104724.jpg",
+        "104727.jpg",
+        "104734.jpg"
+      ],
+      "face_id": "02233",
+      "face_probe_files": [
+        "104715.jpg",
+        "104718.jpg",
+        "104720.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "73_1.tif",
+        "73_2.tif",
+        "73_3.tif",
+        "73_4.tif",
+        "73_5.tif"
+      ],
+      "fingerprint_id": 73,
+      "fingerprint_probe_files": [
+        "73_6.tif",
+        "73_7.tif",
+        "73_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0124"
+    },
+    {
+      "face_enroll_files": [
+        "005007.jpg",
+        "005024.jpg",
+        "005030.jpg",
+        "005032.jpg",
+        "005033.jpg"
+      ],
+      "face_id": "00109",
+      "face_probe_files": [
+        "004990.jpg",
+        "004991.jpg",
+        "005028.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "27_1.tif",
+        "27_2.tif",
+        "27_3.tif",
+        "27_4.tif",
+        "27_5.tif"
+      ],
+      "fingerprint_id": 27,
+      "fingerprint_probe_files": [
+        "27_6.tif",
+        "27_7.tif",
+        "27_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0125"
+    },
+    {
+      "face_enroll_files": [
+        "269654.jpg",
+        "269661.jpg",
+        "269663.jpg",
+        "269665.jpg",
+        "269675.jpg"
+      ],
+      "face_id": "05739",
+      "face_probe_files": [
+        "269657.jpg",
+        "269659.jpg",
+        "269666.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "94_1.tif",
+        "94_2.tif",
+        "94_3.tif",
+        "94_4.tif",
+        "94_5.tif"
+      ],
+      "fingerprint_id": 94,
+      "fingerprint_probe_files": [
+        "94_6.tif",
+        "94_7.tif",
+        "94_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0126"
+    },
+    {
+      "face_enroll_files": [
+        "193864.jpg",
+        "193868.jpg",
+        "193871.jpg",
+        "193873.jpg",
+        "193876.jpg"
+      ],
+      "face_id": "04004",
+      "face_probe_files": [
+        "193858.jpg",
+        "193866.jpg",
+        "193874.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "46_1.tif",
+        "46_2.tif",
+        "46_3.tif",
+        "46_4.tif",
+        "46_5.tif"
+      ],
+      "fingerprint_id": 46,
+      "fingerprint_probe_files": [
+        "46_6.tif",
+        "46_7.tif",
+        "46_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0127"
+    },
+    {
+      "face_enroll_files": [
+        "292639.jpg",
+        "292645.jpg",
+        "292647.jpg",
+        "292654.jpg",
+        "292660.jpg"
+      ],
+      "face_id": "06196",
+      "face_probe_files": [
+        "292646.jpg",
+        "292670.jpg",
+        "292672.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "19_1.tif",
+        "19_2.tif",
+        "19_3.tif",
+        "19_4.tif",
+        "19_5.tif"
+      ],
+      "fingerprint_id": 19,
+      "fingerprint_probe_files": [
+        "19_6.tif",
+        "19_7.tif",
+        "19_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0130"
+    },
+    {
+      "face_enroll_files": [
+        "085413.jpg",
+        "085423.jpg",
+        "085426.jpg",
+        "085435.jpg",
+        "085471.jpg"
+      ],
+      "face_id": "01823",
+      "face_probe_files": [
+        "085415.jpg",
+        "085424.jpg",
+        "085433.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "82_1.tif",
+        "82_2.tif",
+        "82_3.tif",
+        "82_4.tif",
+        "82_5.tif"
+      ],
+      "fingerprint_id": 82,
+      "fingerprint_probe_files": [
+        "82_6.tif",
+        "82_7.tif",
+        "82_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0131"
+    },
+    {
+      "face_enroll_files": [
+        "091059.jpg",
+        "091060.jpg",
+        "091080.jpg",
+        "091085.jpg",
+        "091086.jpg"
+      ],
+      "face_id": "01937",
+      "face_probe_files": [
+        "091075.jpg",
+        "091076.jpg",
+        "091093.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "88_1.tif",
+        "88_2.tif",
+        "88_3.tif",
+        "88_4.tif",
+        "88_5.tif"
+      ],
+      "fingerprint_id": 88,
+      "fingerprint_probe_files": [
+        "88_6.tif",
+        "88_7.tif",
+        "88_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0132"
+    },
+    {
+      "face_enroll_files": [
+        "234787.jpg",
+        "234789.jpg",
+        "234818.jpg",
+        "234827.jpg",
+        "234833.jpg"
+      ],
+      "face_id": "04971",
+      "face_probe_files": [
+        "234797.jpg",
+        "234846.jpg",
+        "234847.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "96_1.tif",
+        "96_2.tif",
+        "96_3.tif",
+        "96_4.tif",
+        "96_5.tif"
+      ],
+      "fingerprint_id": 96,
+      "fingerprint_probe_files": [
+        "96_6.tif",
+        "96_7.tif",
+        "96_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0133"
+    },
+    {
+      "face_enroll_files": [
+        "122806.jpg",
+        "122818.jpg",
+        "122831.jpg",
+        "122848.jpg",
+        "122849.jpg"
+      ],
+      "face_id": "02619",
+      "face_probe_files": [
+        "122815.jpg",
+        "122820.jpg",
+        "122834.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "69_1.tif",
+        "69_2.tif",
+        "69_3.tif",
+        "69_4.tif",
+        "69_5.tif"
+      ],
+      "fingerprint_id": 69,
+      "fingerprint_probe_files": [
+        "69_6.tif",
+        "69_7.tif",
+        "69_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0134"
+    },
+    {
+      "face_enroll_files": [
+        "234004.jpg",
+        "234006.jpg",
+        "234008.jpg",
+        "234028.jpg",
+        "234029.jpg"
+      ],
+      "face_id": "04954",
+      "face_probe_files": [
+        "234000.jpg",
+        "234011.jpg",
+        "234020.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "15_1.tif",
+        "15_2.tif",
+        "15_3.tif",
+        "15_4.tif",
+        "15_5.tif"
+      ],
+      "fingerprint_id": 15,
+      "fingerprint_probe_files": [
+        "15_6.tif",
+        "15_7.tif",
+        "15_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0136"
+    },
+    {
+      "face_enroll_files": [
+        "265114.jpg",
+        "265118.jpg",
+        "265129.jpg",
+        "265134.jpg",
+        "265135.jpg"
+      ],
+      "face_id": "05645",
+      "face_probe_files": [
+        "265098.jpg",
+        "265125.jpg",
+        "265127.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "72_1.tif",
+        "72_2.tif",
+        "72_3.tif",
+        "72_4.tif",
+        "72_5.tif"
+      ],
+      "fingerprint_id": 72,
+      "fingerprint_probe_files": [
+        "72_6.tif",
+        "72_7.tif",
+        "72_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0137"
+    },
+    {
+      "face_enroll_files": [
+        "028516.jpg",
+        "028528.jpg",
+        "028530.jpg",
+        "028535.jpg",
+        "028540.jpg"
+      ],
+      "face_id": "00602",
+      "face_probe_files": [
+        "028524.jpg",
+        "028529.jpg",
+        "028539.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "6_1.tif",
+        "6_2.tif",
+        "6_3.tif",
+        "6_4.tif",
+        "6_5.tif"
+      ],
+      "fingerprint_id": 6,
+      "fingerprint_probe_files": [
+        "6_6.tif",
+        "6_7.tif",
+        "6_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0138"
+    },
+    {
+      "face_enroll_files": [
+        "114301.jpg",
+        "114307.jpg",
+        "114312.jpg",
+        "114319.jpg",
+        "114335.jpg"
+      ],
+      "face_id": "02434",
+      "face_probe_files": [
+        "114309.jpg",
+        "114310.jpg",
+        "114323.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "31_1.tif",
+        "31_2.tif",
+        "31_3.tif",
+        "31_4.tif",
+        "31_5.tif"
+      ],
+      "fingerprint_id": 31,
+      "fingerprint_probe_files": [
+        "31_6.tif",
+        "31_7.tif",
+        "31_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0139"
+    },
+    {
+      "face_enroll_files": [
+        "008053.jpg",
+        "008055.jpg",
+        "008062.jpg",
+        "008082.jpg",
+        "008089.jpg"
+      ],
+      "face_id": "00171",
+      "face_probe_files": [
+        "008039.jpg",
+        "008056.jpg",
+        "008059.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "51_1.tif",
+        "51_2.tif",
+        "51_3.tif",
+        "51_4.tif",
+        "51_5.tif"
+      ],
+      "fingerprint_id": 51,
+      "fingerprint_probe_files": [
+        "51_6.tif",
+        "51_7.tif",
+        "51_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0140"
+    },
+    {
+      "face_enroll_files": [
+        "067834.jpg",
+        "067862.jpg",
+        "067874.jpg",
+        "067875.jpg",
+        "067879.jpg"
+      ],
+      "face_id": "01447",
+      "face_probe_files": [
+        "067848.jpg",
+        "067861.jpg",
+        "067872.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "70_1.tif",
+        "70_2.tif",
+        "70_3.tif",
+        "70_4.tif",
+        "70_5.tif"
+      ],
+      "fingerprint_id": 70,
+      "fingerprint_probe_files": [
+        "70_6.tif",
+        "70_7.tif",
+        "70_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0141"
+    },
+    {
+      "face_enroll_files": [
+        "138341.jpg",
+        "138351.jpg",
+        "138360.jpg",
+        "138367.jpg",
+        "138370.jpg"
+      ],
+      "face_id": "02952",
+      "face_probe_files": [
+        "138353.jpg",
+        "138366.jpg",
+        "138371.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "22_1.tif",
+        "22_2.tif",
+        "22_3.tif",
+        "22_4.tif",
+        "22_5.tif"
+      ],
+      "fingerprint_id": 22,
+      "fingerprint_probe_files": [
+        "22_6.tif",
+        "22_7.tif",
+        "22_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0142"
+    },
+    {
+      "face_enroll_files": [
+        "329988.jpg",
+        "329991.jpg",
+        "329993.jpg",
+        "329995.jpg",
+        "329998.jpg"
+      ],
+      "face_id": "07177",
+      "face_probe_files": [
+        "329989.jpg",
+        "329994.jpg",
+        "330004.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "20_1.tif",
+        "20_2.tif",
+        "20_3.tif",
+        "20_4.tif",
+        "20_5.tif"
+      ],
+      "fingerprint_id": 20,
+      "fingerprint_probe_files": [
+        "20_6.tif",
+        "20_7.tif",
+        "20_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0143"
+    },
+    {
+      "face_enroll_files": [
+        "271706.jpg",
+        "271724.jpg",
+        "271727.jpg",
+        "271767.jpg",
+        "271773.jpg"
+      ],
+      "face_id": "05789",
+      "face_probe_files": [
+        "271728.jpg",
+        "271741.jpg",
+        "271771.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "32_1.tif",
+        "32_2.tif",
+        "32_3.tif",
+        "32_4.tif",
+        "32_5.tif"
+      ],
+      "fingerprint_id": 32,
+      "fingerprint_probe_files": [
+        "32_6.tif",
+        "32_7.tif",
+        "32_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0144"
+    },
+    {
+      "face_enroll_files": [
+        "309647.jpg",
+        "309657.jpg",
+        "309658.jpg",
+        "309662.jpg",
+        "309668.jpg"
+      ],
+      "face_id": "06616",
+      "face_probe_files": [
+        "309655.jpg",
+        "309665.jpg",
+        "309666.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "68_1.tif",
+        "68_2.tif",
+        "68_3.tif",
+        "68_4.tif",
+        "68_5.tif"
+      ],
+      "fingerprint_id": 68,
+      "fingerprint_probe_files": [
+        "68_6.tif",
+        "68_7.tif",
+        "68_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0147"
+    },
+    {
+      "face_enroll_files": [
+        "113957.jpg",
+        "113963.jpg",
+        "113965.jpg",
+        "113970.jpg",
+        "113981.jpg"
+      ],
+      "face_id": "02427",
+      "face_probe_files": [
+        "113958.jpg",
+        "113974.jpg",
+        "113990.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "9_1.tif",
+        "9_2.tif",
+        "9_3.tif",
+        "9_4.tif",
+        "9_5.tif"
+      ],
+      "fingerprint_id": 9,
+      "fingerprint_probe_files": [
+        "9_6.tif",
+        "9_7.tif",
+        "9_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0148"
+    },
+    {
+      "face_enroll_files": [
+        "232338.jpg",
+        "232345.jpg",
+        "232347.jpg",
+        "232357.jpg",
+        "232392.jpg"
+      ],
+      "face_id": "04911",
+      "face_probe_files": [
+        "232336.jpg",
+        "232355.jpg",
+        "232370.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "33_1.tif",
+        "33_2.tif",
+        "33_3.tif",
+        "33_4.tif",
+        "33_5.tif"
+      ],
+      "fingerprint_id": 33,
+      "fingerprint_probe_files": [
+        "33_6.tif",
+        "33_7.tif",
+        "33_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0149"
+    },
+    {
+      "face_enroll_files": [
+        "047830.jpg",
+        "047839.jpg",
+        "047841.jpg",
+        "047842.jpg",
+        "047862.jpg"
+      ],
+      "face_id": "01022",
+      "face_probe_files": [
+        "047820.jpg",
+        "047834.jpg",
+        "047861.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "64_1.tif",
+        "64_2.tif",
+        "64_3.tif",
+        "64_4.tif",
+        "64_5.tif"
+      ],
+      "fingerprint_id": 64,
+      "fingerprint_probe_files": [
+        "64_6.tif",
+        "64_7.tif",
+        "64_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0151"
+    },
+    {
+      "face_enroll_files": [
+        "014007.jpg",
+        "014011.jpg",
+        "014016.jpg",
+        "014022.jpg",
+        "014025.jpg"
+      ],
+      "face_id": "00293",
+      "face_probe_files": [
+        "013996.jpg",
+        "013999.jpg",
+        "014009.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "76_1.tif",
+        "76_2.tif",
+        "76_3.tif",
+        "76_4.tif",
+        "76_5.tif"
+      ],
+      "fingerprint_id": 76,
+      "fingerprint_probe_files": [
+        "76_6.tif",
+        "76_7.tif",
+        "76_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0152"
+    },
+    {
+      "face_enroll_files": [
+        "128977.jpg",
+        "128978.jpg",
+        "128989.jpg",
+        "128991.jpg",
+        "128999.jpg"
+      ],
+      "face_id": "02752",
+      "face_probe_files": [
+        "128986.jpg",
+        "128995.jpg",
+        "129000.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "62_1.tif",
+        "62_2.tif",
+        "62_3.tif",
+        "62_4.tif",
+        "62_5.tif"
+      ],
+      "fingerprint_id": 62,
+      "fingerprint_probe_files": [
+        "62_6.tif",
+        "62_7.tif",
+        "62_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0154"
+    },
+    {
+      "face_enroll_files": [
+        "284298.jpg",
+        "284311.jpg",
+        "284321.jpg",
+        "284322.jpg",
+        "284347.jpg"
+      ],
+      "face_id": "06075",
+      "face_probe_files": [
+        "284323.jpg",
+        "284328.jpg",
+        "284333.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "65_1.tif",
+        "65_2.tif",
+        "65_3.tif",
+        "65_4.tif",
+        "65_5.tif"
+      ],
+      "fingerprint_id": 65,
+      "fingerprint_probe_files": [
+        "65_6.tif",
+        "65_7.tif",
+        "65_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0155"
+    },
+    {
+      "face_enroll_files": [
+        "104945.jpg",
+        "104950.jpg",
+        "104954.jpg",
+        "104960.jpg",
+        "104992.jpg"
+      ],
+      "face_id": "02238",
+      "face_probe_files": [
+        "104942.jpg",
+        "104981.jpg",
+        "104994.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "43_1.tif",
+        "43_2.tif",
+        "43_3.tif",
+        "43_4.tif",
+        "43_5.tif"
+      ],
+      "fingerprint_id": 43,
+      "fingerprint_probe_files": [
+        "43_6.tif",
+        "43_7.tif",
+        "43_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0156"
+    },
+    {
+      "face_enroll_files": [
+        "176796.jpg",
+        "176801.jpg",
+        "176803.jpg",
+        "176814.jpg",
+        "176816.jpg"
+      ],
+      "face_id": "03582",
+      "face_probe_files": [
+        "176797.jpg",
+        "176811.jpg",
+        "176815.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "70_1.tif",
+        "70_2.tif",
+        "70_3.tif",
+        "70_4.tif",
+        "70_5.tif"
+      ],
+      "fingerprint_id": 70,
+      "fingerprint_probe_files": [
+        "70_6.tif",
+        "70_7.tif",
+        "70_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0157"
+    },
+    {
+      "face_enroll_files": [
+        "036727.jpg",
+        "036731.jpg",
+        "036742.jpg",
+        "036765.jpg",
+        "036766.jpg"
+      ],
+      "face_id": "00788",
+      "face_probe_files": [
+        "036728.jpg",
+        "036738.jpg",
+        "036761.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "47_1.tif",
+        "47_2.tif",
+        "47_3.tif",
+        "47_4.tif",
+        "47_5.tif"
+      ],
+      "fingerprint_id": 47,
+      "fingerprint_probe_files": [
+        "47_6.tif",
+        "47_7.tif",
+        "47_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0158"
+    },
+    {
+      "face_enroll_files": [
+        "055482.jpg",
+        "055484.jpg",
+        "055498.jpg",
+        "055499.jpg",
+        "055501.jpg"
+      ],
+      "face_id": "01191",
+      "face_probe_files": [
+        "055462.jpg",
+        "055483.jpg",
+        "055506.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "60_1.tif",
+        "60_2.tif",
+        "60_3.tif",
+        "60_4.tif",
+        "60_5.tif"
+      ],
+      "fingerprint_id": 60,
+      "fingerprint_probe_files": [
+        "60_6.tif",
+        "60_7.tif",
+        "60_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0159"
+    },
+    {
+      "face_enroll_files": [
+        "092010.jpg",
+        "092011.jpg",
+        "092016.jpg",
+        "092023.jpg",
+        "092027.jpg"
+      ],
+      "face_id": "01959",
+      "face_probe_files": [
+        "091994.jpg",
+        "092005.jpg",
+        "092022.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "50_1.tif",
+        "50_2.tif",
+        "50_3.tif",
+        "50_4.tif",
+        "50_5.tif"
+      ],
+      "fingerprint_id": 50,
+      "fingerprint_probe_files": [
+        "50_6.tif",
+        "50_7.tif",
+        "50_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0161"
+    },
+    {
+      "face_enroll_files": [
+        "065767.jpg",
+        "065768.jpg",
+        "065777.jpg",
+        "065786.jpg",
+        "065791.jpg"
+      ],
+      "face_id": "01406",
+      "face_probe_files": [
+        "065778.jpg",
+        "065787.jpg",
+        "065807.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "18_1.tif",
+        "18_2.tif",
+        "18_3.tif",
+        "18_4.tif",
+        "18_5.tif"
+      ],
+      "fingerprint_id": 18,
+      "fingerprint_probe_files": [
+        "18_6.tif",
+        "18_7.tif",
+        "18_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0163"
+    },
+    {
+      "face_enroll_files": [
+        "345240.jpg",
+        "345242.jpg",
+        "345246.jpg",
+        "345247.jpg",
+        "345258.jpg"
+      ],
+      "face_id": "07602",
+      "face_probe_files": [
+        "345244.jpg",
+        "345250.jpg",
+        "345260.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "58_1.tif",
+        "58_2.tif",
+        "58_3.tif",
+        "58_4.tif",
+        "58_5.tif"
+      ],
+      "fingerprint_id": 58,
+      "fingerprint_probe_files": [
+        "58_6.tif",
+        "58_7.tif",
+        "58_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0164"
+    },
+    {
+      "face_enroll_files": [
+        "123161.jpg",
+        "123162.jpg",
+        "123169.jpg",
+        "123170.jpg",
+        "123181.jpg"
+      ],
+      "face_id": "02627",
+      "face_probe_files": [
+        "123168.jpg",
+        "123178.jpg",
+        "123187.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "77_1.tif",
+        "77_2.tif",
+        "77_3.tif",
+        "77_4.tif",
+        "77_5.tif"
+      ],
+      "fingerprint_id": 77,
+      "fingerprint_probe_files": [
+        "77_6.tif",
+        "77_7.tif",
+        "77_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0165"
+    },
+    {
+      "face_enroll_files": [
+        "014247.jpg",
+        "014252.jpg",
+        "014264.jpg",
+        "014271.jpg",
+        "014275.jpg"
+      ],
+      "face_id": "00298",
+      "face_probe_files": [
+        "014217.jpg",
+        "014220.jpg",
+        "014269.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "57_1.tif",
+        "57_2.tif",
+        "57_3.tif",
+        "57_4.tif",
+        "57_5.tif"
+      ],
+      "fingerprint_id": 57,
+      "fingerprint_probe_files": [
+        "57_6.tif",
+        "57_7.tif",
+        "57_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0166"
+    },
+    {
+      "face_enroll_files": [
+        "229415.jpg",
+        "229417.jpg",
+        "229424.jpg",
+        "229429.jpg",
+        "229444.jpg"
+      ],
+      "face_id": "04839",
+      "face_probe_files": [
+        "229423.jpg",
+        "229431.jpg",
+        "229436.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "34_1.tif",
+        "34_2.tif",
+        "34_3.tif",
+        "34_4.tif",
+        "34_5.tif"
+      ],
+      "fingerprint_id": 34,
+      "fingerprint_probe_files": [
+        "34_6.tif",
+        "34_7.tif",
+        "34_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0167"
+    },
+    {
+      "face_enroll_files": [
+        "220354.jpg",
+        "220360.jpg",
+        "220373.jpg",
+        "220379.jpg",
+        "220404.jpg"
+      ],
+      "face_id": "04623",
+      "face_probe_files": [
+        "220368.jpg",
+        "220376.jpg",
+        "220377.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "83_1.tif",
+        "83_2.tif",
+        "83_3.tif",
+        "83_4.tif",
+        "83_5.tif"
+      ],
+      "fingerprint_id": 83,
+      "fingerprint_probe_files": [
+        "83_6.tif",
+        "83_7.tif",
+        "83_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0168"
+    },
+    {
+      "face_enroll_files": [
+        "019292.jpg",
+        "019294.jpg",
+        "019298.jpg",
+        "019301.jpg",
+        "019313.jpg"
+      ],
+      "face_id": "00408",
+      "face_probe_files": [
+        "019296.jpg",
+        "019315.jpg",
+        "019321.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "88_1.tif",
+        "88_2.tif",
+        "88_3.tif",
+        "88_4.tif",
+        "88_5.tif"
+      ],
+      "fingerprint_id": 88,
+      "fingerprint_probe_files": [
+        "88_6.tif",
+        "88_7.tif",
+        "88_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0169"
+    },
+    {
+      "face_enroll_files": [
+        "188599.jpg",
+        "188608.jpg",
+        "188615.jpg",
+        "188635.jpg",
+        "188637.jpg"
+      ],
+      "face_id": "03874",
+      "face_probe_files": [
+        "188603.jpg",
+        "188639.jpg",
+        "188640.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "11_1.tif",
+        "11_2.tif",
+        "11_3.tif",
+        "11_4.tif",
+        "11_5.tif"
+      ],
+      "fingerprint_id": 11,
+      "fingerprint_probe_files": [
+        "11_6.tif",
+        "11_7.tif",
+        "11_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0170"
+    },
+    {
+      "face_enroll_files": [
+        "101701.jpg",
+        "101710.jpg",
+        "101711.jpg",
+        "101713.jpg",
+        "101719.jpg"
+      ],
+      "face_id": "02171",
+      "face_probe_files": [
+        "101695.jpg",
+        "101704.jpg",
+        "101734.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "45_1.tif",
+        "45_2.tif",
+        "45_3.tif",
+        "45_4.tif",
+        "45_5.tif"
+      ],
+      "fingerprint_id": 45,
+      "fingerprint_probe_files": [
+        "45_6.tif",
+        "45_7.tif",
+        "45_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0171"
+    },
+    {
+      "face_enroll_files": [
+        "002989.jpg",
+        "002990.jpg",
+        "003009.jpg",
+        "003010.jpg",
+        "003011.jpg"
+      ],
+      "face_id": "00067",
+      "face_probe_files": [
+        "003016.jpg",
+        "003021.jpg",
+        "003025.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "1_1.tif",
+        "1_2.tif",
+        "1_3.tif",
+        "1_4.tif",
+        "1_5.tif"
+      ],
+      "fingerprint_id": 1,
+      "fingerprint_probe_files": [
+        "1_6.tif",
+        "1_7.tif",
+        "1_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0172"
+    },
+    {
+      "face_enroll_files": [
+        "331757.jpg",
+        "331762.jpg",
+        "331778.jpg",
+        "331781.jpg",
+        "331782.jpg"
+      ],
+      "face_id": "07219",
+      "face_probe_files": [
+        "331750.jpg",
+        "331765.jpg",
+        "331780.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "48_1.tif",
+        "48_2.tif",
+        "48_3.tif",
+        "48_4.tif",
+        "48_5.tif"
+      ],
+      "fingerprint_id": 48,
+      "fingerprint_probe_files": [
+        "48_6.tif",
+        "48_7.tif",
+        "48_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0174"
+    },
+    {
+      "face_enroll_files": [
+        "147078.jpg",
+        "147080.jpg",
+        "147086.jpg",
+        "147120.jpg",
+        "147122.jpg"
+      ],
+      "face_id": "03139",
+      "face_probe_files": [
+        "147082.jpg",
+        "147096.jpg",
+        "147098.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "84_1.tif",
+        "84_2.tif",
+        "84_3.tif",
+        "84_4.tif",
+        "84_5.tif"
+      ],
+      "fingerprint_id": 84,
+      "fingerprint_probe_files": [
+        "84_6.tif",
+        "84_7.tif",
+        "84_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0175"
+    },
+    {
+      "face_enroll_files": [
+        "239756.jpg",
+        "239761.jpg",
+        "239775.jpg",
+        "239778.jpg",
+        "239779.jpg"
+      ],
+      "face_id": "05079",
+      "face_probe_files": [
+        "239764.jpg",
+        "239766.jpg",
+        "239774.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "26_1.tif",
+        "26_2.tif",
+        "26_3.tif",
+        "26_4.tif",
+        "26_5.tif"
+      ],
+      "fingerprint_id": 26,
+      "fingerprint_probe_files": [
+        "26_6.tif",
+        "26_7.tif",
+        "26_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0176"
+    },
+    {
+      "face_enroll_files": [
+        "023031.jpg",
+        "023055.jpg",
+        "023061.jpg",
+        "023062.jpg",
+        "023064.jpg"
+      ],
+      "face_id": "00487",
+      "face_probe_files": [
+        "023011.jpg",
+        "023033.jpg",
+        "023056.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "34_1.tif",
+        "34_2.tif",
+        "34_3.tif",
+        "34_4.tif",
+        "34_5.tif"
+      ],
+      "fingerprint_id": 34,
+      "fingerprint_probe_files": [
+        "34_6.tif",
+        "34_7.tif",
+        "34_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0178"
+    },
+    {
+      "face_enroll_files": [
+        "293941.jpg",
+        "293974.jpg",
+        "293988.jpg",
+        "293994.jpg",
+        "293997.jpg"
+      ],
+      "face_id": "06232",
+      "face_probe_files": [
+        "293960.jpg",
+        "293984.jpg",
+        "293996.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "36_1.tif",
+        "36_2.tif",
+        "36_3.tif",
+        "36_4.tif",
+        "36_5.tif"
+      ],
+      "fingerprint_id": 36,
+      "fingerprint_probe_files": [
+        "36_6.tif",
+        "36_7.tif",
+        "36_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0180"
+    }
+  ],
+  "metadata": {
+    "description": "Fingerprint Train (Fit) / Validation Split (Strictly from 180 TRAIN subjects)",
+    "num_fit": 150,
+    "num_total_train": 180,
+    "num_val": 30,
+    "seed": 42,
+    "stratification": {
+      "fit_per_db": 50,
+      "val_per_db": 10
+    }
+  },
+  "val": [
+    {
+      "face_enroll_files": [
+        "264622.jpg",
+        "264624.jpg",
+        "264643.jpg",
+        "264653.jpg",
+        "264654.jpg"
+      ],
+      "face_id": "05635",
+      "face_probe_files": [
+        "264625.jpg",
+        "264634.jpg",
+        "264647.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "42_1.tif",
+        "42_2.tif",
+        "42_3.tif",
+        "42_4.tif",
+        "42_5.tif"
+      ],
+      "fingerprint_id": 42,
+      "fingerprint_probe_files": [
+        "42_6.tif",
+        "42_7.tif",
+        "42_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0004"
+    },
+    {
+      "face_enroll_files": [
+        "067643.jpg",
+        "067644.jpg",
+        "067656.jpg",
+        "067659.jpg",
+        "067660.jpg"
+      ],
+      "face_id": "01443",
+      "face_probe_files": [
+        "067618.jpg",
+        "067639.jpg",
+        "067640.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "87_1.tif",
+        "87_2.tif",
+        "87_3.tif",
+        "87_4.tif",
+        "87_5.tif"
+      ],
+      "fingerprint_id": 87,
+      "fingerprint_probe_files": [
+        "87_6.tif",
+        "87_7.tif",
+        "87_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0013"
+    },
+    {
+      "face_enroll_files": [
+        "134372.jpg",
+        "134376.jpg",
+        "134378.jpg",
+        "134384.jpg",
+        "134397.jpg"
+      ],
+      "face_id": "02867",
+      "face_probe_files": [
+        "134360.jpg",
+        "134363.jpg",
+        "134394.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "98_1.tif",
+        "98_2.tif",
+        "98_3.tif",
+        "98_4.tif",
+        "98_5.tif"
+      ],
+      "fingerprint_id": 98,
+      "fingerprint_probe_files": [
+        "98_6.tif",
+        "98_7.tif",
+        "98_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0015"
+    },
+    {
+      "face_enroll_files": [
+        "087543.jpg",
+        "087557.jpg",
+        "087563.jpg",
+        "087566.jpg",
+        "087568.jpg"
+      ],
+      "face_id": "01863",
+      "face_probe_files": [
+        "087553.jpg",
+        "087564.jpg",
+        "087565.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "79_1.tif",
+        "79_2.tif",
+        "79_3.tif",
+        "79_4.tif",
+        "79_5.tif"
+      ],
+      "fingerprint_id": 79,
+      "fingerprint_probe_files": [
+        "79_6.tif",
+        "79_7.tif",
+        "79_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0020"
+    },
+    {
+      "face_enroll_files": [
+        "056626.jpg",
+        "056627.jpg",
+        "056646.jpg",
+        "056648.jpg",
+        "056652.jpg"
+      ],
+      "face_id": "01214",
+      "face_probe_files": [
+        "056629.jpg",
+        "056645.jpg",
+        "056649.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "27_1.tif",
+        "27_2.tif",
+        "27_3.tif",
+        "27_4.tif",
+        "27_5.tif"
+      ],
+      "fingerprint_id": 27,
+      "fingerprint_probe_files": [
+        "27_6.tif",
+        "27_7.tif",
+        "27_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0024"
+    },
+    {
+      "face_enroll_files": [
+        "001760.jpg",
+        "001775.jpg",
+        "001778.jpg",
+        "001792.jpg",
+        "001810.jpg"
+      ],
+      "face_id": "00038",
+      "face_probe_files": [
+        "001772.jpg",
+        "001791.jpg",
+        "001799.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "40_1.tif",
+        "40_2.tif",
+        "40_3.tif",
+        "40_4.tif",
+        "40_5.tif"
+      ],
+      "fingerprint_id": 40,
+      "fingerprint_probe_files": [
+        "40_6.tif",
+        "40_7.tif",
+        "40_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0028"
+    },
+    {
+      "face_enroll_files": [
+        "095766.jpg",
+        "095777.jpg",
+        "095785.jpg",
+        "095802.jpg",
+        "095807.jpg"
+      ],
+      "face_id": "02039",
+      "face_probe_files": [
+        "095750.jpg",
+        "095781.jpg",
+        "095799.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "55_1.tif",
+        "55_2.tif",
+        "55_3.tif",
+        "55_4.tif",
+        "55_5.tif"
+      ],
+      "fingerprint_id": 55,
+      "fingerprint_probe_files": [
+        "55_6.tif",
+        "55_7.tif",
+        "55_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0030"
+    },
+    {
+      "face_enroll_files": [
+        "080053.jpg",
+        "080055.jpg",
+        "080057.jpg",
+        "080068.jpg",
+        "080072.jpg"
+      ],
+      "face_id": "01710",
+      "face_probe_files": [
+        "080044.jpg",
+        "080056.jpg",
+        "080081.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "10_1.tif",
+        "10_2.tif",
+        "10_3.tif",
+        "10_4.tif",
+        "10_5.tif"
+      ],
+      "fingerprint_id": 10,
+      "fingerprint_probe_files": [
+        "10_6.tif",
+        "10_7.tif",
+        "10_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0033"
+    },
+    {
+      "face_enroll_files": [
+        "340153.jpg",
+        "340156.jpg",
+        "340163.jpg",
+        "340166.jpg",
+        "340167.jpg"
+      ],
+      "face_id": "07450",
+      "face_probe_files": [
+        "340155.jpg",
+        "340162.jpg",
+        "340168.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "8_1.tif",
+        "8_2.tif",
+        "8_3.tif",
+        "8_4.tif",
+        "8_5.tif"
+      ],
+      "fingerprint_id": 8,
+      "fingerprint_probe_files": [
+        "8_6.tif",
+        "8_7.tif",
+        "8_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0054"
+    },
+    {
+      "face_enroll_files": [
+        "041980.jpg",
+        "041985.jpg",
+        "041990.jpg",
+        "041999.jpg",
+        "042002.jpg"
+      ],
+      "face_id": "00900",
+      "face_probe_files": [
+        "041992.jpg",
+        "041995.jpg",
+        "041998.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "63_1.tif",
+        "63_2.tif",
+        "63_3.tif",
+        "63_4.tif",
+        "63_5.tif"
+      ],
+      "fingerprint_id": 63,
+      "fingerprint_probe_files": [
+        "63_6.tif",
+        "63_7.tif",
+        "63_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0081"
+    },
+    {
+      "face_enroll_files": [
+        "057481.jpg",
+        "057482.jpg",
+        "057483.jpg",
+        "057503.jpg",
+        "057505.jpg"
+      ],
+      "face_id": "01232",
+      "face_probe_files": [
+        "057480.jpg",
+        "057498.jpg",
+        "057508.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "1_1.tif",
+        "1_2.tif",
+        "1_3.tif",
+        "1_4.tif",
+        "1_5.tif"
+      ],
+      "fingerprint_id": 1,
+      "fingerprint_probe_files": [
+        "1_6.tif",
+        "1_7.tif",
+        "1_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0083"
+    },
+    {
+      "face_enroll_files": [
+        "195986.jpg",
+        "196000.jpg",
+        "196008.jpg",
+        "196010.jpg",
+        "196015.jpg"
+      ],
+      "face_id": "04055",
+      "face_probe_files": [
+        "195995.jpg",
+        "196009.jpg",
+        "196012.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "87_1.tif",
+        "87_2.tif",
+        "87_3.tif",
+        "87_4.tif",
+        "87_5.tif"
+      ],
+      "fingerprint_id": 87,
+      "fingerprint_probe_files": [
+        "87_6.tif",
+        "87_7.tif",
+        "87_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0088"
+    },
+    {
+      "face_enroll_files": [
+        "207772.jpg",
+        "207789.jpg",
+        "207793.jpg",
+        "207795.jpg",
+        "207803.jpg"
+      ],
+      "face_id": "04333",
+      "face_probe_files": [
+        "207784.jpg",
+        "207787.jpg",
+        "207802.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "52_1.tif",
+        "52_2.tif",
+        "52_3.tif",
+        "52_4.tif",
+        "52_5.tif"
+      ],
+      "fingerprint_id": 52,
+      "fingerprint_probe_files": [
+        "52_6.tif",
+        "52_7.tif",
+        "52_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0096"
+    },
+    {
+      "face_enroll_files": [
+        "365499.jpg",
+        "365505.jpg",
+        "365537.jpg",
+        "365546.jpg",
+        "365561.jpg"
+      ],
+      "face_id": "08222",
+      "face_probe_files": [
+        "365559.jpg",
+        "365567.jpg",
+        "365571.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "64_1.tif",
+        "64_2.tif",
+        "64_3.tif",
+        "64_4.tif",
+        "64_5.tif"
+      ],
+      "fingerprint_id": 64,
+      "fingerprint_probe_files": [
+        "64_6.tif",
+        "64_7.tif",
+        "64_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0098"
+    },
+    {
+      "face_enroll_files": [
+        "017012.jpg",
+        "017015.jpg",
+        "017017.jpg",
+        "017023.jpg",
+        "017038.jpg"
+      ],
+      "face_id": "00357",
+      "face_probe_files": [
+        "017028.jpg",
+        "017039.jpg",
+        "017046.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "71_1.tif",
+        "71_2.tif",
+        "71_3.tif",
+        "71_4.tif",
+        "71_5.tif"
+      ],
+      "fingerprint_id": 71,
+      "fingerprint_probe_files": [
+        "71_6.tif",
+        "71_7.tif",
+        "71_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0103"
+    },
+    {
+      "face_enroll_files": [
+        "253394.jpg",
+        "253401.jpg",
+        "253408.jpg",
+        "253409.jpg",
+        "253416.jpg"
+      ],
+      "face_id": "05384",
+      "face_probe_files": [
+        "253397.jpg",
+        "253415.jpg",
+        "253417.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "29_1.tif",
+        "29_2.tif",
+        "29_3.tif",
+        "29_4.tif",
+        "29_5.tif"
+      ],
+      "fingerprint_id": 29,
+      "fingerprint_probe_files": [
+        "29_6.tif",
+        "29_7.tif",
+        "29_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0106"
+    },
+    {
+      "face_enroll_files": [
+        "106356.jpg",
+        "106359.jpg",
+        "106362.jpg",
+        "106383.jpg",
+        "106384.jpg"
+      ],
+      "face_id": "02269",
+      "face_probe_files": [
+        "106353.jpg",
+        "106389.jpg",
+        "106396.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "74_1.tif",
+        "74_2.tif",
+        "74_3.tif",
+        "74_4.tif",
+        "74_5.tif"
+      ],
+      "fingerprint_id": 74,
+      "fingerprint_probe_files": [
+        "74_6.tif",
+        "74_7.tif",
+        "74_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0107"
+    },
+    {
+      "face_enroll_files": [
+        "323567.jpg",
+        "323573.jpg",
+        "323574.jpg",
+        "323575.jpg",
+        "323577.jpg"
+      ],
+      "face_id": "06992",
+      "face_probe_files": [
+        "323568.jpg",
+        "323569.jpg",
+        "323570.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "72_1.tif",
+        "72_2.tif",
+        "72_3.tif",
+        "72_4.tif",
+        "72_5.tif"
+      ],
+      "fingerprint_id": 72,
+      "fingerprint_probe_files": [
+        "72_6.tif",
+        "72_7.tif",
+        "72_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0118"
+    },
+    {
+      "face_enroll_files": [
+        "171782.jpg",
+        "171792.jpg",
+        "171794.jpg",
+        "171802.jpg",
+        "171811.jpg"
+      ],
+      "face_id": "03520",
+      "face_probe_files": [
+        "171787.jpg",
+        "171799.jpg",
+        "171801.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "47_1.tif",
+        "47_2.tif",
+        "47_3.tif",
+        "47_4.tif",
+        "47_5.tif"
+      ],
+      "fingerprint_id": 47,
+      "fingerprint_probe_files": [
+        "47_6.tif",
+        "47_7.tif",
+        "47_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0128"
+    },
+    {
+      "face_enroll_files": [
+        "152053.jpg",
+        "152059.jpg",
+        "152065.jpg",
+        "152076.jpg",
+        "152082.jpg"
+      ],
+      "face_id": "03245",
+      "face_probe_files": [
+        "152048.jpg",
+        "152068.jpg",
+        "152071.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "93_1.tif",
+        "93_2.tif",
+        "93_3.tif",
+        "93_4.tif",
+        "93_5.tif"
+      ],
+      "fingerprint_id": 93,
+      "fingerprint_probe_files": [
+        "93_6.tif",
+        "93_7.tif",
+        "93_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0129"
+    },
+    {
+      "face_enroll_files": [
+        "211875.jpg",
+        "211892.jpg",
+        "211905.jpg",
+        "211911.jpg",
+        "211916.jpg"
+      ],
+      "face_id": "04428",
+      "face_probe_files": [
+        "211878.jpg",
+        "211885.jpg",
+        "211896.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "55_1.tif",
+        "55_2.tif",
+        "55_3.tif",
+        "55_4.tif",
+        "55_5.tif"
+      ],
+      "fingerprint_id": 55,
+      "fingerprint_probe_files": [
+        "55_6.tif",
+        "55_7.tif",
+        "55_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0135"
+    },
+    {
+      "face_enroll_files": [
+        "069562.jpg",
+        "069569.jpg",
+        "069586.jpg",
+        "069589.jpg",
+        "069605.jpg"
+      ],
+      "face_id": "01484",
+      "face_probe_files": [
+        "069567.jpg",
+        "069602.jpg",
+        "069608.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "80_1.tif",
+        "80_2.tif",
+        "80_3.tif",
+        "80_4.tif",
+        "80_5.tif"
+      ],
+      "fingerprint_id": 80,
+      "fingerprint_probe_files": [
+        "80_6.tif",
+        "80_7.tif",
+        "80_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0145"
+    },
+    {
+      "face_enroll_files": [
+        "134681.jpg",
+        "134694.jpg",
+        "134707.jpg",
+        "134712.jpg",
+        "134716.jpg"
+      ],
+      "face_id": "02874",
+      "face_probe_files": [
+        "134693.jpg",
+        "134700.jpg",
+        "134701.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "16_1.tif",
+        "16_2.tif",
+        "16_3.tif",
+        "16_4.tif",
+        "16_5.tif"
+      ],
+      "fingerprint_id": 16,
+      "fingerprint_probe_files": [
+        "16_6.tif",
+        "16_7.tif",
+        "16_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0146"
+    },
+    {
+      "face_enroll_files": [
+        "150438.jpg",
+        "150440.jpg",
+        "150441.jpg",
+        "150445.jpg",
+        "150446.jpg"
+      ],
+      "face_id": "03212",
+      "face_probe_files": [
+        "150437.jpg",
+        "150450.jpg",
+        "150451.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "99_1.tif",
+        "99_2.tif",
+        "99_3.tif",
+        "99_4.tif",
+        "99_5.tif"
+      ],
+      "fingerprint_id": 99,
+      "fingerprint_probe_files": [
+        "99_6.tif",
+        "99_7.tif",
+        "99_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0150"
+    },
+    {
+      "face_enroll_files": [
+        "181231.jpg",
+        "181262.jpg",
+        "181272.jpg",
+        "181276.jpg",
+        "181282.jpg"
+      ],
+      "face_id": "03696",
+      "face_probe_files": [
+        "181249.jpg",
+        "181252.jpg",
+        "181275.jpg"
+      ],
+      "fingerprint_db": "DB1_A",
+      "fingerprint_enroll_files": [
+        "87_1.tif",
+        "87_2.tif",
+        "87_3.tif",
+        "87_4.tif",
+        "87_5.tif"
+      ],
+      "fingerprint_id": 87,
+      "fingerprint_probe_files": [
+        "87_6.tif",
+        "87_7.tif",
+        "87_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0153"
+    },
+    {
+      "face_enroll_files": [
+        "015608.jpg",
+        "015626.jpg",
+        "015628.jpg",
+        "015649.jpg",
+        "015650.jpg"
+      ],
+      "face_id": "00327",
+      "face_probe_files": [
+        "015621.jpg",
+        "015629.jpg",
+        "015641.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "57_1.tif",
+        "57_2.tif",
+        "57_3.tif",
+        "57_4.tif",
+        "57_5.tif"
+      ],
+      "fingerprint_id": 57,
+      "fingerprint_probe_files": [
+        "57_6.tif",
+        "57_7.tif",
+        "57_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0160"
+    },
+    {
+      "face_enroll_files": [
+        "015249.jpg",
+        "015254.jpg",
+        "015255.jpg",
+        "015265.jpg",
+        "015269.jpg"
+      ],
+      "face_id": "00320",
+      "face_probe_files": [
+        "015286.jpg",
+        "015292.jpg",
+        "015295.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "78_1.tif",
+        "78_2.tif",
+        "78_3.tif",
+        "78_4.tif",
+        "78_5.tif"
+      ],
+      "fingerprint_id": 78,
+      "fingerprint_probe_files": [
+        "78_6.tif",
+        "78_7.tif",
+        "78_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0162"
+    },
+    {
+      "face_enroll_files": [
+        "111138.jpg",
+        "111140.jpg",
+        "111143.jpg",
+        "111156.jpg",
+        "111172.jpg"
+      ],
+      "face_id": "02371",
+      "face_probe_files": [
+        "111158.jpg",
+        "111161.jpg",
+        "111175.jpg"
+      ],
+      "fingerprint_db": "DB2_A",
+      "fingerprint_enroll_files": [
+        "36_1.tif",
+        "36_2.tif",
+        "36_3.tif",
+        "36_4.tif",
+        "36_5.tif"
+      ],
+      "fingerprint_id": 36,
+      "fingerprint_probe_files": [
+        "36_6.tif",
+        "36_7.tif",
+        "36_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0173"
+    },
+    {
+      "face_enroll_files": [
+        "071209.jpg",
+        "071222.jpg",
+        "071234.jpg",
+        "071253.jpg",
+        "071262.jpg"
+      ],
+      "face_id": "01518",
+      "face_probe_files": [
+        "071228.jpg",
+        "071241.jpg",
+        "071269.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "4_1.tif",
+        "4_2.tif",
+        "4_3.tif",
+        "4_4.tif",
+        "4_5.tif"
+      ],
+      "fingerprint_id": 4,
+      "fingerprint_probe_files": [
+        "4_6.tif",
+        "4_7.tif",
+        "4_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0177"
+    },
+    {
+      "face_enroll_files": [
+        "006933.jpg",
+        "006934.jpg",
+        "006945.jpg",
+        "006955.jpg",
+        "006972.jpg"
+      ],
+      "face_id": "00146",
+      "face_probe_files": [
+        "006952.jpg",
+        "006965.jpg",
+        "006967.jpg"
+      ],
+      "fingerprint_db": "DB3_A",
+      "fingerprint_enroll_files": [
+        "25_1.tif",
+        "25_2.tif",
+        "25_3.tif",
+        "25_4.tif",
+        "25_5.tif"
+      ],
+      "fingerprint_id": 25,
+      "fingerprint_probe_files": [
+        "25_6.tif",
+        "25_7.tif",
+        "25_8.tif"
+      ],
+      "split": "train",
+      "subject_id": "VS_0179"
+    }
+  ]
+}
