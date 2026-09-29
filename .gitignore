@@ -1,0 +1,58 @@
+# === Datasets (never committed) ===
+dataset/
+*.tif
+*.jpg
+*.jpeg
+*.png
+*.bmp
+
+# === Processed data (git-ignored, except split manifest) ===
+data/processed/*
+!data/processed/split_manifest.json
+
+# === Model weights ===
+*.pt
+*.pth
+*.onnx
+
+# === Results binary artifacts ===
+results/**/*.npy
+
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+*.egg
+dist/
+build/
+.venv/
+venv/
+
+# === Environment / secrets ===
+.env
+.env.*
+
+# === C++ build ===
+cpp/build/
+cpp/out/
+*.pyd
+*.so
+*.dll
+*.lib
+*.exp
+*.obj
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === OS ===
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# === Docker ===
+docker/*.log
