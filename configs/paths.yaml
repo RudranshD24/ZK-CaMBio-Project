@@ -1,0 +1,19 @@
+# configs/paths.yaml
+# Project paths relative to project root.
+# Seed 42 for all reproducible operations.
+
+seed: 42
+
+dataset:
+  root: "dataset"
+  fingerprint_root: "dataset/fingerprint_dataset"
+  face_archive_root: "dataset/archive"
+  face_dataset_root: "dataset/facial_dataset"
+
+processed:
+  root: "data/processed"
+  split_manifest: "data/processed/split_manifest.json"
+
+results:
+  root: "results"
+  data_inspection: "results/data_inspection.txt"
