@@ -4,7 +4,7 @@ Fill this in during P9 from real files. Status: Not started / In progress / Done
 | Req | Code | Test | Result artifact | Status |
 |---|---|---|---|---|
 | FR-01 | src/data/ | tests/test_data.py | results/data_inspection.txt, data/processed/split_manifest.json | Verified |
-| FR-02 | src/face/ | tests/test_face.py | results/face_eer.json | Not started |
+| FR-02 | src/face/ | tests/test_face.py | results/face_eer.json, results/face_roc.png, results/face_cmc.png | Verified |
 | FR-03 | src/finger/ | tests/test_finger.py | results/finger_eer.json | Not started |
 | FR-04 | src/fusion/ | tests/test_fusion.py | results/fused_unprotected.json | Not started |
 | FR-05 | cpp/, src/chaos/ | cpp/tests, tests/test_chaos.py | results/cancelable_eer.json | Not started |

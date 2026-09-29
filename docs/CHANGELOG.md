@@ -1,6 +1,14 @@
 # CHANGELOG.md
 Format: `## [phase-N] YYYY-MM-DD` then bullets Added / Changed / Fixed.
 
+## [phase-2a] 2026-09-30
+- Evaluated face encoder candidates in throwaway venv on Python 3.13 / torch 2.14; resolved D-007 by adopting InceptionResnetV1 (VGGFace2 pretrained, 512-d).
+- Implemented FaceEncoder (src/face/encoder.py) and batch feature extractor (src/face/extractor.py).
+- Extracted and cached 512-d embeddings for all 300 virtual subjects in data/processed/face_embeddings.npz.
+- Evaluated face recognition baseline on 120 test subjects (experiments/01_face_baseline.py); achieved 1.99% EER (95% CI [1.11%, 3.89%]) and 94.72% Rank-1 accuracy.
+- Generated evaluation artifacts: results/face_eer.json, results/face_roc.png, results/face_cmc.png, results/face_score_dist.png, and raw score arrays.
+- Added comprehensive unit tests in tests/test_face.py.
+
 ## [phase-1] 2026-09-30
 - Added configs/paths.yaml with dataset, processed, and results paths (seed 42).
 - Implemented and ran experiments/00_inspect_data.py to verify dataset file integrity, headers, and structure.
