@@ -1,7 +1,25 @@
 # CHANGELOG.md
 Format: `## [phase-N] YYYY-MM-DD` then bullets Added / Changed / Fixed.
 
+## [phase-3] 2026-09-30
+- Implemented feature-level and score-level multimodal biometric fusion (src/fusion/fuse.py, src/fusion/extractor.py):
+  - Feature-level fusion concatenates $[\sqrt{w} f_{face}, \sqrt{1-w} f_{finger}]$ into 768-d unit-norm vectors, preserving inner-product linearity $\cos(fused) = w \cos_{face} + (1-w) \cos_{finger}$.
+  - Grid search over $w \in [0.10, 0.90]$ strictly on the 30 validation subjects (Protocol D-009) identified a flat near-optimal plateau $w \in [0.50, 0.70]$ ($0.00\% - 0.18\%$ EER); selected $w=0.60$ (D-011).
+  - Saved validation weight curve results/fusion_val_weight_tuning.png and test sensitivity plot results/fusion_test_weight_sensitivity.png (analysis only).
+  - Score-level fusion (S3b) implemented with z-score normalization parameters fit on validation subjects.
+  - Cached 768-d fused representations for all 300 virtual subjects in data/processed/fused_embeddings.npz.
+- Evaluated systems S1, S2, S3, S3b on 120 test subjects under Protocol D-009 (same-DB impostors: 40 subjects/DB, 14,040 impostor comparisons pooled, 360 genuine trials):
+  - S1 (Face): Pooled EER = 2.00% (95% CI [1.11%, 3.60%]), FNMR@1% = 3.33%, FNMR@0.1% = 9.44%, d' = 4.78, Rank-1 (G40) = 97.22%.
+  - S2 (Finger): Pooled EER = 5.81% (95% CI [4.72%, 7.15%]), FNMR@1% = 26.67%, FNMR@0.1% = 68.06%, d' = 3.42, Rank-1 (G40) = 78.89%.
+  - S3 (Fused Feature-Level): Pooled EER = 1.11% (95% CI [0.29%, 1.66%]), FNMR@1% = 1.11%, FNMR@0.1% = 1.94%, d' = 5.91, Rank-1 (G40) = 99.44%.
+  - S3b (Fused Score-Level): Pooled EER = 1.10% (95% CI [0.28%, 1.67%]), FNMR@1% = 1.39%, FNMR@0.1% = 1.94%, d' = 5.92, Rank-1 (G40) = 99.17%.
+  - Fused EER is 0.89 percentage points below the best single modality (Face 2.00%), representing a 44.5% relative error reduction. Rank-1 accuracy reached 99.44% (358/360 correct).
+- Generated evaluation artifacts: results/fused_unprotected.json, results/fusion_roc.png, results/fusion_cmc.png, results/fusion_score_dist.png, and raw score arrays (.npy).
+- Added comprehensive unit and integration tests in tests/test_fusion.py (all 24 tests passing).
+- Updated TRACEABILITY_REPORT.md (FR-04 Verified, EV-01 partial) and DECISIONS.md (D-011).
+
 ## [phase-2b] 2026-09-30
+
 - Implemented fingerprint preprocessing variant V2 (src/finger/preprocess.py) resolving scale inconsistency and sensor platen border artifacts:
   - Fixed physical scale factor per DB (DB1: scale 0.333, DB2: scale 0.50, DB3: scale 0.333) preserving spatial ridge frequency across impressions.
   - Centering on foreground centroid $(c_y, c_x)$ and fixed-window extraction.

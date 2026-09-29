@@ -145,3 +145,43 @@ def test_fingerprint_baseline_results():
     assert 0.0 <= b_pooled["eer"] <= 1.0
     assert len(a_pooled["eer_ci_95"]) == 2
     assert len(b_pooled["eer_ci_95"]) == 2
+
+
+def test_no_training_finger_in_test_subjects():
+    """Asserts that no (DB, finger) key used to train the fingerprint encoder
+
+    (fit + extra data) appears among the 120 test virtual subjects.
+    """
+    manifest_path = Path("data/processed/split_manifest.json")
+    split_path = Path("data/processed/finger_train_val_split.json")
+
+    assert manifest_path.is_file()
+    assert split_path.is_file()
+
+    with open(manifest_path, encoding="utf-8") as f:
+        manifest = json.load(f)
+    with open(split_path, encoding="utf-8") as f:
+        split_data = json.load(f)
+
+    # 1. 150 fit keys
+    fit_keys = {(r["fingerprint_db"], r["fingerprint_id"]) for r in split_data["fit"]}
+
+    # 2. Extra training keys: DB4_A (fingers 1..100) and DB1_B..DB4_B (fingers 101..110)
+    extra_keys = set()
+    for f in range(1, 101):
+        extra_keys.add(("DB4_A", f))
+    for db in ["DB1_B", "DB2_B", "DB3_B", "DB4_B"]:
+        for f in range(101, 111):
+            extra_keys.add((db, f))
+
+    all_train_keys = fit_keys | extra_keys
+    assert len(all_train_keys) == 290, f"Expected 290 training keys, got {len(all_train_keys)}"
+
+    # 3. Test keys (120 subjects)
+    test_keys = {(r["fingerprint_db"], r["fingerprint_id"]) for r in manifest["test"]}
+    assert len(test_keys) == 120, f"Expected 120 test keys, got {len(test_keys)}"
+
+    # Assert complete disjointness
+    intersection = all_train_keys.intersection(test_keys)
+    assert not intersection, f"Training and test finger keys overlap! Violating keys: {intersection}"
+
