@@ -76,7 +76,13 @@ class GaborFeatureExtractor:
             feat = feat / norm
         return feat.astype(np.float32)
 
-    def extract(self, img: Image.Image | np.ndarray) -> np.ndarray:
+    def extract(
+        self,
+        img: Image.Image | np.ndarray,
+        db_hint: str | None = None,
+        variant: str = "v2",
+    ) -> np.ndarray:
         """Runs preprocessing and extracts 256-d L2-normalized Gabor features."""
-        preproc = preprocess_fingerprint(img, target_size=(128, 128))
+        preproc = preprocess_fingerprint(img, db_hint=db_hint, target_size=(128, 128), variant=variant)
         return self.extract_from_preprocessed(preproc)
+

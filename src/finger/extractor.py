@@ -35,6 +35,7 @@ def extract_and_cache_gabor(
     manifest_path: str | Path = "data/processed/split_manifest.json",
     output_path: str | Path = "data/processed/finger_embeddings_gabor.npz",
     loader: FingerprintLoader | None = None,
+    variant: str = "v2",
 ) -> dict[str, Any]:
     if loader is None:
         loader = FingerprintLoader()
@@ -52,9 +53,9 @@ def extract_and_cache_gabor(
     probe_list = []
     template_list = []
 
-    print(f"Extracting Gabor features for {len(all_subjects)} subjects...")
+    print(f"Extracting Gabor features ({variant}) for {len(all_subjects)} subjects...")
 
-    for subj in tqdm(all_subjects, desc="Gabor extraction"):
+    for subj in tqdm(all_subjects, desc=f"Gabor extraction ({variant})"):
         s_id = subj["subject_id"]
         split = subj["split"]
         db = subj["fingerprint_db"]
@@ -64,7 +65,7 @@ def extract_and_cache_gabor(
         enr_feats = []
         for fn in subj["fingerprint_enroll_files"]:
             raw = loader.load_by_filename(db, fn)
-            feat = extractor.extract(raw)
+            feat = extractor.extract(raw, db_hint=db, variant=variant)
             enr_feats.append(feat)
 
         enr_arr = np.array(enr_feats, dtype=np.float32)  # (5, 256)
@@ -76,7 +77,7 @@ def extract_and_cache_gabor(
         prb_feats = []
         for fn in subj["fingerprint_probe_files"]:
             raw = loader.load_by_filename(db, fn)
-            feat = extractor.extract(raw)
+            feat = extractor.extract(raw, db_hint=db, variant=variant)
             prb_feats.append(feat)
 
         prb_arr = np.array(prb_feats, dtype=np.float32)  # (3, 256)
@@ -109,6 +110,7 @@ def extract_and_cache_resnet(
     output_path: str | Path = "data/processed/finger_embeddings_resnet.npz",
     loader: FingerprintLoader | None = None,
     device: str | None = None,
+    variant: str = "v2",
 ) -> dict[str, Any]:
     if loader is None:
         loader = FingerprintLoader()
@@ -138,10 +140,10 @@ def extract_and_cache_resnet(
     probe_list = []
     template_list = []
 
-    print(f"Extracting ResNet18 embeddings for {len(all_subjects)} subjects on {dev}...")
+    print(f"Extracting ResNet18 embeddings ({variant}) for {len(all_subjects)} subjects on {dev}...")
 
     with torch.no_grad():
-        for subj in tqdm(all_subjects, desc="ResNet18 extraction"):
+        for subj in tqdm(all_subjects, desc=f"ResNet18 extraction ({variant})"):
             s_id = subj["subject_id"]
             split = subj["split"]
             db = subj["fingerprint_db"]
@@ -151,7 +153,7 @@ def extract_and_cache_resnet(
             enr_tensors = []
             for fn in subj["fingerprint_enroll_files"]:
                 raw = loader.load_by_filename(db, fn)
-                proc = preprocess_fingerprint(raw, target_size=(128, 128))
+                proc = preprocess_fingerprint(raw, db_hint=db, target_size=(128, 128), variant=variant)
                 enr_tensors.append(transform(Image.fromarray(proc, mode="L")))
             b_enr = torch.stack(enr_tensors).to(dev)
             enr_embs = model(b_enr).cpu().numpy()  # (5, 256)
@@ -164,10 +166,11 @@ def extract_and_cache_resnet(
             prb_tensors = []
             for fn in subj["fingerprint_probe_files"]:
                 raw = loader.load_by_filename(db, fn)
-                proc = preprocess_fingerprint(raw, target_size=(128, 128))
+                proc = preprocess_fingerprint(raw, db_hint=db, target_size=(128, 128), variant=variant)
                 prb_tensors.append(transform(Image.fromarray(proc, mode="L")))
             b_prb = torch.stack(prb_tensors).to(dev)
             prb_embs = model(b_prb).cpu().numpy()  # (3, 256)
+
 
             subject_ids.append(s_id)
             splits.append(split)

@@ -1,0 +1,58 @@
+{
+  "validation_protocol": "30 validation fingers (10 per DB), same-sensor impostors only, zero test data contamination",
+  "experiments": {
+    "gabor_v1": {
+      "model": "Gabor (256-d)",
+      "variant": "v1",
+      "use_extra_data": false,
+      "val_separation": 0.008944272994995117,
+      "val_eer": 0.4765432098765432,
+      "val_eer_percent": 47.65,
+      "genuine_mean": 0.9511092901229858,
+      "impostor_mean": 0.9421650171279907
+    },
+    "gabor_v2": {
+      "model": "Gabor (256-d)",
+      "variant": "v2",
+      "use_extra_data": false,
+      "val_separation": 0.012918233871459961,
+      "val_eer": 0.44012345679012344,
+      "val_eer_percent": 44.01,
+      "genuine_mean": 0.944318413734436,
+      "impostor_mean": 0.9314001798629761
+    },
+    "resnet_v1": {
+      "variant": "v1",
+      "use_extra_data": false,
+      "best_epoch": 6,
+      "best_val_separation": 0.6281636953353882,
+      "best_val_eer": 0.0648148148148148,
+      "checkpoint_path": "data/processed/finger_resnet18_v1.pth"
+    },
+    "resnet_v2": {
+      "variant": "v2",
+      "use_extra_data": false,
+      "best_epoch": 6,
+      "best_val_separation": 0.6321731805801392,
+      "best_val_eer": 0.06790123456790123,
+      "checkpoint_path": "data/processed/finger_resnet18_v2.pth"
+    },
+    "resnet_v2_extra": {
+      "variant": "v2",
+      "use_extra_data": true,
+      "best_epoch": 6,
+      "best_val_separation": 0.641350269317627,
+      "best_val_eer": 0.054938271604938284,
+      "checkpoint_path": "data/processed/finger_resnet18_v2_extra.pth"
+    }
+  },
+  "chosen_setup": {
+    "name": "ResNet18 V2 + Extra Data (290 fingers)",
+    "variant": "v2",
+    "use_extra_data": true,
+    "best_epoch": 6,
+    "best_val_separation": 0.641350269317627,
+    "best_val_eer": 0.054938271604938284,
+    "checkpoint_path": "data/processed/finger_resnet18_v2_extra.pth"
+  }
+}
