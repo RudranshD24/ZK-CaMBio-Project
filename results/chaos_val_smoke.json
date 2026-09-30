@@ -1,34 +1,58 @@
 {
   "phase": 4,
   "description": "Smoke evaluation of C++ Chaos Engine on 30 validation subjects and property checks",
-  "timing_ms_per_transform": 5.21942300000228,
-  "timing_throughput_transforms_per_sec": 191.5920591221603,
+  "timing_ms_per_transform": 4.795125100000006,
+  "timing_throughput_transforms_per_sec": 208.54513263897925,
   "property_check": {
+    "angle_computation": "Computed on CENTERED fused vectors (u - mean_vec, v - mean_vec) as actually projected",
     "m_64": {
-      "pearson_r": 0.5281060913239134,
+      "slope": 1.0270902572636091,
+      "intercept": -0.012653778791341611,
+      "pearson_r": 0.5453194831968975,
+      "mae": 0.049755123003028846,
       "mean_hd": 0.500428125,
       "std_hd": 0.07426766355291767
     },
     "m_128": {
-      "pearson_r": 0.6460158472784384,
+      "slope": 1.023329507457042,
+      "intercept": -0.011667287512343671,
+      "pearson_r": 0.6748538592319968,
+      "mae": 0.035388742175861215,
       "mean_hd": 0.4995359375,
       "std_hd": 0.05979266730933521
     },
     "m_256": {
-      "pearson_r": 0.7580380176382755,
+      "slope": 1.033018687763027,
+      "intercept": -0.016910632777714756,
+      "pearson_r": 0.79257959028657,
+      "mae": 0.025158475063285873,
       "mean_hd": 0.4991328125,
       "std_hd": 0.051393412982105195
     },
     "m_512": {
-      "pearson_r": 0.8426589940431527,
+      "slope": 1.021909165012655,
+      "intercept": -0.010869084999458913,
+      "pearson_r": 0.8788983871625523,
+      "mae": 0.017614277256386725,
       "mean_hd": 0.499624609375,
       "std_hd": 0.04584751410281651
     },
     "m_768": {
-      "pearson_r": 0.8727483202872623,
+      "slope": 1.0196706718793878,
+      "intercept": -0.010096551133777484,
+      "pearson_r": 0.9126612247795283,
+      "mae": 0.014368008637160253,
       "mean_hd": 0.49927890625,
       "std_hd": 0.04405472501386922
     }
+  },
+  "train_population_bit_balance_m512": {
+    "train_subjects": 180,
+    "fraction_outside_03_07": 0.0,
+    "count_outside_03_07": 0,
+    "global_bit_mean": 0.5001410590277777,
+    "min_bit_mean": 0.4444444444444444,
+    "max_bit_mean": 0.5777777777777777
   },
   "scenario_k_validation": {
     "m": 512,
@@ -53,5 +77,13 @@
     "mean_eer_percent": 0.7839506172839499,
     "std_eer_percent": 0.6415299975000585
   },
-  "unprotected_val_eer_at_w06": 0.0
+  "unprotected_vs_scenario_k_val": {
+    "val_subjects": 30,
+    "genuine_trials": 90,
+    "impostor_trials": 810,
+    "unprotected_s3_val_eer_at_w06": 0.0,
+    "scenario_k_val_eer_mean": 0.0078395061728395,
+    "scenario_k_val_eer_std": 0.006415299975000585,
+    "limitation_note": "Validation set contains only 30 subjects (90 genuine trials, trial resolution 1/90 = 1.11%). 90 genuine trials cannot support any statistically confident claim regarding accuracy; it serves solely as a sanity check before unblinding Phase 5."
+  }
 }

@@ -1,7 +1,40 @@
 # CHANGELOG.md
 Format: `## [phase-N] YYYY-MM-DD` then bullets Added / Changed / Fixed.
 
-## [phase-4] 2026-09-30
+## [phase-5] 2026-09-30
+- Phase 4 Follow-Ups & Sanity Checks:
+  - Computed Hamming-vs-angle linear regression and MAE on centered vectors $\tilde{u} = u - \mu$: slope=1.0219, intercept=-0.0109, $r=0.8789$, MAE=0.0176 for $m=512$; slope=1.0197, intercept=-0.0101, $r=0.9127$, MAE=0.0144 for $m=768$. Regenerated `results/chaos_hd_vs_angle.png`.
+  - Verified population bit balance on 180 train subjects: 0.0% (0 / 512) outside $[0.3, 0.7]$; global mean bit value = 0.5001.
+  - Reported unprotected S3 Val EER (0.000%) next to Scenario K Val EER (0.784% $\pm$ 0.642%), disclosing that 90 genuine trials have 1.11% discrete resolution and cannot support statistical claims.
+  - Recorded Docker CLI status (unavailable on host PATH) as a required Phase 7 acceptance check; confirmed KAT bit string hex hash saved in tests (`83ec0508a8d11c75`).
+  - Added integer overflow and quantization sanity test `test_quantization_and_accumulator_bounds` in `tests/test_chaos.py` (max $|x_q| = 175,011 \ll 2^{31}-1$; 0 clipped coordinates across all 300 subjects / 2,700 vectors).
+- Parameter Selection of $m$ on Validation Data (Step 1, D-014):
+  - Evaluated $m \in \{64, 128, 256, 512, 768, 1024\}$ on 30 validation subjects across 10 random keys (Scenario K).
+  - Best $m=1024$ (Val EER = 0.654% $\pm$ 0.430%, 1-SD threshold = 1.084%).
+  - Selected $m=512$ as the smallest $m$ within 1 SD of best (Val EER = 0.852% $\pm$ 0.398% $\le 1.084\%$). Saved `results/cancelable_val_m_selection.png`.
+- Headline Performance Preservation Benchmark (Scenario K, Steps 2 & 3):
+  - Evaluated on 120 test subjects across 10 fixed random master keys with chosen parameters ($w=0.60, m=512$):
+    - Pooled EER: $1.29\% \pm 0.23\%$ (vs unprotected S3 1.11%).
+    - FNMR @ 1% FMR: $1.47\% \pm 0.31\%$ (vs unprotected S3 1.11%).
+    - FNMR @ 0.1% FMR: $3.19\% \pm 0.79\%$ (vs unprotected S3 1.94%).
+    - Decidability $d': 5.29$ (vs unprotected S3 5.91).
+    - Fair gallery-40 Rank-1 accuracy: $98.81\% \pm 0.31\%$ (DB1: 98.42%, DB2: 98.00%, DB3: 100.00%).
+    - Paired bootstrap over test subjects (1000 resamples): $\Delta\text{EER} = +0.213\%$ (95% CI $[-0.135\%, +0.688\%]$). Excludes 0? False (performance degradation is statistically indistinguishable from zero). 360 genuine trials = 0.28% discrete resolution.
+    - Saved raw scores `results/scenario_k_gen_scores.npy`, `results/scenario_k_imp_scores.npy`, and comparison curves `results/cancelable_roc.png`, `results/cancelable_cmc.png`.
+- Scenario U Cryptographic Isolation (Step 4):
+  - Evaluated unique per-user keys yielding EER = 0.0000% and cross-key impostor mean HD = $0.5001 \pm 0.0222$. Saved `results/cancelable_scenario_u_dist.png` (explicitly disclaimed as NOT an accuracy measure).
+- Revocability Evaluation (Step 5, ISO/IEC 30136):
+  - Evaluated across 5 key versions per test subject. Genuine probes against templates enrolled under revoked keys yielded mean HD = 0.5018 and FNMR = 100.00% (100% rejection at $\tau=0.350$). Re-enrollment under new key restored FNMR to 1.67%. Saved `results/cancelable_revocability_dist.png`.
+- Unlinkability Evaluation (Step 6, ISO/IEC 30136):
+  - Evaluated Gomez-Barrero mated vs non-mated cross-key score distributions. Multi-system cancelable benchmark achieved global $D_\leftrightarrow^{\text{sys}} = 0.0125$ ($\ll 0.10$ threshold, full unlinkability). Reused key counterexample yielded $D_\leftrightarrow^{\text{sys}} = 0.9827$. Saved `results/cancelable_unlinkability.png`.
+- Ablations & Analysis (Step 7):
+  - Validation weight grid confirmed $w=0.60$ is optimal ($0.833\%$ EER).
+  - Test modality cancelable EERs: Face-only 2.73%, Finger-only 5.98%, Fused 1.08%, proving multimodal fusion gain is preserved under chaotic protection.
+  - Generated test-set $m$-sensitivity curve `results/cancelable_test_m_analysis.png` (labeled analysis only).
+- Results Artifacts & Reporting (Step 8):
+  - Compiled `results/cancelable_summary.md` and `results/cancelable_eer.json`.
+  - Recorded ADR D-014 in `docs/DECISIONS.md`, updated `docs/EVALUATION_PLAN.md` and `docs/TRACEABILITY_REPORT.md`.
+  - All 32 tests in test suite passing; `ruff` lint checks clean.
 - Pre-Phase 4 statistical analysis and protocol alignment (D-012):
   - Completed paired bootstrap over test subjects (1000 resamples, seed 42) for EER difference fused-minus-face: difference = -0.89%, 95% CI [-2.23%, -0.38%] (strictly excludes 0, confirming statistically significant fusion gain).
   - Explained face-only CI shift ([1.11%, 3.89%] -> [1.11%, 3.60%]) from Protocol D-009 same-DB impostor stratification; refactored bootstrap CIs to shared unified function with seed 42.

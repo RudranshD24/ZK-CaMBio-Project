@@ -44,9 +44,9 @@ def run_property_check(
             j = rng.randint(0, n_subjs)
         pairs.append((i, j))
 
-    # Compute cosine similarities and angles
-    u_list = [enroll_templates[i] for i, _ in pairs]
-    v_list = [enroll_templates[j] for _, j in pairs]
+    # Compute cosine similarities and angles ON CENTERED VECTORS that are actually projected
+    u_list = [enroll_templates[i] - mean_vec for i, _ in pairs]
+    v_list = [enroll_templates[j] - mean_vec for _, j in pairs]
 
     # Angles theta in [0, pi]
     cos_sims = [
@@ -61,7 +61,9 @@ def run_property_check(
     state, r_param = derive_chaos_parameters(master_key, "property_check", 1)
 
     m_values = [64, 128, 256, 512, 768]
-    hd_results = {}
+    hd_results = {
+        "angle_computation": "Computed on CENTERED fused vectors (u - mean_vec, v - mean_vec) as actually projected",
+    }
 
     plt.figure(figsize=(10, 7))
     plt.plot([0, 1], [0, 1], "k--", label=r"Ideal $\mathbb{E}[HD] = \theta / \pi$", linewidth=2)
@@ -86,19 +88,25 @@ def run_property_check(
             else:
                 binned_hd.append(np.nan)
 
+        slope, intercept = np.polyfit(thetas_over_pi, hds, 1)
         corr = float(np.corrcoef(thetas_over_pi, hds)[0, 1])
+        mae = float(np.mean(np.abs(hds - thetas_over_pi)))
         hd_results[f"m_{m}"] = {
+            "slope": float(slope),
+            "intercept": float(intercept),
             "pearson_r": corr,
+            "mae": mae,
             "mean_hd": float(np.mean(hds)),
             "std_hd": float(np.std(hds)),
         }
-        plt.plot(bin_centers, binned_hd, marker="o", label=f"m = {m} (r = {corr:.3f})")
+        print(f"  m = {m:3d}: slope={slope:.4f}, intercept={intercept:.4f}, r={corr:.4f}, MAE={mae:.4f}")
+        plt.plot(bin_centers, binned_hd, marker="o", label=f"m = {m} (slope={slope:.2f}, r={corr:.3f}, MAE={mae:.3f})")
 
-    plt.xlabel(r"Normalized Angle $\theta / \pi$ (from original fused vectors)", fontsize=12)
+    plt.xlabel(r"Normalized Angle $\theta / \pi$ (from centered fused vectors)", fontsize=12)
     plt.ylabel("Normalized Hamming Distance (chaotic templates)", fontsize=12)
-    plt.title(r"Chaotic Random Projection Metric Preservation ($HD \approx \theta / \pi$)", fontsize=14)
+    plt.title(r"Chaotic Random Projection Metric Preservation on Centered Vectors ($HD \approx \theta / \pi$)", fontsize=13)
     plt.grid(True, alpha=0.3)
-    plt.legend(fontsize=11)
+    plt.legend(fontsize=10)
     plt.tight_layout()
     plt.savefig(output_path, dpi=300)
     plt.close()
@@ -281,15 +289,45 @@ def main() -> None:
     # 4. Benchmark transform timing
     ms_per_transform = benchmark_transform_timing(mean_vec, d=768, m=512, n_runs=1000)
 
-    # 5. Save all smoke results
+    # 5. Train population bit balance for m=512
+    train_mask = fused_data["splits"] == "train"
+    train_tmpls = fused_data["enroll_templates"][train_mask]
+    master_key = b"\x42" * 32
+    state_tb, r_tb = derive_chaos_parameters(master_key, "train_bit_balance", 1)
+    train_bits_512 = []
+    for u in train_tmpls:
+        u_q = quantize_vector(u, mean_vec)
+        raw_b = chaoshash.transform(u_q, state_tb, r_tb, 512)
+        train_bits_512.append(np.unpackbits(np.frombuffer(raw_b, dtype=np.uint8))[:512])
+    train_bits_512 = np.array(train_bits_512)
+    bit_means = np.mean(train_bits_512, axis=0)
+    outside_fraction = float(np.mean((bit_means < 0.3) | (bit_means > 0.7)))
+
+    # 6. Save all smoke results
     smoke_summary = {
         "phase": 4,
         "description": "Smoke evaluation of C++ Chaos Engine on 30 validation subjects and property checks",
         "timing_ms_per_transform": ms_per_transform,
         "timing_throughput_transforms_per_sec": 1000.0 / ms_per_transform,
         "property_check": property_results,
+        "train_population_bit_balance_m512": {
+            "train_subjects": int(np.sum(train_mask)),
+            "fraction_outside_03_07": outside_fraction,
+            "count_outside_03_07": int(np.sum((bit_means < 0.3) | (bit_means > 0.7))),
+            "global_bit_mean": float(np.mean(bit_means)),
+            "min_bit_mean": float(np.min(bit_means)),
+            "max_bit_mean": float(np.max(bit_means)),
+        },
         "scenario_k_validation": scenario_k_results,
-        "unprotected_val_eer_at_w06": 0.0,
+        "unprotected_vs_scenario_k_val": {
+            "val_subjects": len(val_indices),
+            "genuine_trials": 90,
+            "impostor_trials": 810,
+            "unprotected_s3_val_eer_at_w06": 0.0,
+            "scenario_k_val_eer_mean": scenario_k_results["mean_eer"],
+            "scenario_k_val_eer_std": scenario_k_results["std_eer"],
+            "limitation_note": "Validation set contains only 30 subjects (90 genuine trials, trial resolution 1/90 = 1.11%). 90 genuine trials cannot support any statistically confident claim regarding accuracy; it serves solely as a sanity check before unblinding Phase 5.",
+        },
     }
 
     out_json = results_dir / "chaos_val_smoke.json"

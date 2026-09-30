@@ -236,3 +236,47 @@ def test_train_population_bit_balance():
     print(f"\nTrain bit balance: {fraction_skewed*100:.2f}% bits outside [0.3, 0.7] (mean={np.mean(pos_means):.3f})")
 
     assert fraction_skewed < 0.05, f"Too many skewed bit positions: {fraction_skewed*100:.2f}%"
+
+
+def test_quantization_and_accumulator_bounds():
+    """Asserts |x_q| stays within int32 and int64 accumulator cannot overflow for d up to 1024;
+
+    verifies zero clipped values across all 300 subjects.
+    """
+    fused_path = Path("data/processed/fused_embeddings.npz")
+    mean_path = Path("data/processed/chaos_mean_vector.npy")
+    if not fused_path.is_file() or not mean_path.is_file():
+        pytest.skip("Data files missing")
+
+    fused_data = np.load(fused_path)
+    mean_vec = np.load(mean_path)
+
+    # 1. Theoretical worst-case bounds for d up to 1024
+    # Unit vectors centered by mean vector satisfy |x_j| <= 2.0
+    scale = 1 << 20
+    max_theoretical_comp = 2.0 * scale
+    assert max_theoretical_comp < (1 << 31) - 1, "Quantized component must fit in int32"
+
+    max_accumulator_1024 = 1024 * int(max_theoretical_comp)
+    assert max_accumulator_1024 < (1 << 63) - 1, "Accumulator for d=1024 must not overflow int64"
+
+    # 2. Empirical check across all 300 subjects (enroll templates, enroll impressions, probes)
+    all_vectors = []
+    all_vectors.append(fused_data["enroll_templates"])  # (300, 768)
+    all_vectors.append(fused_data["enroll_embeddings"].reshape(-1, 768))  # (1500, 768)
+    all_vectors.append(fused_data["probe_embeddings"].reshape(-1, 768))  # (900, 768)
+
+    clipped_count = 0
+    max_observed_abs = 0
+
+    for vec_batch in all_vectors:
+        for vec in vec_batch:
+            centered = vec.astype(np.float64) - mean_vec.astype(np.float64)
+            scaled = np.round(centered * scale)
+            if np.any(scaled < -2147483648) or np.any(scaled > 2147483647):
+                clipped_count += 1
+            max_observed_abs = max(max_observed_abs, int(np.max(np.abs(scaled))))
+
+    assert clipped_count == 0, f"Observed {clipped_count} clipped values!"
+    assert max_observed_abs < (1 << 22), f"Observed value unexpectedly large: {max_observed_abs}"
+
