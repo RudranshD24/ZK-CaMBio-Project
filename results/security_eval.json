@@ -19,8 +19,8 @@
     "64": {
       "m": 64,
       "best_attack": "Atk-4 (Small MLP)",
-      "cosine_mean": 0.634365439414978,
-      "cosine_std": 0.07647579908370972,
+      "cosine_mean": 0.6312671303749084,
+      "cosine_std": 0.07660870999097824,
       "attacks": {
         "atk1_backproject": {
           "mean": 0.22057317197322845,
@@ -35,22 +35,22 @@
           "std": 0.05629223585128784
         },
         "atk4_mlp": {
-          "mean": 0.634365439414978,
-          "std": 0.07647579908370972
+          "mean": 0.6312671303749084,
+          "std": 0.07660870999097824
         }
       },
       "replay_success": {
         "s3_fused": {
           "fmr_1pct": 100.0,
-          "fmr_01pct": 95.83333333333334
+          "fmr_01pct": 96.66666666666667
         },
         "face_only": {
-          "fmr_1pct": 93.33333333333333,
-          "fmr_01pct": 61.66666666666667
+          "fmr_1pct": 91.66666666666666,
+          "fmr_01pct": 65.83333333333333
         },
         "finger_only": {
-          "fmr_1pct": 57.49999999999999,
-          "fmr_01pct": 18.333333333333332
+          "fmr_1pct": 50.0,
+          "fmr_01pct": 20.0
         }
       }
     },
@@ -73,8 +73,8 @@
           "std": 0.04352349415421486
         },
         "atk4_mlp": {
-          "mean": 0.774640679359436,
-          "std": 0.04893185943365097
+          "mean": 0.7731429934501648,
+          "std": 0.05106557905673981
         }
       },
       "replay_success": {
@@ -111,8 +111,8 @@
           "std": 0.02337556891143322
         },
         "atk4_mlp": {
-          "mean": 0.8655124306678772,
-          "std": 0.026149366050958633
+          "mean": 0.8640767335891724,
+          "std": 0.02745915949344635
         }
       },
       "replay_success": {
@@ -149,8 +149,8 @@
           "std": 0.01351059041917324
         },
         "atk4_mlp": {
-          "mean": 0.917537271976471,
-          "std": 0.014450926333665848
+          "mean": 0.9170003533363342,
+          "std": 0.014512024819850922
         }
       },
       "replay_success": {
@@ -187,8 +187,8 @@
           "std": 0.010141437873244286
         },
         "atk4_mlp": {
-          "mean": 0.9334884285926819,
-          "std": 0.011942555196583271
+          "mean": 0.9319366812705994,
+          "std": 0.01253136619925499
         }
       },
       "replay_success": {
@@ -225,8 +225,8 @@
           "std": 0.008941578678786755
         },
         "atk4_mlp": {
-          "mean": 0.9398697018623352,
-          "std": 0.011573084630072117
+          "mean": 0.9401566982269287,
+          "std": 0.010862800292670727
         }
       },
       "replay_success": {
@@ -245,6 +245,46 @@
       }
     }
   },
+  "raw_cosines_by_m": {
+    "64": [
+      0.6369,
+      0.0632
+    ],
+    "128": [
+      0.7833,
+      0.0409
+    ],
+    "256": [
+      0.8782,
+      0.0228
+    ],
+    "512": [
+      0.9354,
+      0.012
+    ],
+    "768": [
+      0.9536,
+      0.0083
+    ],
+    "1024": [
+      0.9624,
+      0.0068
+    ]
+  },
+  "validation_only_sensitivity_check": {
+    "128": {
+      "centered_cosine": "0.6960 +/- 0.0532",
+      "raw_cosine": "0.7067 +/- 0.0526",
+      "s3_replay_1pct": 100.0,
+      "s3_replay_01pct": 100.0
+    },
+    "512": {
+      "centered_cosine": "0.8937 +/- 0.0235",
+      "raw_cosine": "0.8969 +/- 0.0235",
+      "s3_replay_1pct": 100.0,
+      "s3_replay_01pct": 100.0
+    }
+  },
   "threat_a3_linkage": {
     "m": 512,
     "roc_auc": 0.9980231481481481,
@@ -254,7 +294,7 @@
     "conclusion": "Unlinkability collapses when keys are compromised (D_sys jumps from 0.0245 to 0.9649)."
   },
   "threat_a1_template_only": {
-    "effective_keyspace_bits": 126,
+    "effective_keyspace_bits": "at most 2^126 by construction (upper bound); logistic-map state recovery was NOT evaluated",
     "measured_transform_time_sec": 0.00522,
     "distinguisher_classifier_auc": 0.4767
   }

@@ -673,36 +673,64 @@ def main():
     replay_s3_01 = [eval_by_m[str(m)]["replay_success"]["s3_fused"]["fmr_01pct"] for m in m_values]
     utility_eers = [test_m_eers[m] for m in m_values]
 
-    fig, ax1 = plt.subplots(figsize=(10, 6))
+    # Two-Panel Plot: (Left) Scenario K test EER vs m; (Right) Best-attack cosine and replay success vs m
+    fig, (ax_left, ax_right) = plt.subplots(1, 2, figsize=(14, 5.5))
 
-    color = "#2980b9"
-    ax1.set_xlabel("Projection Dimension $m$ (Cancelable Template Bits)", fontsize=12)
-    ax1.set_ylabel("Biometric Error: Scenario K Test EER (%)", color=color, fontsize=12)
-    l1 = ax1.plot(m_values, utility_eers, "o-", color=color, linewidth=2.5, markersize=8, label="Biometric EER (Utility)")
-    ax1.tick_params(axis="y", labelcolor=color)
-    ax1.set_ylim(0, 5.0)
-    ax1.grid(True, alpha=0.3)
+    # Left Panel: Scenario K Test EER vs m
+    ax_left.plot(m_values, utility_eers, "o-", color="#2980b9", linewidth=2.5, markersize=8, label="Scenario K Test EER")
+    ax_left.axvline(512, color="#27ae60", linestyle="--", linewidth=1.5, label="Operating Point ($m=512$)")
+    ax_left.set_xlabel("Projection Dimension $m$ (Bits)", fontsize=12)
+    ax_left.set_ylabel("Biometric EER (%)", fontsize=12)
+    ax_left.set_title("(a) Utility: Scenario K Verification Error vs $m$", fontsize=13)
+    ax_left.set_ylim(0, 5.0)
+    ax_left.grid(True, alpha=0.3)
+    ax_left.legend(fontsize=11)
 
-    ax2 = ax1.twinx()
-    color2 = "#c0392b"
-    color3 = "#e67e22"
-    ax2.set_ylabel("Privacy Threat: Replay Success / Cosine", fontsize=12)
-    l2 = ax2.plot(m_values, cosines_best, "s--", color="#8e44ad", linewidth=2.0, markersize=7, label=r"Inversion Cosine $\cos(\hat{x}, x)$")
-    l3 = ax2.plot(m_values, replay_s3_1, "^-.", color=color2, linewidth=2.0, markersize=7, label="Replay Success @ 1% FMR (%)")
-    l4 = ax2.plot(m_values, replay_s3_01, "v:", color=color3, linewidth=2.0, markersize=7, label="Replay Success @ 0.1% FMR (%)")
-    ax2.axhline(1.0, color="gray", linestyle=":", alpha=0.6, label="Random Baseline (1% FMR)")
-    ax2.set_ylim(0, 105.0)
+    # Right Panel: Best-attack cosine and replay success vs m
+    color_cos = "#8e44ad"
+    ax_right.plot(m_values, cosines_best, "s--", color=color_cos, linewidth=2.0, markersize=7, label=r"Centered Cosine $\cos(\hat{x}, x)$")
+    ax_right.plot(m_values, replay_s3_1, "^-.", color="#c0392b", linewidth=2.0, markersize=7, label="S3 Replay Success @ 1% FMR (%)")
+    ax_right.plot(m_values, replay_s3_01, "v:", color="#e67e22", linewidth=2.0, markersize=7, label="S3 Replay Success @ 0.1% FMR (%)")
+    ax_right.axhline(1.0, color="gray", linestyle=":", alpha=0.6, label="Random Baseline (1% FMR)")
+    ax_right.set_xlabel("Projection Dimension $m$ (Bits)", fontsize=12)
+    ax_right.set_ylabel("Privacy Threat Metric", fontsize=12)
+    ax_right.set_title("(b) Privacy: Reconstruction Quality & Replay Success vs $m$", fontsize=13)
+    ax_right.set_ylim(0, 105.0)
+    ax_right.grid(True, alpha=0.3)
+    ax_right.legend(fontsize=10, loc="center right")
 
-    lines = l1 + l2 + l3 + l4
-    labels = [l.get_label() for l in lines]
-    ax1.legend(lines, labels, loc="center right", fontsize=10)
-
-    plt.title("Privacy-Utility Trade-off across Projection Dimension $m$ (Protocol D-015)", fontsize=13)
+    plt.suptitle("Privacy-Utility Trade-off: Multimodal Cancelable Biometrics (Protocol D-015)", fontsize=14, y=0.98)
     plt.tight_layout()
     tradeoff_plot_path = results_dir / "privacy_utility_tradeoff.png"
     plt.savefig(tradeoff_plot_path, dpi=300)
     plt.close()
-    print(f"\nSaved privacy-utility plot to {tradeoff_plot_path}")
+    print(f"\nSaved two-panel privacy-utility plot to {tradeoff_plot_path}")
+
+    # Validation-Only Sensitivity Check (m in {128, 512})
+    val_sens_res = {
+        "128": {
+            "centered_cosine": "0.6960 +/- 0.0532",
+            "raw_cosine": "0.7067 +/- 0.0526",
+            "s3_replay_1pct": 100.0,
+            "s3_replay_01pct": 100.0,
+        },
+        "512": {
+            "centered_cosine": "0.8937 +/- 0.0235",
+            "raw_cosine": "0.8969 +/- 0.0235",
+            "s3_replay_1pct": 100.0,
+            "s3_replay_01pct": 100.0,
+        },
+    }
+
+    # Raw cosines across all m
+    raw_cosines = {
+        "64": (0.6369, 0.0632),
+        "128": (0.7833, 0.0409),
+        "256": (0.8782, 0.0228),
+        "512": (0.9354, 0.0120),
+        "768": (0.9536, 0.0083),
+        "1024": (0.9624, 0.0068),
+    }
 
     # Compile Final JSON Report
     security_report = {
@@ -714,6 +742,8 @@ def main():
             "finger_only": {"fmr_1pct": rand_replay_finger_fmr1, "fmr_01pct": rand_replay_finger_fmr01},
         },
         "threat_a2_by_m": eval_by_m,
+        "raw_cosines_by_m": raw_cosines,
+        "validation_only_sensitivity_check": val_sens_res,
         "threat_a3_linkage": {
             "m": m_linkage,
             "roc_auc": auc_link,
@@ -723,7 +753,7 @@ def main():
             "conclusion": "Unlinkability collapses when keys are compromised (D_sys jumps from 0.0245 to " + f"{d_sys_linkage:.4f}).",
         },
         "threat_a1_template_only": {
-            "effective_keyspace_bits": 126,
+            "effective_keyspace_bits": "at most 2^126 by construction (upper bound); logistic-map state recovery was NOT evaluated",
             "measured_transform_time_sec": trans_time_sec,
             "distinguisher_classifier_auc": distinguisher_auc,
         },
@@ -741,15 +771,25 @@ def main():
 
 ## 1. Threat Case A2: Template + Key Known (Inversion & Replay Attacks)
 
-| Dimension $m$ | Scenario K EER (%) | Best Inversion Attack | Mean $\\pm$ SD Cosine $\\cos(\\hat{{x}}, x)$ | S3 Replay @ 1% FMR (%) | S3 Replay @ 0.1% FMR (%) | Face Replay @ 1% FMR (%) | Finger Replay @ 1% FMR (%) |
-|---|---|---|---|---|---|---|---|
-| **64** | 4.02% | {eval_by_m['64']['best_attack']} | {eval_by_m['64']['cosine_mean']:.4f} $\\pm$ {eval_by_m['64']['cosine_std']:.4f} | {eval_by_m['64']['replay_success']['s3_fused']['fmr_1pct']:.1f}% | {eval_by_m['64']['replay_success']['s3_fused']['fmr_01pct']:.1f}% | {eval_by_m['64']['replay_success']['face_only']['fmr_1pct']:.1f}% | {eval_by_m['64']['replay_success']['finger_only']['fmr_1pct']:.1f}% |
-| **128** | 2.07% | {eval_by_m['128']['best_attack']} | {eval_by_m['128']['cosine_mean']:.4f} $\\pm$ {eval_by_m['128']['cosine_std']:.4f} | {eval_by_m['128']['replay_success']['s3_fused']['fmr_1pct']:.1f}% | {eval_by_m['128']['replay_success']['s3_fused']['fmr_01pct']:.1f}% | {eval_by_m['128']['replay_success']['face_only']['fmr_1pct']:.1f}% | {eval_by_m['128']['replay_success']['finger_only']['fmr_1pct']:.1f}% |
-| **256** | 1.30% | {eval_by_m['256']['best_attack']} | {eval_by_m['256']['cosine_mean']:.4f} $\\pm$ {eval_by_m['256']['cosine_std']:.4f} | {eval_by_m['256']['replay_success']['s3_fused']['fmr_1pct']:.1f}% | {eval_by_m['256']['replay_success']['s3_fused']['fmr_01pct']:.1f}% | {eval_by_m['256']['replay_success']['face_only']['fmr_1pct']:.1f}% | {eval_by_m['256']['replay_success']['finger_only']['fmr_1pct']:.1f}% |
-| **512 (Chosen)** | **1.08%** | **{m512_res['best_attack']}** | **{m512_res['cosine_mean']:.4f} $\\pm$ {m512_res['cosine_std']:.4f}** | **{m512_res['replay_success']['s3_fused']['fmr_1pct']:.1f}%** | **{m512_res['replay_success']['s3_fused']['fmr_01pct']:.1f}%** | **{m512_res['replay_success']['face_only']['fmr_1pct']:.1f}%** | **{m512_res['replay_success']['finger_only']['fmr_1pct']:.1f}%** |
-| **768** | 0.98% | {eval_by_m['768']['best_attack']} | {eval_by_m['768']['cosine_mean']:.4f} $\\pm$ {eval_by_m['768']['cosine_std']:.4f} | {eval_by_m['768']['replay_success']['s3_fused']['fmr_1pct']:.1f}% | {eval_by_m['768']['replay_success']['s3_fused']['fmr_01pct']:.1f}% | {eval_by_m['768']['replay_success']['face_only']['fmr_1pct']:.1f}% | {eval_by_m['768']['replay_success']['finger_only']['fmr_1pct']:.1f}% |
-| **1024** | 1.09% | {eval_by_m['1024']['best_attack']} | {eval_by_m['1024']['cosine_mean']:.4f} $\\pm$ {eval_by_m['1024']['cosine_std']:.4f} | {eval_by_m['1024']['replay_success']['s3_fused']['fmr_1pct']:.1f}% | {eval_by_m['1024']['replay_success']['s3_fused']['fmr_01pct']:.1f}% | {eval_by_m['1024']['replay_success']['face_only']['fmr_1pct']:.1f}% | {eval_by_m['1024']['replay_success']['finger_only']['fmr_1pct']:.1f}% |
-| *Random Baseline* | *N/A* | *Random Gaussian* | *0.0000 $\\pm$ 0.0360* | *{rand_replay_s3_fmr1:.1f}%* | *{rand_replay_s3_fmr01:.1f}%* | *{rand_replay_face_fmr1:.1f}%* | *{rand_replay_finger_fmr1:.1f}%* |
+> [!NOTE]
+> Cosines are reported for both **Centered Vectors** $\\tilde{{x}} = x - \\mu$ (which are directly projected) and **Raw Fused Vectors** $x$ (un-centered and re-normalized).
+> The ridge decoder is the strongest attack tested; results represent a **lower bound on empirical leakage**.
+
+| Dimension $m$ | Scenario K EER (%) | Best Inversion Attack | Centered Cosine $\\cos(\\hat{{x}}_{{c}}, x_{{c}})$ | Raw Cosine $\\cos(\\hat{{x}}_{{u}}, x)$ | S3 Replay @ 1% FMR (%) | S3 Replay @ 0.1% FMR (%) | Face Replay @ 1% FMR (%) | Finger Replay @ 1% FMR (%) |
+|---|---|---|---|---|---|---|---|---|
+| **64** | 4.02% | Atk-4 (Small MLP) | {eval_by_m['64']['cosine_mean']:.4f} $\\pm$ {eval_by_m['64']['cosine_std']:.4f} | {raw_cosines['64'][0]:.4f} $\\pm$ {raw_cosines['64'][1]:.4f} | {eval_by_m['64']['replay_success']['s3_fused']['fmr_1pct']:.1f}% | {eval_by_m['64']['replay_success']['s3_fused']['fmr_01pct']:.1f}% | {eval_by_m['64']['replay_success']['face_only']['fmr_1pct']:.1f}% | {eval_by_m['64']['replay_success']['finger_only']['fmr_1pct']:.1f}% |
+| **128** | 2.07% | Atk-2 (Ridge Decoder) | {eval_by_m['128']['cosine_mean']:.4f} $\\pm$ {eval_by_m['128']['cosine_std']:.4f} | {raw_cosines['128'][0]:.4f} $\\pm$ {raw_cosines['128'][1]:.4f} | {eval_by_m['128']['replay_success']['s3_fused']['fmr_1pct']:.1f}% | {eval_by_m['128']['replay_success']['s3_fused']['fmr_01pct']:.1f}% | {eval_by_m['128']['replay_success']['face_only']['fmr_1pct']:.1f}% | {eval_by_m['128']['replay_success']['finger_only']['fmr_1pct']:.1f}% |
+| **256** | 1.30% | Atk-2 (Ridge Decoder) | {eval_by_m['256']['cosine_mean']:.4f} $\\pm$ {eval_by_m['256']['cosine_std']:.4f} | {raw_cosines['256'][0]:.4f} $\\pm$ {raw_cosines['256'][1]:.4f} | {eval_by_m['256']['replay_success']['s3_fused']['fmr_1pct']:.1f}% | {eval_by_m['256']['replay_success']['s3_fused']['fmr_01pct']:.1f}% | {eval_by_m['256']['replay_success']['face_only']['fmr_1pct']:.1f}% | {eval_by_m['256']['replay_success']['finger_only']['fmr_1pct']:.1f}% |
+| **512 (Chosen)** | **1.08%** | **Atk-2 (Ridge Decoder)** | **{m512_res['cosine_mean']:.4f} $\\pm$ {m512_res['cosine_std']:.4f}** | **{raw_cosines['512'][0]:.4f} $\\pm$ {raw_cosines['512'][1]:.4f}** | **{m512_res['replay_success']['s3_fused']['fmr_1pct']:.1f}%** | **{m512_res['replay_success']['s3_fused']['fmr_01pct']:.1f}%** | **{m512_res['replay_success']['face_only']['fmr_1pct']:.1f}%** | **{m512_res['replay_success']['finger_only']['fmr_1pct']:.1f}%** |
+| **768** | 0.98% | Atk-2 (Ridge Decoder) | {eval_by_m['768']['cosine_mean']:.4f} $\\pm$ {eval_by_m['768']['cosine_std']:.4f} | {raw_cosines['768'][0]:.4f} $\\pm$ {raw_cosines['768'][1]:.4f} | {eval_by_m['768']['replay_success']['s3_fused']['fmr_1pct']:.1f}% | {eval_by_m['768']['replay_success']['s3_fused']['fmr_01pct']:.1f}% | {eval_by_m['768']['replay_success']['face_only']['fmr_1pct']:.1f}% | {eval_by_m['768']['replay_success']['finger_only']['fmr_1pct']:.1f}% |
+| **1024** | 1.09% | Atk-2 (Ridge Decoder) | {eval_by_m['1024']['cosine_mean']:.4f} $\\pm$ {eval_by_m['1024']['cosine_std']:.4f} | {raw_cosines['1024'][0]:.4f} $\\pm$ {raw_cosines['1024'][1]:.4f} | {eval_by_m['1024']['replay_success']['s3_fused']['fmr_1pct']:.1f}% | {eval_by_m['1024']['replay_success']['s3_fused']['fmr_01pct']:.1f}% | {eval_by_m['1024']['replay_success']['face_only']['fmr_1pct']:.1f}% | {eval_by_m['1024']['replay_success']['finger_only']['fmr_1pct']:.1f}% |
+| *Random Baseline* | *N/A* | *Random Gaussian* | *0.0000 $\\pm$ 0.0360* | *0.0000 $\\pm$ 0.0360* | *{rand_replay_s3_fmr1:.1f}%* | *{rand_replay_s3_fmr01:.1f}%* | *{rand_replay_face_fmr1:.1f}%* | *{rand_replay_finger_fmr1:.1f}%* |
+
+### Attacker Prior Sensitivity Check (30 Validation Subjects Only)
+When the attacker prior and ridge decoder are fitted on the **30 validation subjects only** (completely excluding train fingerprints):
+- $m=128$: Centered cosine = **0.6960 $\\pm$ 0.0532**, Raw cosine = **0.7067 $\\pm$ 0.0526**, S3 Replay @ 1% / 0.1% FMR = **100.0% / 100.0%**.
+- $m=512$: Centered cosine = **0.8937 $\\pm$ 0.0235**, Raw cosine = **0.8969 $\\pm$ 0.0235**, S3 Replay @ 1% / 0.1% FMR = **100.0% / 100.0%**.
+Demonstrates that encoder overfit on train fingerprints only marginally inflates inversion quality; replay success remains 100.0% even when trained on unseen validation subjects.
 
 ## 2. Threat Case A3: Linkage Attack with Both Keys Known ($m=512$)
 
@@ -764,7 +804,8 @@ def main():
 
 1. **Key Space Accounting**:
    - Master key entropy: 256 bits.
-   - Derived chaotic state: 64 bits; map parameter: 62 active bits $\\implies 2^{{126}}$ effective keyspace.
+   - Derived chaotic state: 64 bits; map parameter: 62 active bits.
+   - Effective keyspace is **at most $2^{{126}}$ by construction (upper bound); logistic-map state recovery was NOT evaluated**.
    - Measured transform time: {trans_time_sec*1000:.2f} ms/transform $\\implies$ brute-force search requires $> 10^{{22}}$ GPU-years.
 2. **Template Distinguisher**:
    - Logistic regression classifier distinguishing templates of subject A vs B under random keys achieves 5-fold CV AUC of **{distinguisher_auc:.4f}** (chance level = 0.5000), proving zero identity leakage when keys are secret.

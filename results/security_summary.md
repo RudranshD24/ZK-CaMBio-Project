@@ -3,15 +3,25 @@
 
 ## 1. Threat Case A2: Template + Key Known (Inversion & Replay Attacks)
 
-| Dimension $m$ | Scenario K EER (%) | Best Inversion Attack | Mean $\pm$ SD Cosine $\cos(\hat{x}, x)$ | S3 Replay @ 1% FMR (%) | S3 Replay @ 0.1% FMR (%) | Face Replay @ 1% FMR (%) | Finger Replay @ 1% FMR (%) |
-|---|---|---|---|---|---|---|---|
-| **64** | 4.02% | Atk-4 (Small MLP) | 0.6344 $\pm$ 0.0765 | 100.0% | 95.8% | 93.3% | 57.5% |
-| **128** | 2.07% | Atk-2 (Ridge Decoder) | 0.7763 $\pm$ 0.0397 | 100.0% | 100.0% | 100.0% | 86.7% |
-| **256** | 1.30% | Atk-2 (Ridge Decoder) | 0.8745 $\pm$ 0.0216 | 100.0% | 100.0% | 100.0% | 100.0% |
-| **512 (Chosen)** | **1.08%** | **Atk-2 (Ridge Decoder)** | **0.9335 $\pm$ 0.0115** | **100.0%** | **100.0%** | **100.0%** | **100.0%** |
-| **768** | 0.98% | Atk-2 (Ridge Decoder) | 0.9522 $\pm$ 0.0078 | 100.0% | 100.0% | 100.0% | 100.0% |
-| **1024** | 1.09% | Atk-2 (Ridge Decoder) | 0.9614 $\pm$ 0.0063 | 100.0% | 100.0% | 100.0% | 100.0% |
-| *Random Baseline* | *N/A* | *Random Gaussian* | *0.0000 $\pm$ 0.0360* | *0.0%* | *0.0%* | *0.0%* | *0.0%* |
+> [!NOTE]
+> Cosines are reported for both **Centered Vectors** $\tilde{x} = x - \mu$ (which are directly projected) and **Raw Fused Vectors** $x$ (un-centered and re-normalized).
+> The ridge decoder is the strongest attack tested; results represent a **lower bound on empirical leakage**.
+
+| Dimension $m$ | Scenario K EER (%) | Best Inversion Attack | Centered Cosine $\cos(\hat{x}_{c}, x_{c})$ | Raw Cosine $\cos(\hat{x}_{u}, x)$ | S3 Replay @ 1% FMR (%) | S3 Replay @ 0.1% FMR (%) | Face Replay @ 1% FMR (%) | Finger Replay @ 1% FMR (%) |
+|---|---|---|---|---|---|---|---|---|
+| **64** | 4.02% | Atk-4 (Small MLP) | 0.6313 $\pm$ 0.0766 | 0.6369 $\pm$ 0.0632 | 100.0% | 96.7% | 91.7% | 50.0% |
+| **128** | 2.07% | Atk-2 (Ridge Decoder) | 0.7763 $\pm$ 0.0397 | 0.7833 $\pm$ 0.0409 | 100.0% | 100.0% | 100.0% | 86.7% |
+| **256** | 1.30% | Atk-2 (Ridge Decoder) | 0.8745 $\pm$ 0.0216 | 0.8782 $\pm$ 0.0228 | 100.0% | 100.0% | 100.0% | 100.0% |
+| **512 (Chosen)** | **1.08%** | **Atk-2 (Ridge Decoder)** | **0.9335 $\pm$ 0.0115** | **0.9354 $\pm$ 0.0120** | **100.0%** | **100.0%** | **100.0%** | **100.0%** |
+| **768** | 0.98% | Atk-2 (Ridge Decoder) | 0.9522 $\pm$ 0.0078 | 0.9536 $\pm$ 0.0083 | 100.0% | 100.0% | 100.0% | 100.0% |
+| **1024** | 1.09% | Atk-2 (Ridge Decoder) | 0.9614 $\pm$ 0.0063 | 0.9624 $\pm$ 0.0068 | 100.0% | 100.0% | 100.0% | 100.0% |
+| *Random Baseline* | *N/A* | *Random Gaussian* | *0.0000 $\pm$ 0.0360* | *0.0000 $\pm$ 0.0360* | *0.0%* | *0.0%* | *0.0%* | *0.0%* |
+
+### Attacker Prior Sensitivity Check (30 Validation Subjects Only)
+When the attacker prior and ridge decoder are fitted on the **30 validation subjects only** (completely excluding train fingerprints):
+- $m=128$: Centered cosine = **0.6960 $\pm$ 0.0532**, Raw cosine = **0.7067 $\pm$ 0.0526**, S3 Replay @ 1% / 0.1% FMR = **100.0% / 100.0%**.
+- $m=512$: Centered cosine = **0.8937 $\pm$ 0.0235**, Raw cosine = **0.8969 $\pm$ 0.0235**, S3 Replay @ 1% / 0.1% FMR = **100.0% / 100.0%**.
+Demonstrates that encoder overfit on train fingerprints only marginally inflates inversion quality; replay success remains 100.0% even when trained on unseen validation subjects.
 
 ## 2. Threat Case A3: Linkage Attack with Both Keys Known ($m=512$)
 
@@ -26,7 +36,8 @@
 
 1. **Key Space Accounting**:
    - Master key entropy: 256 bits.
-   - Derived chaotic state: 64 bits; map parameter: 62 active bits $\implies 2^{126}$ effective keyspace.
+   - Derived chaotic state: 64 bits; map parameter: 62 active bits.
+   - Effective keyspace is **at most $2^{126}$ by construction (upper bound); logistic-map state recovery was NOT evaluated**.
    - Measured transform time: 5.22 ms/transform $\implies$ brute-force search requires $> 10^{22}$ GPU-years.
 2. **Template Distinguisher**:
    - Logistic regression classifier distinguishing templates of subject A vs B under random keys achieves 5-fold CV AUC of **0.4767** (chance level = 0.5000), proving zero identity leakage when keys are secret.
