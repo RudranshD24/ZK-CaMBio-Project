@@ -1,7 +1,27 @@
 # CHANGELOG.md
 Format: `## [phase-N] YYYY-MM-DD` then bullets Added / Changed / Fixed.
 
-## [phase-8] 2026-09-30
+## [phase-9] 2026-10-01
+- Master Reproducibility Pipeline (`scripts/reproduce_all.py`):
+  - Sequentially executes all evaluation pipelines (`01_face_baseline.py`, `02_finger_baseline.py`, `03_fusion_baseline.py`, `04_chaos_smoke_eval.py`, `05_cancelable_eval.py`, `06_security_eval.py`) from cached embeddings.
+  - Successfully regenerated all 47 result artifacts in `results/` in 1,006.9 seconds with zero failures.
+- Results Integrity Manifest (`results/MANIFEST.md`):
+  - Cataloged SHA-256 cryptographic checksums and exact byte sizes for all 47 result artifacts.
+- Documentation & Experimental Consistency Audit (`docs/CONSISTENCY_AUDIT.md`):
+  - Conducted an exhaustive parameter-by-parameter audit reconciling all metrics across documentation against underlying JSON ground truth.
+- Completed Requirement Traceability (`docs/TRACEABILITY_REPORT.md`):
+  - Verified EV-06 (latency / throughput feasibility) and explicitly documented FR-13 as Not Implemented (no cryptographic zero-knowledge proof circuits).
+- Research Paper Draft (`paper/paper.md`):
+  - Full academic paper draft spanning Abstract, Introduction, Related Work (with `[VERIFY]` citations), Method, Dataset & Chimeric Protocol, Programmatically Generated Results Tables, Security Analysis, Limitations, and Conclusion.
+  - Formally defined "zero-knowledge" strictly as zero raw biometric and key material storage.
+- Comprehensive Viva Materials:
+  - Created 12-slide review deck outline (`docs/VIVA_SLIDES.md`) linking each slide to corresponding figures and empirical results.
+  - Expanded `docs/DEMO_SCRIPT.md` with in-depth examiner Q&As covering non-invertibility, chimeric data, accuracy preservation, revocability vs. unlinkability, logistic map design, and technical limitations.
+- Repository Hygiene & Release:
+  - Validated clean `ruff check` across `src/`, `tests/`, and `scripts/`.
+  - Confirmed via `git ls-files` that zero raw datasets, images, weights, or secrets are tracked.
+  - Created comprehensive `README.md` with setup, reproduction instructions, citations, and licenses.
+  - Tagged `v1.0`.
 - Added Streamlit Demonstration Application (`src/ui/app.py`, FR-11):
   - Strict Client Boundary: UI communicates with backend strictly via REST API (`requests`) over HTTP, importing zero machine learning models, biometric extractors, key material, or C++ chaos code (`test_ui_imports_no_models_or_chaos`).
   - Six Dedicated Pages:

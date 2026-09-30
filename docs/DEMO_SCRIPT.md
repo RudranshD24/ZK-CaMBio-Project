@@ -138,3 +138,43 @@
 ### Q7: Why do `/verify` and `/identify` hide numeric similarity scores outside `DEV_MODE`?
 > **Answer**:  
 > *"Returning granular similarity scores or Hamming distances provides a numeric gradient signal that enables iterative hill-climbing attacks. An adversary submitting synthetic biometric probes could optimize inputs toward lower Hamming distances until authentication succeeds. Returning only boolean MATCH / NO MATCH eliminates this direct gradient feedback."*
+
+---
+
+### Q8: Why is recognition accuracy preserved after cancelable transformation (Scenario K)?
+> **Answer**:  
+> *"Under the Johnson-Lindenstrauss lemma and randomized hyper-plane quantization principles, the sign of random linear projections $\text{sign}(R x)$ preserves cosine angular distances between high-dimensional vectors ($\mathbb{E}[HD] = \theta / \pi$). Because the 768-d fused embeddings are L2-normalized and well-separated (decidability $d' = 5.91$), projecting to $m=512$ bits maintains sufficient inter-class margin. In our paired bootstrap test over 120 test subjects, $\Delta\text{EER} = +0.213\%$ with 95% CI $[-0.135\%, +0.688\%]$ (crossing zero), confirming that performance degradation is statistically undetectable at the EER operating point."*
+
+---
+
+### Q9: What is the formal difference between Revocability and Unlinkability (ISO/IEC 30136)?
+> **Answer**:  
+> *"Revocability (renewability) concerns a **single service over time**: if a user's key or template is compromised, can the system revoke it, issue a new key, and generate a new template such that genuine attempts under the revoked key are rejected (100% rejection in our tests) while genuine attempts under the new key succeed?  
+> Unlinkability concerns **multiple independent services simultaneously**: if a user enrolls in Service A and Service B with different keys, can an adversary holding both databases determine whether the two accounts belong to the same biological person? In our Gomez-Barrero benchmark, $D_\leftrightarrow^{sys} = 0.0245 \ll 0.10$, meaning the cross-service matching distribution is indistinguishable from random impostors."*
+
+---
+
+### Q10: Why did you choose a Logistic Map over standard cryptographically secure pseudorandom generators (CSPRNG)?
+> **Answer**:  
+> *"The 1D chaotic logistic map provides continuous pseudo-orbit mixing, high seed sensitivity (Lyapunov exponent $\lambda \approx \ln 2$), and rapid projection generation (3.95 ms for 512 rows) suitable for resource-constrained biometric IoT devices. However, we acknowledge as a formal limitation that standard 1D chaotic maps are not provably cryptographically secure against state reconstruction if many sequential states are observed without perturbation. We counter this by seeding via HMAC-SHA256 from user-stretched secrets and introducing fixed-point state perturbators to prevent short orbit traps."*
+
+---
+
+### Q11: Why is Hamming distance used for template comparison rather than Cosine or Euclidean distance?
+> **Answer**:  
+> *"First, after sign-binarization $\text{sign}(R x) \in \{0, 1\}^m$, Hamming distance is the natural metric because bits directly encode hyper-plane half-spaces. Second, Hamming distance executes via hardware-accelerated bitwise XOR and `popcount` CPU instructions, requiring only 512 bits (64 bytes) of memory per template and executing in nanoseconds per comparison. Third, Hamming distance avoids floating-point non-determinism across disparate microarchitectures."*
+
+---
+
+### Q12: What are the primary technical limitations of this work?
+> **Answer**:  
+> *"We identify eight specific limitations:  
+> 1. Chimeric pairing assumes statistical independence between face and fingerprint identities.  
+> 2. Scale is limited to 120 test subjects (requires million-subject evaluations).  
+> 3. VGGFace2 pretraining may share underlying identities with UMDFaces.  
+> 4. Linear decodability: if the key leaks, a Ridge decoder reconstructs vectors with 0.935 cosine similarity.  
+> 5. Presentation attack detection (liveness) is not implemented.  
+> 6. Replay attacks transmitting verbatim packed bitstrings over the network are not inherently prevented by the template format (requiring challenge-response freshness).  
+> 7. The system uses 'zero-knowledge' to mean zero raw biometric storage, not a cryptographic zk-SNARK proof.  
+> 8. Python process runtime memory is not zeroised upon deallocation."*
+

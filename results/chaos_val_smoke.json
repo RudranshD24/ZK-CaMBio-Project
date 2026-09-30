@@ -1,8 +1,8 @@
 {
   "phase": 4,
   "description": "Smoke evaluation of C++ Chaos Engine on 30 validation subjects and property checks",
-  "timing_ms_per_transform": 3.9196689000000333,
-  "timing_throughput_transforms_per_sec": 255.12358964809286,
+  "timing_ms_per_transform": 3.9528171999991173,
+  "timing_throughput_transforms_per_sec": 252.9841248414481,
   "property_check": {
     "angle_computation": "Computed on CENTERED fused vectors (u - mean_vec, v - mean_vec) as actually projected",
     "min_theta_over_pi": 0.09706021012699592,
