@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: changeme
       POSTGRES_DB: cambio
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -27,10 +27,10 @@ services:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql+psycopg2://cambio:changeme@db:5432/cambio
-      API_TOKEN: ${API_TOKEN:-dev_secret_token_123}
-      DEV_MODE: "false"
-      SERVER_MASTER_KEY: ${SERVER_MASTER_KEY:-dev_master_key_12345678901234567890123456789012}
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-cambio}:${POSTGRES_PASSWORD:-changeme}@db:5432/${POSTGRES_DB:-cambio}
+      API_TOKEN: ${API_TOKEN}
+      DEV_MODE: ${DEV_MODE:-false}
+      SERVER_MASTER_KEY: ${SERVER_MASTER_KEY}
       PUBLIC_PARAMS_PATH: configs/biometric_parameters.json
     volumes:
       - ./models:/app/models:ro
@@ -47,7 +47,7 @@ services:
       - api
     environment:
       API_URL: http://api:8000
-      API_TOKEN: ${API_TOKEN:-dev_secret_token_123}
+      API_TOKEN: ${API_TOKEN}
 
 volumes:
   pgdata:

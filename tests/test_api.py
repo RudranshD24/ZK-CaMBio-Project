@@ -442,3 +442,138 @@ def test_no_secrets_or_biometrics_in_logs(client, caplog):
         assert secret not in msg
         assert "embedding" not in msg.lower()
         assert "numpy" not in msg.lower()
+
+
+def test_kdf_kat():
+    """Known-Answer Test (KAT) for scrypt key derivation.
+
+    Fixed inputs -> exact golden stretched secret and (state, r_param).
+    """
+    import hashlib
+    import hmac
+    from src.api.service import BiometricService
+
+    user_secret = "CorrectSecret2026!"
+    app_salt = "zkcambio_salt"
+    key_version = 1
+    master_key = b"TEST_MASTER_KEY_32_BYTES_PADDED!"
+
+    # 1. Direct scrypt verification
+    salt_bytes = f"zkcambio|{app_salt}|v{key_version}".encode()
+    stretched = hashlib.scrypt(
+        user_secret.encode("utf-8"),
+        salt=salt_bytes,
+        n=16384,
+        r=8,
+        p=1,
+        maxmem=32 * 1024 * 1024,
+        dklen=32,
+    )
+    expected_stretched_hex = "5c80bc5b30f1770306f50676010c0abe55b64d846adbfe1f1cc6ad7e4c700d5b"
+    assert stretched.hex() == expected_stretched_hex, f"Stretched secret mismatch: {stretched.hex()}"
+
+    # 2. Service derivation verification
+    service = BiometricService()
+    service.master_key = master_key
+    state, r_param = service.derive_user_chaos_params(
+        username="kat_user",
+        key_mode="user_secret",
+        key_version=key_version,
+        user_secret=user_secret,
+        app_salt=app_salt,
+    )
+
+    expected_state = 0xF9563B4370830318
+    expected_r_param = 0xE2162A3D13DCEF0C
+    assert state == expected_state, f"State mismatch: {hex(state)} vs {hex(expected_state)}"
+    assert r_param == expected_r_param, f"r_param mismatch: {hex(r_param)} vs {hex(expected_r_param)}"
+
+
+def test_wrong_user_secret_indistinguishable_from_impostor(client, monkeypatch):
+    """Verifies that wrong valid-format user_secret yields match:false with a response
+
+    indistinguishable from an impostor probe (status 200, identical keys and structure).
+    """
+    headers = {"Authorization": "Bearer test_token_123", "X-Forwarded-For": "203.0.113.88"}
+    username = "user_indistinguishable_check"
+    correct_secret = "GenuineSecretPass123!"
+    wrong_valid_secret = "WrongSecretPass456!"
+
+    # Enroll user
+    res_enroll = client.post(
+        "/enroll",
+        data={"username": username, "key_mode": "user_secret", "user_secret": correct_secret},
+        files=[
+            ("face_images", (f"f_{i}.jpg", generate_dummy_face_bytes(90 + i), "image/jpeg"))
+            for i in range(5)
+        ]
+        + [
+            ("finger_images", (f"g_{i}.tif", generate_dummy_finger_bytes(400 + i), "image/tiff"))
+            for i in range(5)
+        ],
+        headers=headers,
+    )
+    assert res_enroll.status_code == 200
+
+    # Ensure DEV_MODE is false during the response comparison to test production payload
+    monkeypatch.setenv("DEV_MODE", "false")
+
+    # Case 1: Genuine biometrics + WRONG (valid-format) secret
+    res_wrong_secret = client.post(
+        "/verify",
+        data={"username": username, "user_secret": wrong_valid_secret},
+        files=[
+            ("face_image", ("f.jpg", generate_dummy_face_bytes(90), "image/jpeg")),
+            ("finger_image", ("g.tif", generate_dummy_finger_bytes(400), "image/tiff")),
+        ],
+        headers=headers,
+    )
+    assert res_wrong_secret.status_code == 200
+    body1 = res_wrong_secret.json()
+    assert body1["match"] is False
+
+    # Case 2: Impostor biometrics (different biological identity) + CORRECT secret
+    time.sleep(0.5)
+    from src.api.main import service as api_svc
+    rng = np.random.RandomState(999)
+    imp_f_emb = rng.randn(512).astype(np.float32)
+    imp_f_emb /= np.linalg.norm(imp_f_emb)
+    monkeypatch.setattr(api_svc, "extract_face_embedding", lambda img: imp_f_emb)
+
+    res_impostor = client.post(
+        "/verify",
+        data={"username": username, "user_secret": correct_secret},
+        files=[
+            ("face_image", ("f.jpg", generate_dummy_face_bytes(90), "image/jpeg")),
+            ("finger_image", ("g.tif", generate_dummy_finger_bytes(400), "image/tiff")),
+        ],
+        headers=headers,
+    )
+    assert res_impostor.status_code == 200
+    body2 = res_impostor.json()
+    assert body2["match"] is False
+
+    # Responses must be completely indistinguishable in structure and values
+    assert set(body1.keys()) == set(body2.keys())
+    assert body1["match"] == body2["match"] == False
+    assert body1["threshold"] == body2["threshold"]
+    assert body1["key_version"] == body2["key_version"]
+    assert "score" not in body1
+    assert "score" not in body2
+
+
+def test_refuse_start_with_default_dev_key_outside_dev_mode(monkeypatch):
+    """Verifies that the application refuses to start with default insecure dev keys when DEV_MODE=false."""
+    from src.api.service import BiometricService
+
+    monkeypatch.setenv("DEV_MODE", "false")
+    monkeypatch.delenv("SERVER_MASTER_KEY", raising=False)
+
+    with pytest.raises(RuntimeError, match="Refusing to start"):
+        BiometricService()
+
+    # Also test when explicitly set to the insecure default key
+    monkeypatch.setenv("SERVER_MASTER_KEY", "dev_master_key_12345678901234567890123456789012")
+    with pytest.raises(RuntimeError, match="Refusing to start with default insecure dev key"):
+        BiometricService()
+

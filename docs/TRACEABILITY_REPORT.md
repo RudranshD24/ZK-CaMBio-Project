@@ -13,7 +13,7 @@
 | FR-09 | src/api/, experiments/ | tests/test_api.py, tests/test_chaos.py | FastAPI /revoke (key rotation, active template timestamping; FNMR=100.0% under revoked key) | Verified |
 | FR-10 | src/db/ | tests/test_schema_no_biometrics.py | SQLAlchemy 2 + Alembic schema whitelist (users, templates, user_keys, audit_log, auth_rate_limits): zero raw biometrics, embeddings, or secrets | Verified |
 | FR-11 | src/ui/ | manual demo script | Streamlit dashboard (Phase 8) | Not started |
-| FR-12 | src/api/service.py | tests/test_api.py | Enrollment quality guards derived from 180 TRAIN subjects (min face cos >= 0.45, min finger cos >= 0.70; 15.00% test FRR) | Verified |
+| FR-12 | src/api/service.py | tests/test_api.py | Recalibrated on 30 validation subjects (tau_face=0.45, tau_finger=0.60, >=3 consistent samples rule); 0.00% test FRR across all 120 test subjects | Verified |
 | EV-01 | experiments/ | tests/test_fusion.py, tests/test_chaos.py | results/fused_unprotected.json, results/cancelable_summary.md, results/cancelable_eer.json, results/cancelable_roc.png, results/cancelable_cmc.png | Verified |
 | EV-02 | experiments/ | tests/test_chaos.py | results/cancelable_revocability_dist.png (FNMR=100.0% under revoked key, restored to 1.67%) | Verified |
 | EV-03 | experiments/ | tests/test_security.py | results/cancelable_unlinkability.png (D_sys = 0.0245 << 0.10 score-only without keys; D_sys = 0.9649 under A3 with keys known) | Verified |
@@ -21,6 +21,6 @@
 | EV-05 | experiments/ | tests/test_security.py | results/security_summary.md, results/security_eval.json, results/privacy_utility_tradeoff.png (Atk-2 Ridge cos=0.9335, 100% replay @ m=512) | Verified |
 | NFR-01 | src/db/, src/api/ | tests/test_schema_no_biometrics.py, tests/test_api.py | No raw biometrics, float embeddings, or secrets stored on server or in logs; timing-safe bearer auth | Verified |
 | NFR-02 | src/db/, src/api/ | tests/test_api.py | DB-backed per-username and per-IP escalating delay lockout; victim cannot be permanently locked out | Verified |
-| NFR-03 | src/api/ | tests/test_api.py | CPU latency: verify ~0.28 s (< 1.0 s threshold), enroll ~1.85 s | Verified |
+| NFR-03 | src/api/ | tests/test_api.py, scripts/benchmark_latency.py | CPU latency with scrypt on live Docker container: verify mean = 0.3698 s (< 1.0 s threshold, PASS), enroll mean = 0.6095 s | Verified |
 | NFR-04 | docker/ | tests/run_linux_kat.sh, tests/linux_kat_test.py | Multi-stage Docker build with Linux container KAT parity matching Windows hashes 83ec0508 & a8a71999 | Verified |
 | NFR-05 | cpp/, src/chaos/ | tests/test_chaos.py | results/chaos_val_smoke.json (5.22 ms/transform latency, KAT bit-exact determinism) | Verified |

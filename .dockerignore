@@ -1,6 +1,7 @@
 .git
 .venv
 data/
+data/processed/
 dataset/
 __pycache__/
 *.pyc
@@ -9,8 +10,11 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 results/
+results/*.npy
 tests/
 scratch/
 docs/
 *.sqlite
 *.log
+.env
+.env.*

@@ -1,6 +1,29 @@
 # CHANGELOG.md
 Format: `## [phase-N] YYYY-MM-DD` then bullets Added / Changed / Fixed.
 
+## [phase-7c] 2026-09-30
+- Fixed & Recalibrated Enrollment Quality (FR-12):
+  - Recalibrated consistency thresholds strictly using the 30 VALIDATION subjects (zero test tuning): $\tau_{\text{face}} = 0.45$ and $\tau_{\text{finger}} = 0.60$ (rejecting $<1\%$ of validation impressions).
+  - Outlier-Dropping Rule: Outlier impressions below threshold are dropped; enrollment rejects ONLY if $<3$ consistent impressions remain per modality. Template is formed from the mean of consistent impressions ($\ge 3$).
+  - Test Outcome: Evaluated across all 120 test subjects (40/DB) resulting in 0/120 (0.00%) test enrollment rejections: DB1=0/40 (0.00%), DB2=0/40 (0.00%), DB3=0/40 (0.00%).
+- Pinned KDF Parameters & Linux KAT:
+  - Versioned scrypt configuration in `configs/biometric_parameters.json` ($N=16384, r=8, p=1, \text{salt}=\text{zkcambio\_salt}, \text{dklen}=32, \text{maxmem}=32\text{ MB}$; config SHA-256 `bd75d68a705cbbd5993b57cb5899bcb00864bacfa54e3ddc7711f9027befbb5b`).
+  - Added KDF Known-Answer Test (`test_kdf_kat`) and verified inside the Linux Docker container.
+  - Re-measured live Docker container latency with scrypt enabled: enroll mean = 0.6095 s, verify mean = 0.3698 s (well within NFR-03 target $< 1.0$ s).
+- Indistinguishable Wrong-Secret Rejection:
+  - Verified and tested that correct username + wrong valid-format secret yields `match: false` with HTTP 200 and schema indistinguishable from an impostor probe (`test_wrong_user_secret_indistinguishable_from_impostor`).
+- Secrets Hygiene & Dev Mode Guard:
+  - Confirmed `docker-compose.yml` contains zero hardcoded production secrets, pulling from git-ignored `.env`.
+  - Added startup guard and tests verifying application refuses to start with default insecure dev keys when `DEV_MODE=false`.
+- Docker Hardening & Image Verification:
+  - Bound Postgres strictly to `127.0.0.1:5432:5432`.
+  - Confirmed `.dockerignore` excludes `dataset/`, `data/processed/`, `results/*.npy`, and `.env`.
+  - Verified lean final Docker image sizes: API = 742 MB, UI = 47.9 MB, Postgres = 117 MB.
+- Live Lifecycle Script:
+  - Moved lifecycle demo to `scripts/demo_live_lifecycle.py` without hardcoded secrets and saved live run output to `results/live_docker_lifecycle.txt`.
+- Threat Model Residual Risk:
+  - Updated `docs/SECURITY_THREAT_MODEL.md` disclosing that match/no-match quantization and rate limiting slow down hill-climbing attacks but do not theoretically eliminate decision-based boundary-seeking attacks.
+
 ## [phase-7b] 2026-09-30
 - Security Hardening & Defenses:
   - Score Suppression & Hill-Climbing Defense: `/verify` and `/identify` return ONLY boolean match/no-match (and candidate rank for identify) by default; numeric scores suppressed unless `DEV_MODE=true`. `audit_log` records no scores outside `DEV_MODE=true` to eliminate score-guided iterative synthesis gradients.

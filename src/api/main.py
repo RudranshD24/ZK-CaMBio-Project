@@ -311,16 +311,16 @@ async def enroll(
             emb = service.extract_finger_embedding(pil_img)
             finger_embs.append(emb)
 
-        # 3. Quality & Consistency Checks (FR-12)
+        # 3. Quality & Consistency Checks (FR-12, Validation-Calibrated, >=3 consistent required)
         try:
-            service.check_enrollment_quality(face_embs, finger_embs)
+            clean_face_embs, clean_finger_embs = service.filter_and_check_enrollment_quality(face_embs, finger_embs)
         except ValueError as qe:
             raise HTTPException(status_code=400, detail=f"Enrollment quality check failed: {qe}") from qe
 
-        # 4. Multimodal Fusion (mean template across 5 impressions)
-        face_tmpl = np.mean(face_embs, axis=0)
+        # 4. Multimodal Fusion (mean template across consistent impressions, >=3 required)
+        face_tmpl = np.mean(clean_face_embs, axis=0)
         face_tmpl /= np.linalg.norm(face_tmpl)
-        finger_tmpl = np.mean(finger_embs, axis=0)
+        finger_tmpl = np.mean(clean_finger_embs, axis=0)
         finger_tmpl /= np.linalg.norm(finger_tmpl)
 
         fused_vec = fuse_embeddings_feature_level(face_tmpl, finger_tmpl, w=service.w)

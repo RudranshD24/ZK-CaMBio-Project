@@ -23,8 +23,18 @@
     "unprotected_s3_val_fmr_01pct": 0.4832
   },
   "enrollment_quality": {
+    "min_consistent_samples": 3,
     "min_face_consistency_cosine": 0.45,
-    "min_finger_consistency_cosine": 0.7
+    "min_finger_consistency_cosine": 0.6
   },
-  "checksum_sha256": "ded6e0b1163b7615a2c1895203fa73ba322d720e18c4858fd82413910671acaf"
+  "kdf": {
+    "algorithm": "scrypt",
+    "app_salt": "zkcambio_salt",
+    "dklen": 32,
+    "maxmem_mb": 32,
+    "n": 16384,
+    "p": 1,
+    "r": 8
+  },
+  "checksum_sha256": "bd75d68a705cbbd5993b57cb5899bcb00864bacfa54e3ddc7711f9027befbb5b"
 }

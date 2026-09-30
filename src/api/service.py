@@ -81,9 +81,21 @@ class BiometricService:
         self.scale = self.cfg["quantization"]["scale"]
         self.tau_eer = self.cfg["matching_thresholds"]["operational_eer_threshold_hd"]
 
-        # Quality thresholds
-        self.min_face_consistency = self.cfg["enrollment_quality"]["min_face_consistency_cosine"]
-        self.min_finger_consistency = self.cfg["enrollment_quality"]["min_finger_consistency_cosine"]
+        # Enrollment quality thresholds (calibrated on 30 validation subjects, FR-12)
+        eq_cfg = self.cfg.get("enrollment_quality", {})
+        self.min_face_consistency = eq_cfg.get("min_face_consistency_cosine", 0.45)
+        self.min_finger_consistency = eq_cfg.get("min_finger_consistency_cosine", 0.60)
+        self.min_consistent_samples = eq_cfg.get("min_consistent_samples", 3)
+
+        # KDF configuration (pinned scrypt parameters)
+        kdf_cfg = self.cfg.get("kdf", {})
+        self.kdf_algorithm = kdf_cfg.get("algorithm", "scrypt")
+        self.kdf_n = kdf_cfg.get("n", 16384)
+        self.kdf_r = kdf_cfg.get("r", 8)
+        self.kdf_p = kdf_cfg.get("p", 1)
+        self.kdf_maxmem = kdf_cfg.get("maxmem_mb", 32) * 1024 * 1024
+        self.kdf_dklen = kdf_cfg.get("dklen", 32)
+        self.kdf_salt = kdf_cfg.get("app_salt", "zkcambio_salt")
 
         # Mean vector
         mean_path = self.models_dir / "chaos_mean_vector.npy"
@@ -115,51 +127,60 @@ class BiometricService:
             ]
         )
 
-        # Master key configuration
+        # Master key configuration & dev key guard
         self.dev_mode = os.environ.get("DEV_MODE", "false").lower() in ("true", "1", "yes")
-        default_dev_key = b"ZKCAMBIO_DEFAULT_INSECURE_DEV_KEY_2026!"[:32]
+        DEFAULT_DEV_KEYS = {
+            b"ZKCAMBIO_DEFAULT_INSECURE_DEV_KEY_2026!"[:32],
+            b"dev_master_key_12345678901234567890123456789012"[:32],
+        }
         env_key = os.environ.get("SERVER_MASTER_KEY")
         if env_key:
-            self.master_key = env_key.encode("utf-8")[:32]
-            if len(self.master_key) < 32:
-                self.master_key = self.master_key.ljust(32, b"\0")
+            parsed_key = env_key.encode("utf-8")[:32]
+            if len(parsed_key) < 32:
+                parsed_key = parsed_key.ljust(32, b"\0")
+            if not self.dev_mode and parsed_key in DEFAULT_DEV_KEYS:
+                raise RuntimeError(
+                    "Refusing to start with default insecure dev key outside DEV_MODE=true! "
+                    "Set a secure production SERVER_MASTER_KEY in your .env or secret manager."
+                )
+            self.master_key = parsed_key
         else:
             if not self.dev_mode:
                 raise RuntimeError("Refusing to start without SERVER_MASTER_KEY outside DEV_MODE=true!")
-            self.master_key = default_dev_key
+            self.master_key = b"ZKCAMBIO_DEFAULT_INSECURE_DEV_KEY_2026!"[:32]
 
     def derive_user_chaos_params(
-
         self,
         username: str,
         key_mode: str,
         key_version: int,
         user_secret: str | None = None,
-        app_salt: str = "zkcambio_salt",
+        app_salt: str | None = None,
     ) -> tuple[int, int]:
         """Derives chaotic initial state and map parameter r_param.
 
         - If key_mode == "user_secret": secret is validated and memory-hard stretched
-          with hashlib.scrypt (N=16384, r=8, p=1) before HMAC derivation.
+          with scrypt (N=16384, r=8, p=1, dklen=32) before HMAC derivation.
           Note: If the server master key AND the template leak, low-entropy secrets
           can be brute-forced offline. Key stretching increases offline cost.
         - If key_mode == "server_key": context binds username/user_id.
         """
+        salt_str = app_salt or self.kdf_salt
         if key_mode == "user_secret":
             validated_secret = validate_user_secret(user_secret)
-            salt_bytes = f"zkcambio|{app_salt}|v{key_version}".encode()
+            salt_bytes = f"zkcambio|{salt_str}|v{key_version}".encode()
             stretched_secret = hashlib.scrypt(
                 validated_secret.encode("utf-8"),
                 salt=salt_bytes,
-                n=16384,
-                r=8,
-                p=1,
-                maxmem=32 * 1024 * 1024,
-                dklen=32,
+                n=self.kdf_n,
+                r=self.kdf_r,
+                p=self.kdf_p,
+                maxmem=self.kdf_maxmem,
+                dklen=self.kdf_dklen,
             )
             context = salt_bytes + b"|" + stretched_secret
         elif key_mode == "server_key":
-            context = f"zkcambio|{app_salt}|v{key_version}|server_key|{username}".encode()
+            context = f"zkcambio|{salt_str}|v{key_version}|server_key|{username}".encode()
         else:
             raise ValueError(f"Unknown key_mode: {key_mode}")
 
@@ -194,34 +215,57 @@ class BiometricService:
             emb = emb / norm
         return emb.astype(np.float32)
 
+    def filter_and_check_enrollment_quality(
+        self,
+        face_embeddings: list[np.ndarray],
+        finger_embeddings: list[np.ndarray],
+    ) -> tuple[list[np.ndarray], list[np.ndarray]]:
+        """FR-12 Enrollment Quality Check (Validation-Calibrated):
+
+        Computes initial modality centroids, drops outlier impressions whose cosine
+        to the centroid is below the validation threshold (tau_face=0.45, tau_finger=0.60),
+        and rejects enrollment ONLY if fewer than min_consistent_samples (3) remain.
+        Returns (consistent_face_embs, consistent_finger_embs).
+        """
+        # Face consistency
+        face_mean = np.mean(face_embeddings, axis=0)
+        face_norm = np.linalg.norm(face_mean)
+        if face_norm > 0:
+            face_mean /= face_norm
+        consistent_face = [
+            emb for emb in face_embeddings if float(np.dot(emb, face_mean)) >= self.min_face_consistency
+        ]
+        if len(consistent_face) < self.min_consistent_samples:
+            raise ValueError(
+                f"Face enrollment quality failed: only {len(consistent_face)}/{len(face_embeddings)} "
+                f"samples met consistency threshold {self.min_face_consistency:.2f} "
+                f"(minimum {self.min_consistent_samples} consistent samples required)."
+            )
+
+        # Finger consistency
+        finger_mean = np.mean(finger_embeddings, axis=0)
+        finger_norm = np.linalg.norm(finger_mean)
+        if finger_norm > 0:
+            finger_mean /= finger_norm
+        consistent_finger = [
+            emb for emb in finger_embeddings if float(np.dot(emb, finger_mean)) >= self.min_finger_consistency
+        ]
+        if len(consistent_finger) < self.min_consistent_samples:
+            raise ValueError(
+                f"Fingerprint enrollment quality failed: only {len(consistent_finger)}/{len(finger_embeddings)} "
+                f"samples met consistency threshold {self.min_finger_consistency:.2f} "
+                f"(minimum {self.min_consistent_samples} consistent samples required)."
+            )
+
+        return consistent_face, consistent_finger
+
     def check_enrollment_quality(
         self,
         face_embeddings: list[np.ndarray],
         finger_embeddings: list[np.ndarray],
     ) -> None:
-        """FR-12 Enrollment Quality Check:
-
-        Asserts each sample has cosine similarity to the modality mean above threshold.
-        """
-        # Face consistency
-        face_mean = np.mean(face_embeddings, axis=0)
-        face_mean /= np.linalg.norm(face_mean)
-        for idx, emb in enumerate(face_embeddings):
-            cos = float(np.dot(emb, face_mean))
-            if cos < self.min_face_consistency:
-                raise ValueError(
-                    f"Face sample {idx+1} consistency ({cos:.3f}) is below minimum threshold ({self.min_face_consistency:.3f})"
-                )
-
-        # Finger consistency
-        finger_mean = np.mean(finger_embeddings, axis=0)
-        finger_mean /= np.linalg.norm(finger_mean)
-        for idx, emb in enumerate(finger_embeddings):
-            cos = float(np.dot(emb, finger_mean))
-            if cos < self.min_finger_consistency:
-                raise ValueError(
-                    f"Finger sample {idx+1} consistency ({cos:.3f}) is below minimum threshold ({self.min_finger_consistency:.3f})"
-                )
+        """Backward-compatible quality check asserting >=3 consistent samples."""
+        self.filter_and_check_enrollment_quality(face_embeddings, finger_embeddings)
 
     def generate_cancelable_template(
         self,

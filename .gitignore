@@ -33,6 +33,7 @@ venv/
 # === Environment / secrets ===
 .env
 .env.*
+!.env.example
 
 # === C++ build ===
 cpp/build/
