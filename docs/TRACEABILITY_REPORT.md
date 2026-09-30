@@ -12,7 +12,7 @@
 | FR-08 | src/api/ | tests/test_api.py | FastAPI /identify (1:N matching restricted to server_key accounts, score suppression, rank-only reporting) | Verified |
 | FR-09 | src/api/, experiments/ | tests/test_api.py, tests/test_chaos.py | FastAPI /revoke (key rotation, active template timestamping; FNMR=100.0% under revoked key) | Verified |
 | FR-10 | src/db/ | tests/test_schema_no_biometrics.py | SQLAlchemy 2 + Alembic schema whitelist (users, templates, user_keys, audit_log, auth_rate_limits): zero raw biometrics, embeddings, or secrets | Verified |
-| FR-11 | src/ui/ | manual demo script | Streamlit dashboard (Phase 8) | Not started |
+| FR-11 | src/ui/ | tests/test_ui.py (AppTest) | Streamlit dashboard (Enroll, Verify, Identify, Revoke, Results, Threat demo; zero model imports), docs/DEMO_SCRIPT.md, docs/screenshots/ | Verified |
 | FR-12 | src/api/service.py | tests/test_api.py | Recalibrated on 30 validation subjects (tau_face=0.45, tau_finger=0.60, >=3 consistent samples rule); 0.00% test FRR across all 120 test subjects | Verified |
 | EV-01 | experiments/ | tests/test_fusion.py, tests/test_chaos.py | results/fused_unprotected.json, results/cancelable_summary.md, results/cancelable_eer.json, results/cancelable_roc.png, results/cancelable_cmc.png | Verified |
 | EV-02 | experiments/ | tests/test_chaos.py | results/cancelable_revocability_dist.png (FNMR=100.0% under revoked key, restored to 1.67%) | Verified |

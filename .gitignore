@@ -6,10 +6,14 @@ dataset/
 *.png
 *.bmp
 
+# Allow docs screenshots
+!docs/screenshots/*.png
+
 # === Processed data (git-ignored, except split manifest) ===
 data/processed/*
 !data/processed/split_manifest.json
 !data/processed/finger_train_val_split.json
+!data/processed/validation_threshold_curve.json
 
 # === Model weights ===
 *.pt

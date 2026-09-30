@@ -48,6 +48,13 @@ services:
     environment:
       API_URL: http://api:8000
       API_TOKEN: ${API_TOKEN}
+      DEV_MODE: ${DEV_MODE:-true}
+      PYTHONPATH: /app
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+      - ./results:/app/results:ro
+      - ./dataset:/app/dataset:ro
 
 volumes:
   pgdata:
+

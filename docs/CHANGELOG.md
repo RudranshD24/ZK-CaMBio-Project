@@ -1,6 +1,24 @@
 # CHANGELOG.md
 Format: `## [phase-N] YYYY-MM-DD` then bullets Added / Changed / Fixed.
 
+## [phase-8] 2026-09-30
+- Added Streamlit Demonstration Application (`src/ui/app.py`, FR-11):
+  - Strict Client Boundary: UI communicates with backend strictly via REST API (`requests`) over HTTP, importing zero machine learning models, biometric extractors, key material, or C++ chaos code (`test_ui_imports_no_models_or_chaos`).
+  - Six Dedicated Pages:
+    - Enroll: supports `user_secret` and `server_key` modes, test-split demo subject selection from `split_manifest.json` with quality indicators, or file uploaders, and simulated failure demonstrations.
+    - Verify (1:1): supports genuine and live impostor probe evaluation with big visual MATCH / NO MATCH badges; displays DEV_MODE score visibility and warning banner (`scores enable hill-climbing attacks`); informational threshold slider mapped to validation FMR/FNMR curve.
+    - Identify (1:N): ranked candidate table for `server_key` accounts with clear explanation of why `user_secret` accounts are excluded.
+    - Revoke: active template revocation, key version bump, salt regeneration, and live probe verification demonstrating 100% rejection under revoked template.
+    - Results: renders evaluation artifacts directly from `results/` (ROC, CMC, revocability, unlinkability, privacy-utility tradeoff) and the explicit security claims table.
+    - Threat Demo: demonstrates precomputed cross-key decorrelation (Hamming distance 0.5006) and Phase 6 linear decodability findings under known keys with honest disclosure.
+  - Mandatory Research Footer on every page: *"Virtual subjects built from UMDFaces + FVC2004 (independent identities paired for research). Research prototype."*
+  - Secrets Hygiene: Passphrase inputs use `type='password'`, are never echoed, logged, or cached, and session state is cleared immediately after action.
+  - Escalating Lockout Resilience: Added DEV_MODE reset lockout endpoint (`/dev/reset_lockout`) and button to prevent presenter lockout during live impostor testing.
+  - Automated Testing: Added `streamlit.testing.v1.AppTest` smoke test suite (`tests/test_ui.py`) covering all 6 pages and architectural boundary enforcement.
+  - Docker Compose: Updated `docker-compose.yml` to build and serve the UI service on port 8501 with read-only volume mounts (`results/`, `data/processed/`, `dataset/`).
+  - Documentation & Viva Guide: Created `docs/DEMO_SCRIPT.md` containing a 5-minute viva demo walkthrough and honest examiner Q&A. Captured high-res screenshots to `docs/screenshots/`.
+  - Added Architecture Decision Record D-018 to `docs/DECISIONS.md`.
+
 ## [phase-7d] 2026-09-30
 - Fixed & Per-User Key Separation:
   - Bound user identity (`user_id`) directly into the chaotic key HMAC context string (`zkcambio|salt|v{version}|{user_id}|stretched_secret` and `server_key` variant), ensuring two users with identical secrets derive completely independent chaotic keys and templates.

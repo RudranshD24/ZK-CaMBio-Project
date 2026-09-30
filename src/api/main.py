@@ -677,3 +677,38 @@ def get_latest_metrics(_: None = Depends(verify_bearer_token)) -> dict[str, Any]
             metrics["fused_unprotected"] = json.load(f)
 
     return metrics
+
+
+@app.post("/dev/reset_lockout")
+def reset_lockout(
+    request: Request,
+    username: str = Form(...),
+    db: Session = Depends(get_db),
+    _: None = Depends(verify_bearer_token),
+) -> dict[str, Any]:
+    """DEV_MODE-only endpoint to reset escalating lockout counters for a demo user.
+
+    Refuses execution if DEV_MODE is disabled.
+    """
+    if not is_dev_mode():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Lockout reset is permitted only in DEV_MODE.",
+        )
+
+    client_ip = request.client.host if request.client else "unknown"
+    # Delete rate limits for both the username and client IP
+    from sqlalchemy import delete
+
+    db.execute(
+        delete(AuthRateLimit).where(
+            (AuthRateLimit.identifier_type == "username") & (AuthRateLimit.identifier_value == username)
+        )
+    )
+    db.execute(
+        delete(AuthRateLimit).where(
+            (AuthRateLimit.identifier_type == "ip") & (AuthRateLimit.identifier_value == client_ip)
+        )
+    )
+    db.commit()
+    return {"status": "reset", "username": username, "client_ip": client_ip}
