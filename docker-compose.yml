@@ -54,6 +54,11 @@ services:
       - ./data/processed:/app/data/processed:ro
       - ./results:/app/results:ro
       - ./dataset:/app/dataset:ro
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health')\""]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   pgdata:
