@@ -7,6 +7,7 @@ Evaluates compliance against NFR-03 (< 1.0 s).
 import io
 import os
 import time
+
 import numpy as np
 import requests
 from PIL import Image
@@ -64,7 +65,7 @@ def main():
         files=files,
     )
 
-    for i in range(10):
+    for _i in range(10):
         time.sleep(0.1)
         p_files = [
             ("face_image", ("f.jpg", generate_face_bytes(42), "image/jpeg")),
@@ -85,7 +86,7 @@ def main():
     print("\n=== Latency Benchmark (scrypt N=16384, r=8, p=1 on live Docker API) ===")
     print(f"Enroll (5 face + 5 finger impressions): mean={mean_enr:.4f}s, std={std_enr:.4f}s")
     print(f"Verify (1 probe pair + scrypt KDF):     mean={mean_ver:.4f}s, std={std_ver:.4f}s")
-    print(f"NFR-03 Target: < 1.0 s for verification")
+    print("NFR-03 Target: < 1.0 s for verification")
     status_str = "PASS (NFR-03 met)" if mean_ver < 1.0 else "FAIL"
     print(f"Compliance: {status_str}")
 

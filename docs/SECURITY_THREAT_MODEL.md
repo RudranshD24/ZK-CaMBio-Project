@@ -65,13 +65,23 @@ In this work, "non-invertibility" does **not** denote an information-theoretic o
 
 6. **Cross-Platform Bit-Level Determinism (Verified)**:
    - Exact bit determinism was verified via Docker container KAT (`tests/run_linux_kat.sh` and `tests/linux_kat_test.py`). Linux GCC and Windows MSVC produce identical KAT hashes:
-     - Server key KAT: `83ec0508a8d11c75`
-     - Stretched user secret KAT: `a8a71999ef4a6015`
+     - Server key KAT: `2d8998aa`
+     - Stretched user secret KAT: `9ed1a9ad`
+
+7. **Per-User Key Separation & Dynamic KDF Salts (Phase 7d)**:
+   - Every user receives a unique random 16-byte salt generated at enrollment and persisted in `users.kdf_salt` (regenerated upon template revocation).
+   - The user's UUID (`user_id`) is cryptographically bound into the HMAC context string:
+     - User secret: `zkcambio|kdf_salt|v{version}|{user_id}|stretched_secret`
+     - Server key: `zkcambio|kdf_salt|v{version}|server_key|{user_id}`
+   - Guarantees that two users selecting identical secrets and key versions derive independent, decorrelated chaotic keys (Hamming distance $\approx 0.50$), preventing template collision and cross-user linkage.
 
 ## Open Security Limitations for Paper Disclosure
-- **Encoder Overfitting Sensitivity**: Attacker prior/decoder trained on 30 validation subjects only (no train fingerprints) still achieves centered cosine $0.8937 \pm 0.0235$ and 100.0% replay success at $m=512$, confirming vulnerability is structural to known linear projections, not an artifact of encoder overfit.
-- **Offline Dictionary Attack Risk**: In user_secret mode, joint leakage of the server app salt and template database enables offline dictionary search against weak user passphrases.
+- **Encoder Overfitting Sensitivity & Enrollment Gate Recalibration**: The finger enrollment quality gate threshold was revised from 0.70 to 0.60 after observing 15% test genuine rejection caused by encoder overfitting on training impressions. While the recalibration was performed strictly using the 30 validation subjects (whose fingers were never used for training), the observed 0.00% test enrollment rejection is an outcome of a gate revised after a first test-set look, rather than a pure held-out estimate.
+- **Weaker Quality Gate**: The enrollment quality gate is weaker at 0.60 than at 0.70, admitting higher intra-subject impression variance into the enrolled template and potentially increasing genuine matching variability.
+- **Attacker Linear Decodability**: Attacker prior/decoder trained on 30 validation subjects only (no train fingerprints) still achieves centered cosine $0.8937 \pm 0.0235$ and 100.0% replay success at $m=512$, confirming vulnerability is structural to known linear projections, not an artifact of encoder overfit.
+- **Offline Dictionary Attack Risk**: In user_secret mode, joint leakage of the server app salt and template database enables offline dictionary search against weak user passphrases. The per-user random salt (`kdf_salt`) prevents precomputed rainbow tables across users, but individual dictionary attacks remain bounded by scrypt work factors ($N=16384, r=8, p=1$).
 - **Logistic Map Cryptanalysis**: The fixed-point logistic map bitstream is not proven secure against algebraic state reconstruction from long bit sequences. Hardening with HMAC in counter mode is recommended for production.
 - **Cross-Platform Integer Determinism**: Exact bit determinism achieved via Q64 fixed-point integer arithmetic and validated across MSVC and Linux GCC containers.
 - **Hill-Climbing Residual Risk**: Score suppression to binary match/no-match answers and escalating delay rate limiting slow down iterative hill-climbing attacks significantly, but do not completely eliminate decision-based boundary-seeking attacks under distributed or long-term query budgets.
+
 

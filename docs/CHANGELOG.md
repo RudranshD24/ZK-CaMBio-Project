@@ -1,6 +1,19 @@
 # CHANGELOG.md
 Format: `## [phase-N] YYYY-MM-DD` then bullets Added / Changed / Fixed.
 
+## [phase-7d] 2026-09-30
+- Fixed & Per-User Key Separation:
+  - Bound user identity (`user_id`) directly into the chaotic key HMAC context string (`zkcambio|salt|v{version}|{user_id}|stretched_secret` and `server_key` variant), ensuring two users with identical secrets derive completely independent chaotic keys and templates.
+  - Implemented dynamic per-user 16-byte random scrypt salts stored in `users.kdf_salt` (regenerated upon template revocation).
+  - Pinned KDF parameters with `user_salt_len: 16` in `configs/biometric_parameters.json` (canonical SHA-256 `13ce83aca7af7611f0d654ce7563a1bebf9a16437e8eda89187dde118acdaa82`).
+  - Added Alembic migration `c7b91d2e3f4a_add_users_kdf_salt.py`.
+  - Added unit tests in `tests/test_api.py`: (1) two users with same secret and key version produce distinct keys and uncorrelated templates (cross-key Hamming ~0.50); (2) same user with bumped key version derives different keys.
+  - Verified bit-exact Linux container KATs (`2d8998aa` server_key, `9ed1a9ad` user_secret).
+  - Re-executed automated container lifecycle script and saved output to `results/live_docker_lifecycle.txt`.
+- Disclosures & Documentation Notes:
+  - Documented in `docs/DECISIONS.md` (D-017) and `docs/SECURITY_THREAT_MODEL.md` that the finger enrollment threshold was revised from 0.70 to 0.60 after observing 15% test rejection; while recalibration used validation subjects only, 0.00% test rejection is an observed outcome of a revised gate after a test look, not a pure held-out estimate.
+  - Explicitly disclosed that the quality gate is weaker at 0.60 than at 0.70.
+
 ## [phase-7c] 2026-09-30
 - Fixed & Recalibrated Enrollment Quality (FR-12):
   - Recalibrated consistency thresholds strictly using the 30 VALIDATION subjects (zero test tuning): $\tau_{\text{face}} = 0.45$ and $\tau_{\text{finger}} = 0.60$ (rejecting $<1\%$ of validation impressions).

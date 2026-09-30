@@ -445,31 +445,32 @@ def test_no_secrets_or_biometrics_in_logs(client, caplog):
 
 
 def test_kdf_kat():
-    """Known-Answer Test (KAT) for scrypt key derivation.
+    """Known-Answer Test (KAT) for scrypt key derivation with per-user key separation.
 
     Fixed inputs -> exact golden stretched secret and (state, r_param).
     """
     import hashlib
-    import hmac
+
     from src.api.service import BiometricService
 
     user_secret = "CorrectSecret2026!"
     app_salt = "zkcambio_salt"
     key_version = 1
+    fixed_user_id = "test_user_kat_001"
+    fixed_user_salt = b"0123456789abcdef"
     master_key = b"TEST_MASTER_KEY_32_BYTES_PADDED!"
 
     # 1. Direct scrypt verification
-    salt_bytes = f"zkcambio|{app_salt}|v{key_version}".encode()
     stretched = hashlib.scrypt(
         user_secret.encode("utf-8"),
-        salt=salt_bytes,
+        salt=fixed_user_salt,
         n=16384,
         r=8,
         p=1,
         maxmem=32 * 1024 * 1024,
         dklen=32,
     )
-    expected_stretched_hex = "5c80bc5b30f1770306f50676010c0abe55b64d846adbfe1f1cc6ad7e4c700d5b"
+    expected_stretched_hex = "4314ce170843891f53cf75f976726da680943d6246d21f5f2bc82c7f838b9fd0"
     assert stretched.hex() == expected_stretched_hex, f"Stretched secret mismatch: {stretched.hex()}"
 
     # 2. Service derivation verification
@@ -481,12 +482,122 @@ def test_kdf_kat():
         key_version=key_version,
         user_secret=user_secret,
         app_salt=app_salt,
+        user_id=fixed_user_id,
+        user_kdf_salt=fixed_user_salt,
     )
 
-    expected_state = 0xF9563B4370830318
-    expected_r_param = 0xE2162A3D13DCEF0C
+    expected_state = 0x59B7C9831461E6CD
+    expected_r_param = 0x538008E60F777D34
     assert state == expected_state, f"State mismatch: {hex(state)} vs {hex(expected_state)}"
     assert r_param == expected_r_param, f"r_param mismatch: {hex(r_param)} vs {hex(expected_r_param)}"
+
+
+def test_two_users_same_secret_same_version_different_keys_and_templates():
+    """Verifies that two distinct users with identical secrets and key_version receive
+
+    different keys and produce different templates for the exact same biometric vector.
+    """
+    from src.api.service import BiometricService
+
+    service = BiometricService()
+    shared_secret = "IdenticalPassphrase2026!"
+    key_version = 1
+
+    user_a_id = "11111111-1111-1111-1111-111111111111"
+    user_a_salt = "0123456789abcdef0123456789abcdef"
+
+    user_b_id = "22222222-2222-2222-2222-222222222222"
+    user_b_salt = "fedcba9876543210fedcba9876543210"
+
+    state_a, r_a = service.derive_user_chaos_params(
+        username="user_a",
+        key_mode="user_secret",
+        key_version=key_version,
+        user_secret=shared_secret,
+        user_id=user_a_id,
+        user_kdf_salt=user_a_salt,
+    )
+
+    state_b, r_b = service.derive_user_chaos_params(
+        username="user_b",
+        key_mode="user_secret",
+        key_version=key_version,
+        user_secret=shared_secret,
+        user_id=user_b_id,
+        user_kdf_salt=user_b_salt,
+    )
+
+    # Derived chaotic parameters must differ
+    assert state_a != state_b, "States must not match between distinct users"
+    assert r_a != r_b, "r_params must not match between distinct users"
+
+    # Even with identical per-user salt, context binds user_id
+    state_b_same_salt, _ = service.derive_user_chaos_params(
+        username="user_b",
+        key_mode="user_secret",
+        key_version=key_version,
+        user_secret=shared_secret,
+        user_id=user_b_id,
+        user_kdf_salt=user_a_salt,
+    )
+    assert state_a != state_b_same_salt, "Context must bind user_id even if salts collide"
+
+    # Transform the EXACT same synthetic biometric vector
+    rng = np.random.RandomState(42)
+    same_vector = rng.randn(service.fused_dim).astype(np.float32)
+    same_vector /= np.linalg.norm(same_vector)
+
+    tmpl_a = service.generate_cancelable_template(same_vector, state_a, r_a)
+    tmpl_b = service.generate_cancelable_template(same_vector, state_b, r_b)
+
+    assert tmpl_a != tmpl_b, "Templates for identical biometric vector must differ across users"
+    hd = service.compute_hamming_distance(tmpl_a, tmpl_b)
+    # Expected cross-key Hamming distance is ~0.50 (uncorrelated projection)
+    assert 0.40 <= hd <= 0.60, f"Expected cross-key HD near 0.50, got {hd:.4f}"
+
+
+def test_same_user_different_key_version_different_keys():
+    """Verifies that the same user under different key versions receives different keys."""
+    from src.api.service import BiometricService
+
+    service = BiometricService()
+    secret = "PersistentSecretPass123!"
+    user_id = "33333333-3333-3333-3333-333333333333"
+    salt_v1 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    salt_v2 = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"  # Regenerated on revoke
+
+    state_v1, r_v1 = service.derive_user_chaos_params(
+        username="charlie",
+        key_mode="user_secret",
+        key_version=1,
+        user_secret=secret,
+        user_id=user_id,
+        user_kdf_salt=salt_v1,
+    )
+
+    state_v2, r_v2 = service.derive_user_chaos_params(
+        username="charlie",
+        key_mode="user_secret",
+        key_version=2,
+        user_secret=secret,
+        user_id=user_id,
+        user_kdf_salt=salt_v2,
+    )
+
+    assert state_v1 != state_v2
+    assert r_v1 != r_v2
+
+    # Even without salt rotation, key_version alone changes context
+    state_v2_same_salt, _ = service.derive_user_chaos_params(
+        username="charlie",
+        key_mode="user_secret",
+        key_version=2,
+        user_secret=secret,
+        user_id=user_id,
+        user_kdf_salt=salt_v1,
+    )
+    assert state_v1 != state_v2_same_salt
+
 
 
 def test_wrong_user_secret_indistinguishable_from_impostor(client, monkeypatch):
@@ -555,7 +666,7 @@ def test_wrong_user_secret_indistinguishable_from_impostor(client, monkeypatch):
 
     # Responses must be completely indistinguishable in structure and values
     assert set(body1.keys()) == set(body2.keys())
-    assert body1["match"] == body2["match"] == False
+    assert body1["match"] is False and body2["match"] is False
     assert body1["threshold"] == body2["threshold"]
     assert body1["key_version"] == body2["key_version"]
     assert "score" not in body1

@@ -156,19 +156,36 @@ class BiometricService:
         key_version: int,
         user_secret: str | None = None,
         app_salt: str | None = None,
+        user_id: str | None = None,
+        user_kdf_salt: str | bytes | None = None,
     ) -> tuple[int, int]:
         """Derives chaotic initial state and map parameter r_param.
 
-        - If key_mode == "user_secret": secret is validated and memory-hard stretched
-          with scrypt (N=16384, r=8, p=1, dklen=32) before HMAC derivation.
-          Note: If the server master key AND the template leak, low-entropy secrets
-          can be brute-forced offline. Key stretching increases offline cost.
-        - If key_mode == "server_key": context binds username/user_id.
+        Per-User Key Separation (Phase 7d):
+        - scrypt salt = per-user random 16-byte salt stored in users.kdf_salt.
+        - HMAC context string binds user_id, ensuring two users with identical secret
+          and key_version receive mathematically distinct chaotic keys and templates.
         """
         salt_str = app_salt or self.kdf_salt
+        uid_str = str(user_id) if user_id is not None else username
+
         if key_mode == "user_secret":
             validated_secret = validate_user_secret(user_secret)
-            salt_bytes = f"zkcambio|{salt_str}|v{key_version}".encode()
+            # Per-user 16-byte salt for scrypt
+            if user_kdf_salt:
+                if isinstance(user_kdf_salt, str):
+                    try:
+                        salt_bytes = bytes.fromhex(user_kdf_salt)
+                    except ValueError:
+                        salt_bytes = user_kdf_salt.encode("utf-8")
+                else:
+                    salt_bytes = bytes(user_kdf_salt)
+            else:
+                salt_bytes = f"user_{uid_str[:11]}".encode().ljust(16, b"0")
+
+            if len(salt_bytes) < 16:
+                salt_bytes = salt_bytes.ljust(16, b"0")
+
             stretched_secret = hashlib.scrypt(
                 validated_secret.encode("utf-8"),
                 salt=salt_bytes,
@@ -178,9 +195,10 @@ class BiometricService:
                 maxmem=self.kdf_maxmem,
                 dklen=self.kdf_dklen,
             )
-            context = salt_bytes + b"|" + stretched_secret
+            # Bind user identity into HMAC context string
+            context = f"zkcambio|{salt_str}|v{key_version}|{uid_str}".encode() + b"|" + stretched_secret
         elif key_mode == "server_key":
-            context = f"zkcambio|{salt_str}|v{key_version}|server_key|{username}".encode()
+            context = f"zkcambio|{salt_str}|v{key_version}|server_key|{uid_str}".encode()
         else:
             raise ValueError(f"Unknown key_mode: {key_mode}")
 

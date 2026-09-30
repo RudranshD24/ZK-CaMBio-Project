@@ -34,7 +34,8 @@
     "maxmem_mb": 32,
     "n": 16384,
     "p": 1,
-    "r": 8
+    "r": 8,
+    "user_salt_len": 16
   },
-  "checksum_sha256": "bd75d68a705cbbd5993b57cb5899bcb00864bacfa54e3ddc7711f9027befbb5b"
+  "checksum_sha256": "13ce83aca7af7611f0d654ce7563a1bebf9a16437e8eda89187dde118acdaa82"
 }

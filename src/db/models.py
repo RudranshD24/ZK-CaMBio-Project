@@ -46,6 +46,9 @@ class User(Base):
     key_mode: Mapped[str] = mapped_column(
         String(32), nullable=False, default="user_secret"
     )  # "user_secret" or "server_key"
+    kdf_salt: Mapped[str | None] = mapped_column(
+        String(64), nullable=True
+    )  # Per-user 16-byte random salt (hex-encoded) for memory-hard key stretching
     active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False

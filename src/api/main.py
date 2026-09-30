@@ -25,6 +25,8 @@ import hmac
 import json
 import logging
 import os
+import secrets
+import uuid
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -325,24 +327,35 @@ async def enroll(
 
         fused_vec = fuse_embeddings_feature_level(face_tmpl, finger_tmpl, w=service.w)
 
-        # 5. Key Derivation & Cancelable Transformation
-        state, r_param = service.derive_user_chaos_params(
-            username=username,
-            key_mode=key_mode,
-            key_version=key_version,
-            user_secret=user_secret,
-        )
-        template_bytes = service.generate_cancelable_template(fused_vec, state, r_param)
-
-        # 6. Database Storage (Users & Templates ONLY; NO keys for user_secret mode)
+        # 5. Database User Record & Per-User Salt (Phase 7d)
         if existing_user is None:
-            user_record = User(username=username, key_mode=key_mode, active=True)
+            user_record = User(
+                id=uuid.uuid4(),
+                username=username,
+                key_mode=key_mode,
+                kdf_salt=secrets.token_hex(16),
+                active=True,
+            )
             db.add(user_record)
             db.flush()
         else:
             user_record = existing_user
             user_record.active = True
             user_record.key_mode = key_mode
+            if not user_record.kdf_salt:
+                user_record.kdf_salt = secrets.token_hex(16)
+            db.flush()
+
+        # 6. Key Derivation & Cancelable Transformation (Binds user_id & per-user kdf_salt)
+        state, r_param = service.derive_user_chaos_params(
+            username=username,
+            key_mode=key_mode,
+            key_version=key_version,
+            user_secret=user_secret,
+            user_id=str(user_record.id),
+            user_kdf_salt=user_record.kdf_salt,
+        )
+        template_bytes = service.generate_cancelable_template(fused_vec, state, r_param)
 
         new_template = Template(
             user_id=user_record.id,
@@ -444,13 +457,15 @@ async def verify(
 
         probe_fused = fuse_embeddings_feature_level(face_emb, finger_emb, w=service.w)
 
-        # 3. Derive key parameters & generate probe template
+        # 3. Derive key parameters & generate probe template (Binds user_id & per-user kdf_salt)
         try:
             state, r_param = service.derive_user_chaos_params(
                 username=username,
                 key_mode=user.key_mode,
                 key_version=tmpl_rec.key_version,
                 user_secret=user_secret,
+                user_id=str(user.id),
+                user_kdf_salt=user.kdf_salt,
             )
         except ValueError as e:
             record_failed_attempt(db, username, client_ip)
@@ -594,6 +609,9 @@ def revoke(
     for tmpl in active_tmpls:
         tmpl.revoked_at = now
         latest_version = max(latest_version, tmpl.key_version)
+
+    # Regenerate per-user KDF salt on revoke to guarantee key separation
+    user.kdf_salt = secrets.token_hex(16)
 
     # If server_key mode, also revoke user_keys record
     stmt_key = select(UserKey).where(UserKey.user_id == user.id, UserKey.revoked_at == None)  # noqa: E711
