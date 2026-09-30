@@ -1,8 +1,64 @@
-FROM python:3.13-slim
-# Placeholder — will be fleshed out in Phase 7
+# syntax=docker/dockerfile:1
+# Multi-stage Dockerfile for ZK-CaMBio API backend
+
+# -------------------------------------------------------------
+# Stage 1: Build native C++ chaoshash extension
+# -------------------------------------------------------------
+FROM python:3.13-slim AS builder
+
+WORKDIR /build
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    g++ \
+    python3-dev \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir pybind11 numpy
+
+COPY cpp/ cpp/
+
+RUN SUFFIX=$(python3-config --extension-suffix) && \
+    g++ -O3 -Wall -shared -std=c++17 -fPIC -ffp-contract=off \
+    $(python3 -m pybind11 --includes) \
+    cpp/chaos.cpp cpp/bindings.cpp \
+    -o /build/chaoshash${SUFFIX}
+
+# -------------------------------------------------------------
+# Stage 2: Runtime image
+# -------------------------------------------------------------
+FROM python:3.13-slim AS runtime
+
 WORKDIR /app
+
+# Install runtime system libraries (OpenCV, PostgreSQL client, curl for healthcheck)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 \
+    libglib2.0-0 \
+    libpq5 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy compiled C++ extension from builder
+COPY --from=builder /build/chaoshash*.so /app/src/chaos/
+COPY --from=builder /build/chaoshash*.so /app/
+
+# Copy application code, configs, models, alembic migrations
 COPY src/ src/
 COPY configs/ configs/
+COPY models/ models/
+COPY alembic/ alembic/
+COPY alembic.ini .
+
+ENV PYTHONPATH=/app:/app/src:/app/src/chaos \
+    PYTHONUNBUFFERED=1
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
 CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

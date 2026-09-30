@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres:16-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_USER: cambio
       POSTGRES_PASSWORD: changeme
@@ -9,26 +10,39 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cambio"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   api:
     build:
       context: .
       dockerfile: docker/Dockerfile.api
+    restart: unless-stopped
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgresql://cambio:changeme@db:5432/cambio
+      API_TOKEN: ${API_TOKEN:-dev_secret_token_123}
+      PUBLIC_PARAMS_PATH: configs/biometric_parameters.json
 
   ui:
     build:
       context: .
       dockerfile: docker/Dockerfile.ui
+    restart: unless-stopped
     ports:
       - "8501:8501"
     depends_on:
       - api
+    environment:
+      API_URL: http://api:8000
+      API_TOKEN: ${API_TOKEN:-dev_secret_token_123}
 
 volumes:
   pgdata:

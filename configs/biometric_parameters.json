@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "algo_version": "zkcambio_v1",
+  "dimensions": {
+    "face_dim": 512,
+    "finger_dim": 256,
+    "fused_dim": 768,
+    "template_bits_m": 512
+  },
+  "fusion": {
+    "weight_face_w": 0.6,
+    "weight_finger_1_minus_w": 0.4
+  },
+  "quantization": {
+    "scale": 1048576,
+    "mean_vector_sha256": "2ac9e890dc457ab838fefd95caeadbec1b8341fdce45a94a17515f83bc8d48fe",
+    "mean_vector_path": "data/processed/chaos_mean_vector.npy"
+  },
+  "matching_thresholds": {
+    "operational_eer_threshold_hd": 0.3504,
+    "operational_fmr_01pct_threshold_hd": 0.301,
+    "unprotected_s3_val_fmr_1pct": 0.3811,
+    "unprotected_s3_val_fmr_01pct": 0.4832
+  },
+  "enrollment_quality": {
+    "min_face_consistency_cosine": 0.45,
+    "min_finger_consistency_cosine": 0.7
+  },
+  "checksum_sha256": "ded6e0b1163b7615a2c1895203fa73ba322d720e18c4858fd82413910671acaf"
+}

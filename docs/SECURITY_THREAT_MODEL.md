@@ -32,15 +32,21 @@ In this work, "non-invertibility" does **not** denote an information-theoretic o
 3. **Protection Relies on Key Secrecy**: The system provides strong protection **if and only if the key remains secret** (Threat Case A1). Without the key, the effective search space is **at most $2^{126}$ by construction (upper bound; logistic-map state recovery was NOT evaluated)**, and distinguishing templates of different subjects is statistically at chance (AUC = 0.4767).
 4. **Revocation Limits Damage**: If a key and template are compromised, the victim's biometric is revocable. Issuing a new key $K_{v+1}$ immediately restores biometric security and repudiates the compromised template (FNMR = 100% rejection).
 
-## Mitigations for Phase 7 (Architecture & Key Storage)
-1. **Strict Key Separation & User Secret Mode**: Master keys are NEVER stored alongside cancelable templates in the application database (`DATABASE.md`). Two distinct operational modes are supported (D-016):
-   - **User Secret Mode (`key_mode = "user_secret"`, Default)**:
-     $$K = \text{HMAC-SHA256}(\text{ServerMasterKey}, \text{"zkcambio\|" } \parallel \text{app\_salt} \parallel \text{"\|v"} \parallel \text{version} \parallel \text{"\|"} \parallel \text{UserSecret})$$
-     The user secret (PIN/passphrase) is provided during enroll/verify and never stored in the database or logs. No key material is stored on the server. If the server database is breached, the attacker possesses only templates (Threat Case A1) and cannot invert templates or link across systems.
-   - **Server Key Mode (`key_mode = "server_key"`)**: Per-user keys derived server-side to allow 1:N identification. Server compromise exposes keys for these users (Threat Case A2/A3).
-2. **Challenge-Response & Freshness**: API verification requires authenticating freshness to prevent static bitstring replay.
+## Implemented Mitigations in Phase 7 (Architecture & Key Storage)
+1. **Strict Key Separation & User Secret Mode (Implemented, ADR D-016)**:
+   - Master keys are NEVER stored alongside cancelable templates in the application database (`docs/DATABASE.md`).
+   - **User Secret Mode (`key_mode = "user_secret"`, Default & Enforced for Verification)**:
+     $$K = \text{HMAC-SHA256}(\text{app\_salt}, \text{user\_secret} \parallel \text{key\_version})$$
+     The user secret (PIN/passphrase) is provided during enroll and verify in volatile RAM and is never logged or stored in the database. Zero key material is stored on the server. If the server database is breached, the attacker possesses only cancelable bitstring templates (Threat Case A1) and cannot invert them or link accounts across systems without cracking the user's secret. Identification (`/identify`) is strictly disabled for user_secret accounts.
+   - **Server Key Mode (`key_mode = "server_key"`)**: Enrolled keys are encrypted using AES-256-GCM and stored in the dedicated `user_keys` table. Exclusively used when 1:N identification is required.
+2. **Brute-Force & Replay Defenses (A4 / A6, Implemented)**:
+   - **Rate Limiting & Lockout Counter**: Failed verification attempts increment an in-memory sliding failure counter per username. After 5 consecutive failures, the account is locked out for 15 minutes (`HTTP 429 Too Many Requests`).
+   - **In-Memory Biometric Processing**: Images are streamed, processed, and garbage-collected in `try ... finally` blocks. Database schema enforces zero columns capable of holding biometric images or raw embeddings ([test_schema_whitelist_no_raw_biometrics](file:///D:/Biometric%20Project/tests/test_schema_no_biometrics.py)).
+3. **Cross-Platform Bit-Level Determinism (Verified)**:
+   - Exact bit determinism was verified via Docker container KAT (`tests/run_linux_kat.sh`). Linux GCC and Windows MSVC produce the identical KAT hash `83ec0508`.
 
 ## Open Security Limitations for Paper Disclosure
 - **Encoder Overfitting Sensitivity**: Attacker prior/decoder trained on 30 validation subjects only (no train fingerprints) still achieves centered cosine $0.8937 \pm 0.0235$ and 100.0% replay success at $m=512$, confirming vulnerability is structural to known linear projections, not an artifact of encoder overfit.
 - **Logistic Map Cryptanalysis**: The fixed-point logistic map bitstream is not proven secure against algebraic state reconstruction from long bit sequences. Hardening with HMAC in counter mode is recommended for production.
-- **Cross-Platform Integer Determinism**: Exact bit determinism achieved via Q64 fixed-point integer arithmetic; Linux container KAT test required prior to release.
+- **Cross-Platform Integer Determinism**: Exact bit determinism achieved via Q64 fixed-point integer arithmetic and validated across MSVC and Linux GCC containers.
+

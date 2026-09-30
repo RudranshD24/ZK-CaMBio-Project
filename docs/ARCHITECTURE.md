@@ -81,8 +81,32 @@ Biometric Project/   (project root)
   docker/ (Dockerfile.api, Dockerfile.ui)  docker-compose.yml
 ```
 
-## Deployment
-`docker compose`: `db` (postgres), `api` (FastAPI + built chaoshash), `ui` (Streamlit). Model weights mounted as a volume.
+## Deployment & Multi-Stage Docker Architecture
+- **Docker Compose**: Orchestrates `db` (PostgreSQL 16 Alpine with healthchecks), `api` (FastAPI backend with native Linux-compiled `chaoshash`), and `ui` (Streamlit dashboard communicating over internal network).
+- **Multi-Stage Build (`docker/Dockerfile.api`)**:
+  - *Stage 1 (`builder`)*: Uses `python:3.13-slim` + `g++` to compile `cpp/chaos.cpp` and `cpp/bindings.cpp` into `chaoshash.so` using `-O3 -Wall -shared -std=c++17 -fPIC -ffp-contract=off`.
+  - *Stage 2 (`runtime`)*: Minimal `python:3.13-slim` runtime image copying the compiled `.so` library, application code, cached model weights (`models/`), versioned public parameters (`configs/biometric_parameters.json`), and Alembic migrations.
+- **Cross-Platform Known-Answer Parity**:
+  - The Linux container build was validated against the reference MSVC output using `tests/run_linux_kat.sh`.
+  - Both MSVC (Windows x86_64) and GCC 12+ (Linux x86_64) produce the identical 64-bit KAT template hash: `83ec0508`.
 
-## Memory hygiene
-Images -> embeddings -> fused vector -> template happen inside one request handler; only the template is persisted. Python cannot guarantee zeroing memory, so the docs claim "not persisted", not "cryptographically erased".
+## Backend Model Service & Public Parameters
+- Encoders (VGGFace2 ResNet-50 and Fingerprint ResNet-18 V2) are initialized once at application startup into the singleton `BiometricService`.
+- Model weights are pre-cached in `models/` to ensure offline, air-gapped Docker startup without external network downloads.
+- Public parameters ($d=768, m=512, w=0.60, \mu \in \mathbb{R}^{768}$) are loaded from `configs/biometric_parameters.json` and validated at startup against an integrity SHA-256 checksum (`ded6e0b1163b7615a2c1895203fa73ba322d720e18c4858fd82413910671acaf`).
+
+## Key Derivation & Mode Isolation (ADR D-016)
+- **`user_secret` Mode (Default)**:
+  - User presents PIN/secret on every request; server computes HMAC-SHA256 in volatile RAM and immediately discards it.
+  - Zero key material is stored on the server.
+  - Verification only; 1:N `/identify` is rejected by design to prevent unkeyed database scans.
+- **`server_key` Mode (Opt-in)**:
+  - System derives and encrypts a 256-bit key using AES-256-GCM under `SERVER_MASTER_KEY`.
+  - Enables 1:N identification across enrolled active templates.
+
+## Memory Hygiene & Anti-Leakage
+- Images -> tensors -> embeddings -> fused vectors -> binary template occur entirely in-memory within the scope of a single request.
+- Every endpoint wraps processing in `try ... finally` blocks triggering `gc.collect()`.
+- Database schema whitelist tests ([test_schema_whitelist_no_raw_biometrics](file:///D:/Biometric%20Project/tests/test_schema_no_biometrics.py)) statically inspect all tables to assert zero columns can store raw image bytes, floating-point vectors, or plaintext credentials.
+- The documentation explicitly notes that Python memory management does not guarantee cryptographic zeroization of RAM, but guarantees zero disk persistence.
+

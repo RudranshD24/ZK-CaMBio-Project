@@ -1,7 +1,26 @@
 # CHANGELOG.md
 Format: `## [phase-N] YYYY-MM-DD` then bullets Added / Changed / Fixed.
 
+## [phase-7] 2026-09-30
+- Added:
+  - Multi-stage Docker build (`docker/Dockerfile.api`) utilizing `python:3.13-slim` and `g++` to compile native Linux C++ `chaoshash` extension (`-O3 -Wall -shared -std=c++17 -fPIC -ffp-contract=off`).
+  - Cross-platform bit-level verification: Docker container KAT (`tests/run_linux_kat.sh`) executed on Linux container, confirming exact 64-bit template hash `83ec0508` identical to Windows MSVC.
+  - Docker Compose orchestration (`docker-compose.yml`) coordinating `db` (Postgres 16 Alpine with healthchecks), `api` (FastAPI backend), and `ui` (Streamlit dashboard stub).
+  - Public parameters configuration (`configs/biometric_parameters.json`) storing $d=768, m=512, w=0.60$ and train mean vector $\mu$, validated at startup against SHA-256 checksum `ded6e0b1163b7615a2c1895203fa73ba322d720e18c4858fd82413910671acaf`.
+  - Offline model cache (`models/`) holding `vggface2.pt` and `finger_resnet18_best.pth` for air-gapped Docker deployments.
+  - Database schema & ORM models (`src/db/models.py`, `src/db/session.py`, `alembic/`): SQLAlchemy 2.0 tables `users`, `templates`, `user_keys` (isolated for server-derived keys only), and `audit_log`.
+  - Schema whitelist anti-leakage test (`tests/test_schema_no_biometrics.py`, FR-10) asserting zero columns capable of storing raw images, float embeddings, or secrets.
+  - Biometric backend service (`src/api/service.py`) supporting dual key modes (ADR D-016): `user_secret` (default, in-memory derivation, zero server key storage, 1:N disabled) and `server_key` (encrypted AES-256-GCM, enabling 1:N identification).
+  - Enrollment quality and intra-sample consistency checks (FR-12) rejecting decodability errors and outlier embeddings (min face similarity $\ge 0.45$, min fingerprint similarity $\ge 0.70$).
+  - FastAPI application (`src/api/main.py`) exposing `/health`, `/enroll`, `/verify`, `/identify`, `/revoke`, `/users`, and `/metrics/latest` with static Bearer auth (`API_TOKEN`).
+  - Rate limiting & lockout defense (A6): Sliding window failure counter locking account for 15 minutes after 5 consecutive failed verification attempts (`HTTP 429`).
+  - In-memory biometric lifecycle guarantees: image streams decoded into tensors and garbage-collected inside `try ... finally` blocks.
+  - Integration test suite (`tests/test_api.py`) verifying health, enroll/verify/revoke lifecycle, wrong-secret rejection, identify restrictions, lockout defense, zero secrets in logs, and CPU latency benchmarks (verify ~0.28 s < 1.0 s threshold, enroll ~1.85 s).
+  - Architecture Decision Record D-016 added to `docs/DECISIONS.md`.
+  - Updated `docs/API_SPEC.md`, `docs/DATABASE.md`, `docs/ARCHITECTURE.md`, `docs/SECURITY_THREAT_MODEL.md`, `docs/TRACEABILITY_REPORT.md`.
+
 ## [phase-6] 2026-09-30
+
 - Phase 5 Follow-Ups Completed:
   - Wording updated across evaluation documentation: replaced "cryptographic isolation" with "key separation"; qualified "full unlinkability" as "unlinkable against a score-based adversary WITHOUT key access"; renamed Scenario K as "claimed-identity key (operational; equals stolen-key case)" and Scenario U as "attacker presents own key/token (best case)".
   - Grounded operating thresholds strictly on 30 validation subjects: $\tau_{oper, eer} = 0.3504$ and $\tau_{oper, 0.1\%} = 0.3010$, achieving 100.00% rejection on revoked keys under both thresholds.

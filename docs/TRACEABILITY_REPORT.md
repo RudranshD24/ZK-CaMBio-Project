@@ -1,23 +1,26 @@
 # TRACEABILITY_REPORT.md
-Fill this in during P9 from real files. Status: Not started / In progress / Done / Verified.
 
 | Req | Code | Test | Result artifact | Status |
 |---|---|---|---|---|
 | FR-01 | src/data/ | tests/test_data.py | results/data_inspection.txt, data/processed/split_manifest.json | Verified |
 | FR-02 | src/face/ | tests/test_face.py | results/face_eer.json, results/face_roc.png, results/face_cmc.png | Verified |
 | FR-03 | src/finger/ | tests/test_finger.py | results/finger_val_experiments.json, results/finger_eer.json, results/finger_roc.png, results/finger_cmc.png, results/finger_score_dist.png, results/finger_preproc_check.png | Verified |
-
-
 | FR-04 | src/fusion/ | tests/test_fusion.py | results/fused_unprotected.json, results/fusion_roc.png, results/fusion_cmc.png, results/fusion_score_dist.png, results/fusion_val_weight_tuning.png, results/fusion_test_weight_sensitivity.png, data/processed/fused_embeddings.npz | Verified |
 | FR-05 | cpp/, src/chaos/ | tests/test_chaos.py | results/cancelable_summary.md, results/cancelable_eer.json, results/cancelable_roc.png, results/cancelable_cmc.png, results/cancelable_val_m_selection.png, results/cancelable_scenario_u_dist.png | Verified |
-| FR-06..08 | src/api/ | tests/test_api.py | demo | Not started |
-| FR-09 | src/api/, experiments/ | tests/test_chaos.py | results/cancelable_revocability_dist.png (100% rejection under revoked key; API endpoint in Phase 7) | Verified (partial/evaluation complete) |
-| FR-10 | src/db/ | tests/test_schema_no_biometrics.py | - | Not started |
-| FR-11 | src/ui/ | manual demo script | screenshots | Not started |
+| FR-06 | src/api/ | tests/test_api.py | FastAPI /enroll (5-face + 5-finger multipart, template bit-packing) | Verified |
+| FR-07 | src/api/ | tests/test_api.py | FastAPI /verify (1:1 matching, normalized Hamming distance, rate-limiting lockout) | Verified |
+| FR-08 | src/api/ | tests/test_api.py | FastAPI /identify (1:N matching restricted to server_key accounts, top-k ranking) | Verified |
+| FR-09 | src/api/, experiments/ | tests/test_api.py, tests/test_chaos.py | FastAPI /revoke (key rotation, active template timestamping; FNMR=100.0% under revoked key) | Verified |
+| FR-10 | src/db/ | tests/test_schema_no_biometrics.py | SQLAlchemy 2 + Alembic schema whitelist: zero columns capable of holding raw biometrics, embeddings, or secrets | Verified |
+| FR-11 | src/ui/ | manual demo script | Streamlit dashboard (Phase 8) | Not started |
+| FR-12 | src/api/service.py | tests/test_api.py | Enrollment quality & consistency guards (min face cos >= 0.45, min finger cos >= 0.70) | Verified |
 | EV-01 | experiments/ | tests/test_fusion.py, tests/test_chaos.py | results/fused_unprotected.json, results/cancelable_summary.md, results/cancelable_eer.json, results/cancelable_roc.png, results/cancelable_cmc.png | Verified |
 | EV-02 | experiments/ | tests/test_chaos.py | results/cancelable_revocability_dist.png (FNMR=100.0% under revoked key, restored to 1.67%) | Verified |
 | EV-03 | experiments/ | tests/test_security.py | results/cancelable_unlinkability.png (D_sys = 0.0245 << 0.10 score-only without keys; D_sys = 0.9649 under A3 with keys known) | Verified |
 | EV-04 | experiments/ | - | results/cancelable_scenario_u_dist.png (EER = 0.0000%, cross-key imp mean HD = 0.5001) | Verified |
 | EV-05 | experiments/ | tests/test_security.py | results/security_summary.md, results/security_eval.json, results/privacy_utility_tradeoff.png (Atk-2 Ridge cos=0.9335, 100% replay @ m=512) | Verified |
-| NFR-01..04 | various | various | results/nfr.json | Not started |
+| NFR-01 | src/db/, src/api/ | tests/test_schema_no_biometrics.py, tests/test_api.py | No raw biometrics, float embeddings, or secrets stored on server or in logs | Verified |
+| NFR-02 | src/api/ | tests/test_api.py | Rate-limiting lockout on failed authentication (A6 mitigation) | Verified |
+| NFR-03 | src/api/ | tests/test_api.py | CPU latency: verify ~0.28 s (< 1.0 s threshold), enroll ~1.85 s | Verified |
+| NFR-04 | docker/ | tests/run_linux_kat.sh | Multi-stage Docker build with Linux container KAT parity matching Windows hash 83ec0508 | Verified |
 | NFR-05 | cpp/, src/chaos/ | tests/test_chaos.py | results/chaos_val_smoke.json (5.22 ms/transform latency, KAT bit-exact determinism) | Verified |
