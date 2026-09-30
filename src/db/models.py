@@ -135,3 +135,22 @@ class AuditLog(Base):
     )
 
     user: Mapped[User | None] = relationship("User", back_populates="audit_logs")
+
+
+class AuthRateLimit(Base):
+    """Tracks failed authentication attempts for per-username and per-IP escalating delays.
+    Persisted in DB to survive server restarts and multiple workers.
+    """
+
+    __tablename__ = "auth_rate_limits"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    identifier_type: Mapped[str] = mapped_column(String(16), nullable=False)  # 'username' or 'ip'
+    identifier_value: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    failed_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    last_failed_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False
+    )
+    locked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

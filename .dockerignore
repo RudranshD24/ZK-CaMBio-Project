@@ -1,0 +1,16 @@
+.git
+.venv
+data/
+dataset/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ruff_cache/
+results/
+tests/
+scratch/
+docs/
+*.sqlite
+*.log

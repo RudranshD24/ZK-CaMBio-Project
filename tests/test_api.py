@@ -1,11 +1,15 @@
 """tests/test_api.py
 
-API integration tests using FastAPI TestClient:
-- Enroll -> Verify Genuine -> Verify Impostor -> Revoke -> Old Template Rejected -> Re-enroll Works.
-- Wrong user_secret is rejected.
-- Identify disabled for user_secret users.
-- Rate limiting lockout test (A6).
-- Zero secret / biometric data in captured logs.
+Comprehensive API integration tests:
+- Healthcheck.
+- Bearer token timing-safe validation (hmac.compare_digest).
+- User secret strength validation (min 8 chars, common weak secret rejection).
+- Score suppression outside DEV_MODE (hill-climbing defense).
+- Enroll -> Verify Genuine -> Verify Impostor (wrong secret) -> Revoke -> Re-enroll flow.
+- Identification disabled for user_secret accounts.
+- Database-persisted rate-limiting and escalating delays.
+- Test showing an attacker cannot permanently lock a victim out.
+- Zero secret, embedding, or raw image bytes in captured logs.
 - Measures and asserts CPU latency for enroll and verify (NFR-03).
 """
 
@@ -29,11 +33,12 @@ os.environ["API_TOKEN"] = "test_token_123"
 os.environ["DEV_MODE"] = "true"
 
 from src.api.main import app
+from src.db.models import AuditLog
+from src.db.session import SessionLocal
 
 
 @pytest.fixture(scope="module")
 def client():
-    # Remove test DB file if exists
     test_db = Path("test_api_db.sqlite")
     if test_db.exists():
         with contextlib.suppress(OSError):
@@ -50,12 +55,10 @@ def client():
             test_db.unlink()
 
 
-
 def generate_dummy_face_bytes(seed: int = 42) -> bytes:
     """Generates a realistic 160x160 RGB face-like pattern image."""
     rng = np.random.RandomState(seed)
     arr = rng.randint(50, 200, (160, 160, 3), dtype=np.uint8)
-    # Add a bright circular center so face features are consistent
     y, x = np.ogrid[:160, :160]
     mask = (x - 80) ** 2 + (y - 80) ** 2 <= 40**2
     arr[mask] = 220
@@ -68,7 +71,6 @@ def generate_dummy_face_bytes(seed: int = 42) -> bytes:
 def generate_dummy_finger_bytes(seed: int = 100) -> bytes:
     """Generates a 128x128 grayscale fingerprint-like pattern image."""
     rng = np.random.RandomState(seed)
-    # Create smooth synthetic ridge-like sinusoidal pattern
     x = np.linspace(0, 10 * np.pi, 128)
     y = np.linspace(0, 10 * np.pi, 128)
     xx, yy = np.meshgrid(x, y)
@@ -87,8 +89,118 @@ def test_health_endpoint(client):
     assert data["service"] == "zk-cambio-api"
 
 
+def test_bearer_token_timing_safe_compare(client):
+    """Verifies that invalid or forged bearer tokens are rejected."""
+    # No auth header
+    res = client.get("/users")
+    assert res.status_code == 401
+
+    # Prefix match attempt
+    res = client.get("/users", headers={"Authorization": "Bearer test_token"})
+    assert res.status_code == 401
+
+    # Wrong token
+    res = client.get("/users", headers={"Authorization": "Bearer wrong_secret_token"})
+    assert res.status_code == 401
+
+    # Valid token
+    res = client.get("/users", headers={"Authorization": "Bearer test_token_123"})
+    assert res.status_code == 200
+
+
+def test_user_secret_validation_min_length_and_weak(client):
+    """Asserts that short (<8 chars) and predictable weak secrets are rejected."""
+    headers = {"Authorization": "Bearer test_token_123"}
+    face_files = [
+        ("face_images", (f"face_{i}.jpg", generate_dummy_face_bytes(10 + i), "image/jpeg"))
+        for i in range(5)
+    ]
+    finger_files = [
+        ("finger_images", (f"finger_{i}.tif", generate_dummy_finger_bytes(50 + i), "image/tiff"))
+        for i in range(5)
+    ]
+
+    # 1. Too short (<8 chars)
+    res_short = client.post(
+        "/enroll",
+        data={"username": "short_user", "key_mode": "user_secret", "user_secret": "short7!"},
+        files=face_files + finger_files,
+        headers=headers,
+    )
+    assert res_short.status_code == 400
+    assert "at least 8 characters" in res_short.json()["detail"]
+
+    # 2. Common weak secret
+    res_weak = client.post(
+        "/enroll",
+        data={"username": "weak_user", "key_mode": "user_secret", "user_secret": "password123"},
+        files=face_files + finger_files,
+        headers=headers,
+    )
+    assert res_weak.status_code == 400
+    assert "too weak" in res_weak.json()["detail"]
+
+
+def test_score_suppressed_when_not_dev_mode(client):
+    """Hill-climbing defense: When DEV_MODE=false, /verify and audit_log suppress numeric scores."""
+    headers = {"Authorization": "Bearer test_token_123"}
+    username = "score_test_user"
+    secret = "StrongPassphrase456!"
+
+    # Enroll user
+    face_files = [
+        ("face_images", (f"f_{i}.jpg", generate_dummy_face_bytes(20 + i), "image/jpeg"))
+        for i in range(5)
+    ]
+    finger_files = [
+        ("finger_images", (f"g_{i}.tif", generate_dummy_finger_bytes(60 + i), "image/tiff"))
+        for i in range(5)
+    ]
+    res_enroll = client.post(
+        "/enroll",
+        data={"username": username, "key_mode": "user_secret", "user_secret": secret},
+        files=face_files + finger_files,
+        headers=headers,
+    )
+    assert res_enroll.status_code == 200
+
+    # Switch DEV_MODE to false
+    os.environ["DEV_MODE"] = "false"
+    try:
+        ver_face = ("face_image", ("f.jpg", generate_dummy_face_bytes(20), "image/jpeg"))
+        ver_finger = ("finger_image", ("g.tif", generate_dummy_finger_bytes(60), "image/tiff"))
+        res_ver = client.post(
+            "/verify",
+            data={"username": username, "user_secret": secret},
+            files=[ver_face, ver_finger],
+            headers=headers,
+        )
+        assert res_ver.status_code == 200
+        data = res_ver.json()
+        assert data["match"] is True
+        # Numeric score must NOT be returned when DEV_MODE=false
+        assert "score" not in data
+        assert "normalized_hamming_distance" not in data
+
+        # Check audit_log: score must be NULL/None
+        db = SessionLocal()
+        try:
+            log_entry = (
+                db.query(AuditLog)
+                .filter(AuditLog.event == "verify")
+                .order_by(AuditLog.timestamp.desc())
+                .first()
+            )
+            assert log_entry is not None
+            assert log_entry.score is None
+        finally:
+            db.close()
+    finally:
+        os.environ["DEV_MODE"] = "true"
+
+
 def test_enroll_verify_revoke_lifecycle_user_secret(client, caplog):
-    """Complete lifecycle test for default 'user_secret' mode."""
+    """Complete lifecycle test: Enroll -> Verify Genuine -> Wrong Secret -> Revoke -> Re-enroll."""
     headers = {"Authorization": "Bearer test_token_123"}
     username = "alice_test"
     secret = "AliceSecretPass123!"
@@ -121,7 +233,7 @@ def test_enroll_verify_revoke_lifecycle_user_secret(client, caplog):
     assert enroll_data["status"] == "enrolled"
     print(f"\nEnroll CPU latency (5 face + 5 finger impressions): {enroll_time_sec:.3f} s")
 
-    # Assert no user secret in logs
+    # Assert no secret or biometric arrays in logs
     for rec in caplog.records:
         assert secret not in rec.message
         assert "password" not in rec.message.lower()
@@ -142,7 +254,7 @@ def test_enroll_verify_revoke_lifecycle_user_secret(client, caplog):
     assert ver_res.status_code == 200, ver_res.text
     ver_data = ver_res.json()
     assert ver_data["match"] is True
-    assert ver_data["normalized_hamming_distance"] < ver_data["threshold"]
+    assert ver_data["score"] < ver_data["threshold"]
     print(f"Verify CPU latency (1 probe pair matching): {verify_time_sec:.3f} s")
 
     # 3. Verify with WRONG secret -> Must Reject
@@ -151,13 +263,13 @@ def test_enroll_verify_revoke_lifecycle_user_secret(client, caplog):
 
     wrong_res = client.post(
         "/verify",
-        data={"username": username, "user_secret": "WrongSecret!"},
+        data={"username": username, "user_secret": "WrongSecretPass999!"},
         files=[wrong_face, wrong_finger],
         headers=headers,
     )
     assert wrong_res.status_code == 200
     assert wrong_res.json()["match"] is False
-    assert wrong_res.json()["normalized_hamming_distance"] > 0.40  # cross-key HD ~0.50
+    assert wrong_res.json()["score"] > 0.40  # cross-key HD ~0.50
 
     # 4. Revocation
     rev_res = client.post("/revoke", data={"username": username}, headers=headers)
@@ -189,17 +301,18 @@ def test_identify_disabled_for_user_secret_users(client):
     res = client.post("/identify", files=[id_face, id_finger], headers=headers)
     assert res.status_code == 200
     data = res.json()
-    # alice_test was enrolled in user_secret mode, so candidate list must be empty
     assert len(data.get("candidates", [])) == 0
 
 
 def test_rate_limiting_and_lockout(client):
-    """Asserts that 5 consecutive failed attempts trigger a 429 lockout."""
+    """Asserts that repeated failed attempts trigger escalating delays persisted in DB."""
     headers = {"Authorization": "Bearer test_token_123"}
-    # Enroll user bob
+    username = "bob_lockout"
+    secret = "BobPassphrase123!"
+
     client.post(
         "/enroll",
-        data={"username": "bob_lockout", "key_mode": "user_secret", "user_secret": "BobPass123!"},
+        data={"username": username, "key_mode": "user_secret", "user_secret": secret},
         files=[
             ("face_images", (f"f_{i}.jpg", generate_dummy_face_bytes(50 + i), "image/jpeg"))
             for i in range(5)
@@ -211,11 +324,11 @@ def test_rate_limiting_and_lockout(client):
         headers=headers,
     )
 
-    # 5 consecutive wrong secret attempts
-    for _ in range(5):
+    # 3 consecutive wrong secret attempts to trigger escalating delay
+    for _ in range(3):
         client.post(
             "/verify",
-            data={"username": "bob_lockout", "user_secret": "WrongSecret"},
+            data={"username": username, "user_secret": "WrongSecretPass999!"},
             files=[
                 ("face_image", ("f.jpg", generate_dummy_face_bytes(50), "image/jpeg")),
                 ("finger_image", ("g.tif", generate_dummy_finger_bytes(200), "image/tiff")),
@@ -223,10 +336,10 @@ def test_rate_limiting_and_lockout(client):
             headers=headers,
         )
 
-    # 6th attempt should be locked out (429)
+    # Immediate next attempt should be delayed (429)
     locked_res = client.post(
         "/verify",
-        data={"username": "bob_lockout", "user_secret": "BobPass123!"},
+        data={"username": username, "user_secret": secret},
         files=[
             ("face_image", ("f.jpg", generate_dummy_face_bytes(50), "image/jpeg")),
             ("finger_image", ("g.tif", generate_dummy_finger_bytes(200), "image/tiff")),
@@ -234,4 +347,98 @@ def test_rate_limiting_and_lockout(client):
         headers=headers,
     )
     assert locked_res.status_code == 429, locked_res.text
-    assert "locked out" in locked_res.json()["detail"].lower()
+    assert "throttled" in locked_res.json()["detail"].lower() or "delayed" in locked_res.json()["detail"].lower()
+
+
+def test_attacker_cannot_permanently_lock_victim_out(client):
+    """Asserts that an attacker at a separate IP cannot permanently deny access to the victim."""
+    headers = {"Authorization": "Bearer test_token_123"}
+    username = "charlie_victim"
+    secret = "CharlieSecretPass123!"
+
+    # Enroll victim
+    client.post(
+        "/enroll",
+        data={"username": username, "key_mode": "user_secret", "user_secret": secret},
+        files=[
+            ("face_images", (f"f_{i}.jpg", generate_dummy_face_bytes(70 + i), "image/jpeg"))
+            for i in range(5)
+        ]
+        + [
+            ("finger_images", (f"g_{i}.tif", generate_dummy_finger_bytes(300 + i), "image/tiff"))
+            for i in range(5)
+        ],
+        headers=headers,
+    )
+
+    # Attacker repeatedly fails from Attacker IP
+    attacker_headers = {"Authorization": "Bearer test_token_123", "X-Forwarded-For": "203.0.113.50"}
+    for _ in range(3):
+        client.post(
+            "/verify",
+            data={"username": username, "user_secret": "WrongAttackerGuess!"},
+            files=[
+                ("face_image", ("f.jpg", generate_dummy_face_bytes(70), "image/jpeg")),
+                ("finger_image", ("g.tif", generate_dummy_finger_bytes(300), "image/tiff")),
+            ],
+            headers=attacker_headers,
+        )
+
+    # Attacker's IP is throttled
+    atk_locked = client.post(
+        "/verify",
+        data={"username": username, "user_secret": "AnotherGuess123!"},
+        files=[
+            ("face_image", ("f.jpg", generate_dummy_face_bytes(70), "image/jpeg")),
+            ("finger_image", ("g.tif", generate_dummy_finger_bytes(300), "image/tiff")),
+        ],
+        headers=attacker_headers,
+    )
+    assert atk_locked.status_code == 429
+    assert "throttled" in atk_locked.json()["detail"].lower()
+
+    # Wait for the brief per-username delay (2s for k=3)
+    time.sleep(2.5)
+
+    # Legitimate victim authenticates from Victim IP
+    victim_headers = {"Authorization": "Bearer test_token_123", "X-Forwarded-For": "198.51.100.22"}
+    vic_res = client.post(
+        "/verify",
+        data={"username": username, "user_secret": secret},
+        files=[
+            ("face_image", ("f.jpg", generate_dummy_face_bytes(70), "image/jpeg")),
+            ("finger_image", ("g.tif", generate_dummy_finger_bytes(300), "image/tiff")),
+        ],
+        headers=victim_headers,
+    )
+    assert vic_res.status_code == 200
+    assert vic_res.json()["match"] is True
+
+
+def test_no_secrets_or_biometrics_in_logs(client, caplog):
+    """Verifies that no secrets, embeddings, or raw biometrics appear in log captures."""
+    headers = {"Authorization": "Bearer test_token_123"}
+    username = "log_audit_user"
+    secret = "SuperSecretPassword99!"
+
+    with caplog.at_level(logging.DEBUG):
+        client.post(
+            "/enroll",
+            data={"username": username, "key_mode": "user_secret", "user_secret": secret},
+            files=[
+                ("face_images", (f"f_{i}.jpg", generate_dummy_face_bytes(80 + i), "image/jpeg"))
+                for i in range(5)
+            ]
+            + [
+                ("finger_images", (f"g_{i}.tif", generate_dummy_finger_bytes(350 + i), "image/tiff"))
+                for i in range(5)
+            ],
+            headers=headers,
+        )
+
+    # Scan logs
+    for record in caplog.records:
+        msg = record.message
+        assert secret not in msg
+        assert "embedding" not in msg.lower()
+        assert "numpy" not in msg.lower()

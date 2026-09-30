@@ -1,9 +1,8 @@
 FROM python:3.13-slim
-# Placeholder — will be fleshed out in Phase 8
+# UI service image — placeholder server for Phase 8
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir requests
 COPY src/ src/
-COPY configs/ configs/
 EXPOSE 8501
-CMD ["streamlit", "run", "src/ui/app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["python", "src/ui/app.py"]

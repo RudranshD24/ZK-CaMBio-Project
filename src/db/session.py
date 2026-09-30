@@ -15,6 +15,8 @@ from sqlalchemy.orm import Session, sessionmaker
 from src.db.models import Base
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./zkcambio_test.db")
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
 
 # SQLite foreign keys enable
 connect_args = {}

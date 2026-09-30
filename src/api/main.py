@@ -21,13 +21,12 @@ Security & Design (D-016):
 from __future__ import annotations
 
 import gc
+import hmac
 import json
 import logging
 import os
-import time
-from collections import defaultdict
 from contextlib import asynccontextmanager
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Annotated, Any
 
@@ -39,14 +38,15 @@ from fastapi import (
     Form,
     Header,
     HTTPException,
+    Request,
     UploadFile,
     status,
 )
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from src.api.service import BiometricService
-from src.db.models import AuditLog, Template, User, UserKey
+from src.api.service import BiometricService, validate_user_secret
+from src.db.models import AuditLog, AuthRateLimit, Template, User, UserKey
 from src.db.session import get_db, init_db
 from src.fusion.fuse import fuse_embeddings_feature_level
 
@@ -58,49 +58,163 @@ logger = logging.getLogger("zkcambio.api")
 API_TOKEN = os.environ.get("API_TOKEN", "zkcambio_dev_secret_token_2026")
 
 
+def is_dev_mode() -> bool:
+    """Returns true if dev mode is enabled via environment variable."""
+    return os.environ.get("DEV_MODE", "false").lower() in ("true", "1", "yes")
+
+
 def verify_bearer_token(authorization: Annotated[str | None, Header()] = None) -> None:
-    """Validates authorization bearer token."""
+    """Validates authorization bearer token using timing-safe comparison."""
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Missing or invalid Authorization header",
         )
     token = authorization.split("Bearer ", 1)[1].strip()
-    if token != API_TOKEN:
+    if not hmac.compare_digest(token, API_TOKEN):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid bearer token",
         )
 
 
-# Rate limiting & Lockout tracker (A6 mitigation)
-# Tracks failed attempts per username within window
-MAX_FAILED_ATTEMPTS = 5
-LOCKOUT_DURATION_SEC = 60
-FAILED_ATTEMPTS: dict[str, list[float]] = defaultdict(list)
+def compute_lockout_delay(failed_count: int) -> int:
+    """Computes escalating delay in seconds based on failed attempts:
+    k < 3: 0
+    k = 3: 2s
+    k = 4: 5s
+    k = 5: 15s
+    k = 6: 30s
+    k >= 7: min(60 * 2^(k-7), 300)s
+    """
+    if failed_count < 3:
+        return 0
+    if failed_count == 3:
+        return 2
+    if failed_count == 4:
+        return 5
+    if failed_count == 5:
+        return 15
+    if failed_count == 6:
+        return 30
+    return min(60 * (2 ** (failed_count - 7)), 300)
 
 
-def check_rate_limit_and_lockout(username: str) -> None:
-    now = time.time()
-    attempts = FAILED_ATTEMPTS[username]
-    # Filter attempts within lockout duration
-    recent = [t for t in attempts if now - t < LOCKOUT_DURATION_SEC]
-    FAILED_ATTEMPTS[username] = recent
-    if len(recent) >= MAX_FAILED_ATTEMPTS:
-        logger.warning("Account %s locked out due to excessive failed attempts", username)
-        raise HTTPException(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail=f"Too many failed attempts for {username}. Account temporarily locked out.",
+def ensure_utc(dt: datetime | None) -> datetime | None:
+    """Ensures datetime is UTC timezone-aware for SQLite and Postgres compatibility."""
+    if dt is None:
+        return None
+    if dt.tzinfo is None:
+        return dt.replace(tzinfo=UTC)
+    return dt
+
+
+def check_rate_limit_and_lockout(db: Session, username: str, ip_address: str | None) -> None:
+    """Checks per-IP and per-username escalating delay from the database."""
+    now = datetime.now(UTC)
+
+    # 1. Check IP lockout first (protects server from distributed or single-source brute forcing)
+    if ip_address:
+        ip_rec = db.query(AuthRateLimit).filter(
+            AuthRateLimit.identifier_type == "ip",
+            AuthRateLimit.identifier_value == ip_address,
+        ).first()
+        if ip_rec:
+            ip_locked = ensure_utc(ip_rec.locked_until)
+            if ip_locked and now < ip_locked:
+                wait_sec = max(1, int((ip_locked - now).total_seconds()) + 1)
+                logger.warning("IP %s throttled due to repeated failures (%ds remaining)", ip_address, wait_sec)
+                raise HTTPException(
+                    status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                    detail=f"Too many failed attempts from your IP. Throttled for {wait_sec}s.",
+                )
+
+    # 2. Check per-username delay (escalating delay)
+    user_rec = db.query(AuthRateLimit).filter(
+        AuthRateLimit.identifier_type == "username",
+        AuthRateLimit.identifier_value == username,
+    ).first()
+    if user_rec:
+        user_locked = ensure_utc(user_rec.locked_until)
+        if user_locked and now < user_locked:
+            wait_sec = max(1, int((user_locked - now).total_seconds()) + 1)
+            logger.warning("Account %s throttled due to repeated failures (%ds remaining)", username, wait_sec)
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=f"Account temporarily delayed due to repeated failures. Retry in {wait_sec}s.",
+            )
+
+
+
+def record_failed_attempt(db: Session, username: str, ip_address: str | None) -> None:
+    """Records failed attempt for username and IP, applying escalating delay."""
+    now = datetime.now(UTC)
+
+    # Update username record
+    user_rec = db.query(AuthRateLimit).filter(
+        AuthRateLimit.identifier_type == "username",
+        AuthRateLimit.identifier_value == username,
+    ).first()
+    if not user_rec:
+        user_rec = AuthRateLimit(
+            identifier_type="username",
+            identifier_value=username,
+            failed_count=1,
+            last_failed_at=now,
         )
+        db.add(user_rec)
+    else:
+        user_rec.failed_count += 1
+        user_rec.last_failed_at = now
+
+    delay_user = compute_lockout_delay(user_rec.failed_count)
+    user_rec.locked_until = (now + timedelta(seconds=delay_user)) if delay_user > 0 else None
+
+    # Update IP record
+    if ip_address:
+        ip_rec = db.query(AuthRateLimit).filter(
+            AuthRateLimit.identifier_type == "ip",
+            AuthRateLimit.identifier_value == ip_address,
+        ).first()
+        if not ip_rec:
+            ip_rec = AuthRateLimit(
+                identifier_type="ip",
+                identifier_value=ip_address,
+                failed_count=1,
+                last_failed_at=now,
+            )
+            db.add(ip_rec)
+        else:
+            ip_rec.failed_count += 1
+            ip_rec.last_failed_at = now
+
+        delay_ip = compute_lockout_delay(ip_rec.failed_count)
+        ip_rec.locked_until = (now + timedelta(seconds=delay_ip)) if delay_ip > 0 else None
+
+    db.commit()
 
 
-def record_failed_attempt(username: str) -> None:
-    FAILED_ATTEMPTS[username].append(time.time())
+def clear_failed_attempts(db: Session, username: str, ip_address: str | None) -> None:
+    """Clears failed attempts on successful authentication for user and IP."""
+    user_rec = db.query(AuthRateLimit).filter(
+        AuthRateLimit.identifier_type == "username",
+        AuthRateLimit.identifier_value == username,
+    ).first()
+    if user_rec:
+        user_rec.failed_count = 0
+        user_rec.locked_until = None
 
+    if ip_address:
+        ip_rec = db.query(AuthRateLimit).filter(
+            AuthRateLimit.identifier_type == "ip",
+            AuthRateLimit.identifier_value == ip_address,
+        ).first()
+        if ip_rec:
+            ip_rec.failed_count = 0
+            ip_rec.locked_until = None
 
-def clear_failed_attempts(username: str) -> None:
-    if username in FAILED_ATTEMPTS:
-        del FAILED_ATTEMPTS[username]
+    db.commit()
+
 
 
 # Lifespan service management
@@ -149,8 +263,13 @@ async def enroll(
     # 1. Input validations
     if key_mode not in ("user_secret", "server_key"):
         raise HTTPException(status_code=400, detail="key_mode must be 'user_secret' or 'server_key'")
-    if key_mode == "user_secret" and not user_secret:
-        raise HTTPException(status_code=400, detail="user_secret is required for 'user_secret' mode")
+    if key_mode == "user_secret":
+        try:
+            validate_user_secret(user_secret)
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e)) from e
+
+
 
     if len(face_images) != 5:
         raise HTTPException(status_code=400, detail=f"Exactly 5 face images required, got {len(face_images)}")
@@ -160,8 +279,17 @@ async def enroll(
     # Check if user already exists
     stmt = select(User).where(User.username == username)
     existing_user = db.execute(stmt).scalar_one_or_none()
+    key_version = 1
     if existing_user is not None:
-        raise HTTPException(status_code=409, detail=f"User '{username}' is already enrolled")
+        stmt_active = select(Template).where(
+            Template.user_id == existing_user.id,
+            Template.revoked_at == None,  # noqa: E711
+        )
+        if db.execute(stmt_active).scalar_one_or_none() is not None:
+            raise HTTPException(status_code=409, detail=f"User '{username}' is already enrolled with an active template")
+        stmt_latest = select(func.max(Template.key_version)).where(Template.user_id == existing_user.id)
+        max_ver = db.execute(stmt_latest).scalar() or 1
+        key_version = int(max_ver) + 1
 
     # 2. In-memory processing with explicit cleanup
     face_embs = []
@@ -198,7 +326,6 @@ async def enroll(
         fused_vec = fuse_embeddings_feature_level(face_tmpl, finger_tmpl, w=service.w)
 
         # 5. Key Derivation & Cancelable Transformation
-        key_version = 1
         state, r_param = service.derive_user_chaos_params(
             username=username,
             key_mode=key_mode,
@@ -208,12 +335,17 @@ async def enroll(
         template_bytes = service.generate_cancelable_template(fused_vec, state, r_param)
 
         # 6. Database Storage (Users & Templates ONLY; NO keys for user_secret mode)
-        new_user = User(username=username, key_mode=key_mode, active=True)
-        db.add(new_user)
-        db.flush()
+        if existing_user is None:
+            user_record = User(username=username, key_mode=key_mode, active=True)
+            db.add(user_record)
+            db.flush()
+        else:
+            user_record = existing_user
+            user_record.active = True
+            user_record.key_mode = key_mode
 
         new_template = Template(
-            user_id=new_user.id,
+            user_id=user_record.id,
             key_version=key_version,
             algo_version="zkcambio_v1",
             key_mode=key_mode,
@@ -225,7 +357,7 @@ async def enroll(
         # If server_key mode, persist server key
         if key_mode == "server_key":
             user_key_rec = UserKey(
-                user_id=new_user.id,
+                user_id=user_record.id,
                 key_version=key_version,
                 key_material=service.master_key,  # In production, wrapped with KMS
             )
@@ -233,7 +365,7 @@ async def enroll(
 
         # Audit log (no biometric data, no user secret)
         audit = AuditLog(
-            user_id=new_user.id,
+            user_id=user_record.id,
             event="enroll",
             key_mode=key_mode,
             result="success",
@@ -241,9 +373,9 @@ async def enroll(
         db.add(audit)
         db.commit()
 
-        logger.info("Successfully enrolled user %s (key_mode=%s)", username, key_mode)
+        logger.info("Successfully enrolled user %s (key_mode=%s, version=%d)", username, key_mode, key_version)
         return {
-            "user_id": str(new_user.id),
+            "user_id": str(user_record.id),
             "username": username,
             "key_mode": key_mode,
             "key_version": key_version,
@@ -260,6 +392,7 @@ async def enroll(
 
 @app.post("/verify")
 async def verify(
+    request: Request,
     username: Annotated[str, Form()],
     user_secret: Annotated[str | None, Form()] = None,
     face_image: UploadFile = File(...),
@@ -271,13 +404,19 @@ async def verify(
     if service is None:
         raise HTTPException(status_code=500, detail="Service not initialized")
 
-    check_rate_limit_and_lockout(username)
+    client_ip = request.headers.get("x-forwarded-for")
+    if not client_ip and request.client:
+        client_ip = request.client.host
+    if client_ip and "," in client_ip:
+        client_ip = client_ip.split(",")[0].strip()
+    check_rate_limit_and_lockout(db, username, client_ip)
+
 
     # 1. Fetch user and active template
     stmt_user = select(User).where(User.username == username, User.active == True)  # noqa: E712
     user = db.execute(stmt_user).scalar_one_or_none()
     if user is None:
-        record_failed_attempt(username)
+        record_failed_attempt(db, username, client_ip)
         raise HTTPException(status_code=404, detail=f"User '{username}' not found or inactive")
 
     stmt_tmpl = select(Template).where(
@@ -289,6 +428,7 @@ async def verify(
         raise HTTPException(status_code=400, detail=f"No active template found for user '{username}'")
 
     if user.key_mode == "user_secret" and not user_secret:
+        record_failed_attempt(db, username, client_ip)
         raise HTTPException(status_code=400, detail="user_secret is required for this user")
 
     # 2. Extract probe biometrics
@@ -305,42 +445,55 @@ async def verify(
         probe_fused = fuse_embeddings_feature_level(face_emb, finger_emb, w=service.w)
 
         # 3. Derive key parameters & generate probe template
-        state, r_param = service.derive_user_chaos_params(
-            username=username,
-            key_mode=user.key_mode,
-            key_version=tmpl_rec.key_version,
-            user_secret=user_secret,
-        )
+        try:
+            state, r_param = service.derive_user_chaos_params(
+                username=username,
+                key_mode=user.key_mode,
+                key_version=tmpl_rec.key_version,
+                user_secret=user_secret,
+            )
+        except ValueError as e:
+            record_failed_attempt(db, username, client_ip)
+            raise HTTPException(status_code=400, detail=str(e)) from e
+
+
         probe_template = service.generate_cancelable_template(probe_fused, state, r_param)
 
         # 4. Hamming matching against enrolled template
         score = service.compute_hamming_distance(tmpl_rec.template, probe_template)
         is_match = bool(score <= service.tau_eer)
 
-        # Audit log
+        # Audit log: hill-climbing defense: do NOT store score unless DEV_MODE=true
+        dev = is_dev_mode()
         audit = AuditLog(
             user_id=user.id,
             event="verify",
             key_mode=user.key_mode,
             result="success" if is_match else "rejected",
-            score=score,
+            score=round(score, 4) if dev else None,
+            ip_address=client_ip,
         )
         db.add(audit)
         db.commit()
 
         if is_match:
-            clear_failed_attempts(username)
-            logger.info("Verification SUCCESS for %s (HD=%.4f <= %.4f)", username, score, service.tau_eer)
+            clear_failed_attempts(db, username, client_ip)
+            logger.info("Verification SUCCESS for %s", username)
         else:
-            record_failed_attempt(username)
-            logger.info("Verification REJECTED for %s (HD=%.4f > %.4f)", username, score, service.tau_eer)
+            record_failed_attempt(db, username, client_ip)
+            logger.info("Verification REJECTED for %s", username)
 
-        return {
+        response_payload: dict[str, Any] = {
             "match": is_match,
-            "normalized_hamming_distance": round(score, 4),
             "threshold": service.tau_eer,
             "key_version": tmpl_rec.key_version,
         }
+        if dev:
+            # Hill-climbing defense: return score ONLY when DEV_MODE=true
+            response_payload["score"] = round(score, 4)
+            response_payload["normalized_hamming_distance"] = round(score, 4)
+
+        return response_payload
 
     finally:
         gc.collect()
@@ -384,6 +537,7 @@ async def identify(
         finger_emb = service.extract_finger_embedding(finger_pil)
         probe_fused = fuse_embeddings_feature_level(face_emb, finger_emb, w=service.w)
 
+        dev = is_dev_mode()
         candidates = []
         for tmpl_rec, user_rec in records:
             state, r_param = service.derive_user_chaos_params(
@@ -393,23 +547,26 @@ async def identify(
             )
             probe_template = service.generate_cancelable_template(probe_fused, state, r_param)
             hd = service.compute_hamming_distance(tmpl_rec.template, probe_template)
-            candidates.append(
-                {
-                    "user_id": str(user_rec.id),
-                    "username": user_rec.username,
-                    "score": round(hd, 4),
-                    "match": bool(hd <= service.tau_eer),
-                }
-            )
+            cand: dict[str, Any] = {
+                "user_id": str(user_rec.id),
+                "username": user_rec.username,
+                "match": bool(hd <= service.tau_eer),
+                "_internal_hd": hd,
+            }
+            if dev:
+                cand["score"] = round(hd, 4)
+            candidates.append(cand)
 
-        candidates.sort(key=lambda c: c["score"])
+        candidates.sort(key=lambda c: c["_internal_hd"])
         top_candidates = candidates[:top_k]
         for rank, c in enumerate(top_candidates, start=1):
             c["rank"] = rank
+            del c["_internal_hd"]
 
         return {"candidates": top_candidates}
     finally:
         gc.collect()
+
 
 
 @app.post("/revoke")

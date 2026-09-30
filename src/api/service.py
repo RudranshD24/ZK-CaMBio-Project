@@ -38,8 +38,27 @@ except ImportError:
     chaoshash = None
 
 
+COMMON_WEAK_SECRETS = {
+
+    "password", "password123", "12345678", "123456789", "qwerty123",
+    "admin123", "letmein123", "welcome1", "iloveyou", "secret123", "master123",
+}
+
+
+def validate_user_secret(secret: str | None) -> str:
+    """Enforces minimum length of 8 chars and rejects common weak or predictable values."""
+    if not secret:
+        raise ValueError("user_secret is required for 'user_secret' key_mode")
+    if len(secret) < 8:
+        raise ValueError("user_secret must be at least 8 characters long")
+    if secret.lower() in COMMON_WEAK_SECRETS or len(set(secret)) < 3:
+        raise ValueError("user_secret is too weak or predictable; choose a stronger passphrase")
+    return secret
+
+
 class BiometricService:
     """Singleton service holding encoders and execution parameters."""
+
 
     def __init__(
         self,
@@ -67,7 +86,9 @@ class BiometricService:
         self.min_finger_consistency = self.cfg["enrollment_quality"]["min_finger_consistency_cosine"]
 
         # Mean vector
-        mean_path = Path(self.cfg["quantization"]["mean_vector_path"])
+        mean_path = self.models_dir / "chaos_mean_vector.npy"
+        if not mean_path.is_file():
+            mean_path = Path(self.cfg["quantization"]["mean_vector_path"])
         if not mean_path.is_file():
             # Fallback relative to project
             mean_path = Path("data/processed/chaos_mean_vector.npy")
@@ -108,6 +129,7 @@ class BiometricService:
             self.master_key = default_dev_key
 
     def derive_user_chaos_params(
+
         self,
         username: str,
         key_mode: str,
@@ -117,13 +139,25 @@ class BiometricService:
     ) -> tuple[int, int]:
         """Derives chaotic initial state and map parameter r_param.
 
-        - If key_mode == "user_secret": context binds user_secret.
+        - If key_mode == "user_secret": secret is validated and memory-hard stretched
+          with hashlib.scrypt (N=16384, r=8, p=1) before HMAC derivation.
+          Note: If the server master key AND the template leak, low-entropy secrets
+          can be brute-forced offline. Key stretching increases offline cost.
         - If key_mode == "server_key": context binds username/user_id.
         """
         if key_mode == "user_secret":
-            if not user_secret:
-                raise ValueError("user_secret is required for 'user_secret' key_mode")
-            context = f"zkcambio|{app_salt}|v{key_version}|{user_secret}".encode()
+            validated_secret = validate_user_secret(user_secret)
+            salt_bytes = f"zkcambio|{app_salt}|v{key_version}".encode()
+            stretched_secret = hashlib.scrypt(
+                validated_secret.encode("utf-8"),
+                salt=salt_bytes,
+                n=16384,
+                r=8,
+                p=1,
+                maxmem=32 * 1024 * 1024,
+                dklen=32,
+            )
+            context = salt_bytes + b"|" + stretched_secret
         elif key_mode == "server_key":
             context = f"zkcambio|{app_salt}|v{key_version}|server_key|{username}".encode()
         else:
@@ -135,6 +169,7 @@ class BiometricService:
         if state == 0:
             state = 0x9E3779B97F4A7C15
         return state, r_param
+
 
     def decode_image_bytes(self, image_bytes: bytes, mode: str = "RGB") -> Image.Image:
         """Loads a PIL image from raw bytes with format validation."""

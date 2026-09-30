@@ -6,6 +6,8 @@ Extracts 512-dimensional L2-normalized facial embeddings.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import torch
 from facenet_pytorch import InceptionResnetV1
@@ -17,7 +19,8 @@ class FaceEncoder:
 
     def __init__(
         self,
-        pretrained: str = "vggface2",
+        pretrained: str | None = "vggface2",
+        weights_path: str | Path | None = None,
         device: str | None = None,
     ) -> None:
         if device is None:
@@ -25,8 +28,23 @@ class FaceEncoder:
         else:
             self.device = torch.device(device)
 
-        self.model = InceptionResnetV1(pretrained=pretrained).eval().to(self.device)
+        # Check local weights to avoid runtime network download
+        resolved_weights = None
+        if weights_path is not None and Path(weights_path).is_file():
+            resolved_weights = Path(weights_path)
+        elif Path("models/vggface2.pt").is_file():
+            resolved_weights = Path("models/vggface2.pt")
+
+        if resolved_weights is not None:
+            self.model = InceptionResnetV1(pretrained=None).eval().to(self.device)
+            state_dict = torch.load(resolved_weights, map_location=self.device)
+            self.model.load_state_dict(state_dict, strict=False)
+        else:
+
+            self.model = InceptionResnetV1(pretrained=pretrained).eval().to(self.device)
+
         self.embedding_dim = 512
+
 
     def preprocess(self, img: Image.Image) -> torch.Tensor:
         """Preprocesses a PIL image to a normalized (3, 160, 160) tensor."""

@@ -27,9 +27,14 @@ services:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://cambio:changeme@db:5432/cambio
+      DATABASE_URL: postgresql+psycopg2://cambio:changeme@db:5432/cambio
       API_TOKEN: ${API_TOKEN:-dev_secret_token_123}
+      DEV_MODE: "false"
+      SERVER_MASTER_KEY: ${SERVER_MASTER_KEY:-dev_master_key_12345678901234567890123456789012}
       PUBLIC_PARAMS_PATH: configs/biometric_parameters.json
+    volumes:
+      - ./models:/app/models:ro
+
 
   ui:
     build:

@@ -1,6 +1,15 @@
 # CHANGELOG.md
 Format: `## [phase-N] YYYY-MM-DD` then bullets Added / Changed / Fixed.
 
+## [phase-7b] 2026-09-30
+- Security Hardening & Defenses:
+  - Score Suppression & Hill-Climbing Defense: `/verify` and `/identify` return ONLY boolean match/no-match (and candidate rank for identify) by default; numeric scores suppressed unless `DEV_MODE=true`. `audit_log` records no scores outside `DEV_MODE=true` to eliminate score-guided iterative synthesis gradients.
+  - Password Complexity & Memory-Hard Key Stretching: Enforced minimum secret length $\ge 8$ chars and rejected weak dictionary passwords in `user_secret` mode. Applied memory-hard `scrypt` ($N=16384, r=8, p=1$, maxmem 32MB, dklen 32) before HMAC key derivation to mitigate offline brute-force attacks if server salt and template database both leak.
+  - Cross-Platform Parity KAT: Executed Docker container Linux KAT test covering both server_key (`83ec0508a8d11c75`) and stretched user_secret (`a8a71999ef4a6015`), confirming bit-exact parity across Linux GCC and Windows MSVC.
+  - DB-Backed Escalating Delays: Replaced in-memory lockout with persistent `auth_rate_limits` table tracking per-username and per-IP failures with escalating delay windows (0s, 2s, 5s, 15s, 30s, capped at 300s), ensuring resilience against container restarts and preventing DoS lockout of legitimate victims.
+  - Timing-Safe Auth: Bearer tokens validated strictly using `hmac.compare_digest`.
+  - FR-12 Thresholds Calibration & FRR Disclosure: Quality thresholds derived strictly from 180 TRAIN subjects (face min cosine $\ge 0.45$, finger min cosine $\ge 0.70$); documented 15.00% (18/120) false rejection rate on genuine test enrollments in `docs/DECISIONS.md`.
+
 ## [phase-7] 2026-09-30
 - Added:
   - Multi-stage Docker build (`docker/Dockerfile.api`) utilizing `python:3.13-slim` and `g++` to compile native Linux C++ `chaoshash` extension (`-O3 -Wall -shared -std=c++17 -fPIC -ffp-contract=off`).
