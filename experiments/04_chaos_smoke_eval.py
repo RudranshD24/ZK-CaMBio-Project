@@ -24,31 +24,54 @@ from src.fusion.fuse import compute_eer
 
 def run_property_check(
     enroll_templates: np.ndarray,
+    probe_embeddings: np.ndarray,
     mean_vec: np.ndarray,
     output_path: Path,
 ) -> dict:
     """Property check on all 300 subjects:
     Normalized Hamming distance vs angle (theta / pi) between original vectors
     for m in {64, 128, 256, 512, 768}.
+    Includes genuine pairs (enroll vs probe) to cover theta / pi down to ~0.15.
     """
     print("\n--- Property Check: Hamming Distance vs Angle (theta / pi) ---")
     n_subjs = len(enroll_templates)
     rng = np.random.RandomState(42)
 
-    # Sample 5,000 random subject pairs among the 300 subjects
-    pairs = []
-    for _ in range(5000):
+    # 1. Genuine pairs: 300 subjects x 3 probes = 900 genuine pairs
+    # 2. Impostor pairs: 4,100 random subject pairs among the 300 subjects
+    u_list = []
+    v_list = []
+    u_q_list = []
+    v_q_list = []
+
+    # Pre-quantize enroll templates and probe embeddings
+    enroll_q = [quantize_vector(u, mean_vec) for u in enroll_templates]
+    probe_q = [
+        [quantize_vector(probe_embeddings[i, p], mean_vec) for p in range(3)]
+        for i in range(n_subjs)
+    ]
+
+    # Add 900 genuine pairs
+    for i in range(n_subjs):
+        for p in range(3):
+            u_list.append(enroll_templates[i] - mean_vec)
+            v_list.append(probe_embeddings[i, p] - mean_vec)
+            u_q_list.append(enroll_q[i])
+            v_q_list.append(probe_q[i][p])
+
+    # Add 4,100 impostor pairs
+    for _ in range(4100):
         i = rng.randint(0, n_subjs)
         j = rng.randint(0, n_subjs)
         while i == j:
             j = rng.randint(0, n_subjs)
-        pairs.append((i, j))
+        p_j = rng.randint(0, 3)
+        u_list.append(enroll_templates[i] - mean_vec)
+        v_list.append(probe_embeddings[j, p_j] - mean_vec)
+        u_q_list.append(enroll_q[i])
+        v_q_list.append(probe_q[j][p_j])
 
-    # Compute cosine similarities and angles ON CENTERED VECTORS that are actually projected
-    u_list = [enroll_templates[i] - mean_vec for i, _ in pairs]
-    v_list = [enroll_templates[j] - mean_vec for _, j in pairs]
-
-    # Angles theta in [0, pi]
+    # Angles theta in [0, pi] computed on centered vectors
     cos_sims = [
         float(np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v)))
         for u, v in zip(u_list, v_list, strict=True)
@@ -63,22 +86,24 @@ def run_property_check(
     m_values = [64, 128, 256, 512, 768]
     hd_results = {
         "angle_computation": "Computed on CENTERED fused vectors (u - mean_vec, v - mean_vec) as actually projected",
+        "min_theta_over_pi": float(np.min(thetas_over_pi)),
+        "max_theta_over_pi": float(np.max(thetas_over_pi)),
     }
 
     plt.figure(figsize=(10, 7))
     plt.plot([0, 1], [0, 1], "k--", label=r"Ideal $\mathbb{E}[HD] = \theta / \pi$", linewidth=2)
 
-    # Pre-quantize all 300 enroll vectors
-    enroll_q = [quantize_vector(u, mean_vec) for u in enroll_templates]
-
     for m in m_values:
-        # Precompute templates for the 300 subjects once
-        templates_m = [chaoshash.transform(u_q, state, r_param, m) for u_q in enroll_q]
-        hds = [chaoshash.hamming(templates_m[i], templates_m[j], m) for i, j in pairs]
+        # Precompute templates
+        templates_u = [chaoshash.transform(uq, state, r_param, m) for uq in u_q_list]
+        templates_v = [chaoshash.transform(vq, state, r_param, m) for vq in v_q_list]
+        hds = np.array([
+            chaoshash.hamming(templates_u[k], templates_v[k], m)
+            for k in range(len(u_q_list))
+        ])
 
-        hds = np.array(hds)
-        # Compute mean curve across angle bins
-        bins = np.linspace(0.1, 0.9, 17)
+        # Compute mean curve across angle bins from 0.12 to 0.62
+        bins = np.linspace(0.12, 0.62, 26)
         bin_centers = 0.5 * (bins[:-1] + bins[1:])
         binned_hd = []
         for b_low, b_high in zip(bins[:-1], bins[1:], strict=True):
@@ -102,7 +127,7 @@ def run_property_check(
         print(f"  m = {m:3d}: slope={slope:.4f}, intercept={intercept:.4f}, r={corr:.4f}, MAE={mae:.4f}")
         plt.plot(bin_centers, binned_hd, marker="o", label=f"m = {m} (slope={slope:.2f}, r={corr:.3f}, MAE={mae:.3f})")
 
-    plt.xlabel(r"Normalized Angle $\theta / \pi$ (from centered fused vectors)", fontsize=12)
+    plt.xlabel(r"Normalized Angle $\theta / \pi$ (from centered fused vectors, covering genuine & impostor pairs)", fontsize=12)
     plt.ylabel("Normalized Hamming Distance (chaotic templates)", fontsize=12)
     plt.title(r"Chaotic Random Projection Metric Preservation on Centered Vectors ($HD \approx \theta / \pi$)", fontsize=13)
     plt.grid(True, alpha=0.3)
@@ -268,10 +293,11 @@ def main() -> None:
     all_subjs = list(fused_data["subject_ids"])
     val_indices = [all_subjs.index(sid) for sid in val_ids]
 
-    # 2. Property check on all 300 subjects: HD vs angle
+    # 2. Property check on all 300 subjects: HD vs angle (genuine + impostor pairs)
     hd_vs_angle_plot = results_dir / "chaos_hd_vs_angle.png"
     property_results = run_property_check(
         fused_data["enroll_templates"],
+        fused_data["probe_embeddings"],
         mean_vec,
         hd_vs_angle_plot,
     )

@@ -16,8 +16,8 @@ Fill this in during P9 from real files. Status: Not started / In progress / Done
 | FR-11 | src/ui/ | manual demo script | screenshots | Not started |
 | EV-01 | experiments/ | tests/test_fusion.py, tests/test_chaos.py | results/fused_unprotected.json, results/cancelable_summary.md, results/cancelable_eer.json, results/cancelable_roc.png, results/cancelable_cmc.png | Verified |
 | EV-02 | experiments/ | tests/test_chaos.py | results/cancelable_revocability_dist.png (FNMR=100.0% under revoked key, restored to 1.67%) | Verified |
-| EV-03 | experiments/ | - | results/cancelable_unlinkability.png (D_sys = 0.0125 << 0.10) | Verified |
+| EV-03 | experiments/ | tests/test_security.py | results/cancelable_unlinkability.png (D_sys = 0.0245 << 0.10 score-only without keys; D_sys = 0.9649 under A3 with keys known) | Verified |
 | EV-04 | experiments/ | - | results/cancelable_scenario_u_dist.png (EER = 0.0000%, cross-key imp mean HD = 0.5001) | Verified |
-| EV-05 | experiments/ | - | results/inversion.json | Not started |
+| EV-05 | experiments/ | tests/test_security.py | results/security_summary.md, results/security_eval.json, results/privacy_utility_tradeoff.png (Atk-2 Ridge cos=0.9335, 100% replay @ m=512) | Verified |
 | NFR-01..04 | various | various | results/nfr.json | Not started |
 | NFR-05 | cpp/, src/chaos/ | tests/test_chaos.py | results/chaos_val_smoke.json (5.22 ms/transform latency, KAT bit-exact determinism) | Verified |

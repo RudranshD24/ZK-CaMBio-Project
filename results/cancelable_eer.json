@@ -221,11 +221,24 @@
       }
     },
     "paired_bootstrap_vs_s3": {
-      "diff_mean_pct": 0.21273148148148224,
-      "ci_lower_pct": -0.13461538461538408,
-      "ci_upper_pct": 0.6876869658119672,
-      "excludes_zero": false,
-      "interpretation": "CI includes 0"
+      "delta_eer": {
+        "diff_mean_pct": 0.21273148148148224,
+        "ci_lower_pct": -0.13461538461538408,
+        "ci_upper_pct": 0.6876869658119672,
+        "excludes_zero": false
+      },
+      "delta_fnmr_at_1pct_fmr": {
+        "diff_mean_pct": 0.27622222222222326,
+        "ci_lower_pct": -0.3333333333333376,
+        "ci_upper_pct": 1.1666666666666703,
+        "excludes_zero": false
+      },
+      "delta_fnmr_at_01pct_fmr": {
+        "diff_mean_pct": 1.310638888888889,
+        "ci_lower_pct": 0.333333333333332,
+        "ci_upper_pct": 2.722222222222226,
+        "excludes_zero": true
+      }
     }
   },
   "scenario_u": {
@@ -241,17 +254,20 @@
   },
   "revocability": {
     "m": 512,
-    "operational_threshold": 0.35,
+    "operational_threshold_val_eer": 0.3504,
+    "operational_threshold_val_fmr01": 0.301,
     "same_subject_diff_keys_mean_hd": 0.500595703125,
     "same_subject_diff_keys_std_hd": 0.0218601990536035,
     "diff_subject_diff_keys_mean_hd": 0.499941015625,
     "diff_subject_same_key_mean_hd": 0.497171875,
-    "fnmr_after_revocation_pct": 100.0,
-    "fnmr_restored_new_key_pct": 1.6666666666666667
+    "fnmr_after_revocation_at_val_eer_pct": 100.0,
+    "fnmr_restored_new_key_at_val_eer_pct": 1.6666666666666667,
+    "fnmr_after_revocation_at_val_fmr01_pct": 100.0,
+    "fnmr_restored_new_key_at_val_fmr01_pct": 6.944444444444445
   },
   "unlinkability": {
     "m": 512,
-    "global_d_sys_cancelable": 0.012520318903453993,
+    "global_d_sys_cancelable": 0.0244774648197758,
     "global_d_sys_reused_key_counterexample": 0.9826867255431802,
     "evaluation_standard": "ISO/IEC 30136:2018 Information technology - Biometric performance testing and reporting - Part 6: Testing of biometric template protection"
   },

@@ -328,10 +328,9 @@ def compute_paired_bootstrap_scenario_k_vs_s3(
     k_imp_scores_all_keys: list[list[float]],
     n_resamples: int = 1000,
     seed: int = 42,
-) -> tuple[float, float, float, bool]:
+) -> dict:
     """Computes paired bootstrap (1000 resamples over test subjects) of
-
-    Delta_EER = EER(Scenario K, averaged over 10 keys) - EER(S3 unprotected).
+    Delta_EER, Delta_FNMR@1%, Delta_FNMR@0.1% = Metric(Scenario K, avg over 10 keys) - Metric(S3).
     Uses the exact same stratified subject resamples with seed 42.
     """
     print("\n--- Computing Paired Bootstrap: Scenario K minus S3 Unprotected ---")
@@ -339,19 +338,15 @@ def compute_paired_bootstrap_scenario_k_vs_s3(
     unique_dbs = sorted(list(set(test_dbs)))
     db_to_test_idx = {db: np.where(test_dbs == db)[0] for db in unique_dbs}
 
-    # Load unprotected S3 scores from Phase 3 if available, or compute on the fly
     test_enroll = fused_data["enroll_templates"][test_indices]
     test_probes = fused_data["probe_embeddings"][test_indices]
     n_test = len(test_indices)
 
-    # Pre-extract S3 genuine & impostor matrices
-    # Genuine: s3_gen[i, p]
     s3_gen = np.zeros((n_test, 3))
     for i in range(n_test):
         for p in range(3):
             s3_gen[i, p] = np.dot(test_enroll[i], test_probes[i, p])
 
-    # Impostor: same-DB only
     s3_imp_by_subj = {i: [] for i in range(n_test)}
     for _db, indices in db_to_test_idx.items():
         for i in indices:
@@ -361,61 +356,80 @@ def compute_paired_bootstrap_scenario_k_vs_s3(
                 for p in range(3):
                     s3_imp_by_subj[i].append(np.dot(test_enroll[i], test_probes[j, p]))
 
-    # Scenario K scores per subject across keys
-    # k_gen[k, i, p] and k_imp_by_subj[k, i]
-    # Restructure from all_key_gen_scores (10, 360) and all_key_imp_scores (10, 14040)
     delta_eers = []
+    delta_fnmr1s = []
+    delta_fnmr01s = []
 
     for _b in range(n_resamples):
-        # Stratified resample of subjects within each DB
         resampled_subjs = []
         for _db, indices in db_to_test_idx.items():
             boot_idx = rng.choice(indices, size=len(indices), replace=True)
             resampled_subjs.extend(boot_idx)
 
-        # S3 EER on resample
+        # S3 on resample
         s3_boot_gen = []
         s3_boot_imp = []
         for s in resampled_subjs:
             s3_boot_gen.extend(s3_gen[s])
             s3_boot_imp.extend(s3_imp_by_subj[s])
 
-        s3_eer, _, _, _ = compute_eer(np.array(s3_boot_gen), np.array(s3_boot_imp))
+        s3_gen_arr = np.array(s3_boot_gen)
+        s3_imp_arr = np.array(s3_boot_imp)
+        s3_eer, _, _, _ = compute_eer(s3_gen_arr, s3_imp_arr)
+        s3_fnmr1, _ = compute_fnmr_at_fmr(s3_gen_arr, s3_imp_arr, 0.01)
+        s3_fnmr01, _ = compute_fnmr_at_fmr(s3_gen_arr, s3_imp_arr, 0.001)
 
-        # Scenario K EER on resample (averaged across 10 keys)
+        # Scenario K on resample (averaged across 10 keys)
         k_boot_eers = []
+        k_boot_fnmr1s = []
+        k_boot_fnmr01s = []
         for k_idx in range(len(k_gen_scores_all_keys)):
             gen_flat = k_gen_scores_all_keys[k_idx]
             imp_flat = k_imp_scores_all_keys[k_idx]
 
-            # Reconstruct per-subject trials
             k_subj_gen = []
             for s in resampled_subjs:
                 k_subj_gen.extend(gen_flat[s * 3 : (s + 1) * 3])
 
-            # For impostors, sample correspondingly
-            # 14040 / 120 = 117 impostor comparisons per subject
             k_subj_imp = []
             for s in resampled_subjs:
                 k_subj_imp.extend(imp_flat[s * 117 : (s + 1) * 117])
 
-            k_eer_k, _, _, _ = compute_eer(np.array(k_subj_gen), np.array(k_subj_imp))
+            k_gen_arr = np.array(k_subj_gen)
+            k_imp_arr = np.array(k_subj_imp)
+            k_eer_k, _, _, _ = compute_eer(k_gen_arr, k_imp_arr)
+            k_fnmr1_k, _ = compute_fnmr_at_fmr(k_gen_arr, k_imp_arr, 0.01)
+            k_fnmr01_k, _ = compute_fnmr_at_fmr(k_gen_arr, k_imp_arr, 0.001)
+
             k_boot_eers.append(k_eer_k)
+            k_boot_fnmr1s.append(k_fnmr1_k)
+            k_boot_fnmr01s.append(k_fnmr01_k)
 
-        mean_k_boot_eer = np.mean(k_boot_eers)
-        delta_eers.append(mean_k_boot_eer - s3_eer)
+        delta_eers.append(np.mean(k_boot_eers) - s3_eer)
+        delta_fnmr1s.append(np.mean(k_boot_fnmr1s) - s3_fnmr1)
+        delta_fnmr01s.append(np.mean(k_boot_fnmr01s) - s3_fnmr01)
 
-    delta_eers = np.array(delta_eers)
-    diff_mean = float(np.mean(delta_eers))
-    ci_lower = float(np.percentile(delta_eers, 2.5))
-    ci_upper = float(np.percentile(delta_eers, 97.5))
-    excludes_zero = bool(ci_lower > 0.0 or ci_upper < 0.0)
+    def summarize_delta(arr):
+        arr_np = np.array(arr)
+        mean_d = float(np.mean(arr_np))
+        ci_l = float(np.percentile(arr_np, 2.5))
+        ci_u = float(np.percentile(arr_np, 97.5))
+        ex_0 = bool(ci_l > 0.0 or ci_u < 0.0)
+        return mean_d, ci_l, ci_u, ex_0
 
-    print(f"Paired Bootstrap Delta EER (K - S3): {diff_mean*100:.3f}%")
-    print(f"95% CI: [{ci_lower*100:.3f}%, {ci_upper*100:.3f}%]")
-    print(f"Excludes 0? {excludes_zero}")
+    eer_diff, eer_ci_l, eer_ci_u, eer_ex0 = summarize_delta(delta_eers)
+    fnmr1_diff, fnmr1_ci_l, fnmr1_ci_u, fnmr1_ex0 = summarize_delta(delta_fnmr1s)
+    fnmr01_diff, fnmr01_ci_l, fnmr01_ci_u, fnmr01_ex0 = summarize_delta(delta_fnmr01s)
 
-    return diff_mean, ci_lower, ci_upper, excludes_zero
+    print(f"Paired Bootstrap Delta EER (K - S3):      {eer_diff*100:+.3f}% (95% CI [{eer_ci_l*100:+.3f}%, {eer_ci_u*100:+.3f}%], excludes 0: {eer_ex0})")
+    print(f"Paired Bootstrap Delta FNMR@1% (K - S3):   {fnmr1_diff*100:+.3f}% (95% CI [{fnmr1_ci_l*100:+.3f}%, {fnmr1_ci_u*100:+.3f}%], excludes 0: {fnmr1_ex0})")
+    print(f"Paired Bootstrap Delta FNMR@0.1% (K - S3): {fnmr01_diff*100:+.3f}% (95% CI [{fnmr01_ci_l*100:+.3f}%, {fnmr01_ci_u*100:+.3f}%], excludes 0: {fnmr01_ex0})")
+
+    return {
+        "eer": {"diff_mean": eer_diff, "ci_lower": eer_ci_l, "ci_upper": eer_ci_u, "excludes_zero": eer_ex0},
+        "fnmr_1pct": {"diff_mean": fnmr1_diff, "ci_lower": fnmr1_ci_l, "ci_upper": fnmr1_ci_u, "excludes_zero": fnmr1_ex0},
+        "fnmr_01pct": {"diff_mean": fnmr01_diff, "ci_lower": fnmr01_ci_l, "ci_upper": fnmr01_ci_u, "excludes_zero": fnmr01_ex0},
+    }
 
 
 def run_scenario_u_test(
@@ -576,7 +590,7 @@ def run_revocability_and_unlinkability(
         hd = chaoshash.hamming(multi_templates[i][v1], multi_templates[j][v2], chosen_m)
         diff_subj_diff_keys_hd.append(hd)
 
-    # (iii) Different subjects, same key (Scenario K impostors): sample 5,000 pairs
+    # (iii) Different subjects, same key (claimed-identity impostors): sample 5,000 pairs
     shared_key = rng.bytes(32)
     state_k, r_k = derive_chaos_parameters(shared_key, "shared_k_impostors", 1)
     k_templates = [chaoshash.transform(vq, state_k, r_k, chosen_m) for vq in test_enroll_q]
@@ -611,23 +625,34 @@ def run_revocability_and_unlinkability(
             hd = chaoshash.hamming(multi_templates[i][1], probe_v2, chosen_m)
             restored_hds.append(hd)
 
-    # Operating threshold from Scenario K headline EER (~0.35)
-    tau_oper = 0.350
-    fnmr_revoked = float(np.mean(np.array(revoked_hds) > tau_oper))  # Genuine trials rejected
-    fnmr_restored = float(np.mean(np.array(restored_hds) > tau_oper))
+    # Operating thresholds derived strictly from 30 VALIDATION subjects under Scenario K:
+    # Validation Scenario K EER threshold = 0.3504 HD (similarity 0.6496)
+    # Validation Scenario K FMR=0.1% threshold = 0.3010 HD (similarity 0.6990)
+    tau_oper_eer = 0.3504
+    tau_oper_fmr01 = 0.3010
 
-    print(f"\nRevocation Results (at operational threshold tau = {tau_oper:.3f}):")
+    fnmr_revoked_at_eer = float(np.mean(np.array(revoked_hds) > tau_oper_eer))
+    fnmr_restored_at_eer = float(np.mean(np.array(restored_hds) > tau_oper_eer))
+
+    fnmr_revoked_at_fmr01 = float(np.mean(np.array(revoked_hds) > tau_oper_fmr01))
+    fnmr_restored_at_fmr01 = float(np.mean(np.array(restored_hds) > tau_oper_fmr01))
+
+    print("\nRevocation Results (operating thresholds from 30 VALIDATION subjects):")
     print(f"  Mean HD under revoked key: {np.mean(revoked_hds):.4f} (expected ~0.500)")
-    print(f"  FNMR with revoked key (rejected cross-key genuine attempts): {fnmr_revoked * 100:.2f}% (expected 100.0%)")
-    print(f"  Mean HD under re-enrolled new key: {np.mean(restored_hds):.4f}")
-    print(f"  FNMR with re-enrolled new key: {fnmr_restored * 100:.2f}% (restored accuracy)")
+    print(f"  At Val EER threshold (tau = {tau_oper_eer:.4f}):")
+    print(f"    FNMR with revoked key (rejected cross-key genuine attempts): {fnmr_revoked_at_eer * 100:.2f}% (expected 100.0%)")
+    print(f"    FNMR with re-enrolled new key: {fnmr_restored_at_eer * 100:.2f}% (restored accuracy)")
+    print(f"  At Val FMR=0.1% threshold (tau = {tau_oper_fmr01:.4f}):")
+    print(f"    FNMR with revoked key (rejected cross-key genuine attempts): {fnmr_revoked_at_fmr01 * 100:.2f}% (expected 100.0%)")
+    print(f"    FNMR with re-enrolled new key: {fnmr_restored_at_fmr01 * 100:.2f}%")
 
     # Plot Revocability distributions
     plt.figure(figsize=(9, 5))
     plt.hist(same_subj_diff_keys_hd, bins=35, alpha=0.65, color="#e67e22", density=True, label="Same subject, diff keys (revoked/pseudo-impostor)")
-    plt.hist(diff_subj_diff_keys_hd, bins=35, alpha=0.65, color="#8e44ad", density=True, label="Diff subjects, diff keys (Scenario U)")
-    plt.hist(diff_subj_same_key_hd, bins=35, alpha=0.65, color="#c0392b", density=True, label="Diff subjects, same key (Scenario K)")
-    plt.axvline(tau_oper, color="black", linestyle="--", linewidth=1.5, label=f"Operational Threshold ({tau_oper:.3f})")
+    plt.hist(diff_subj_diff_keys_hd, bins=35, alpha=0.65, color="#8e44ad", density=True, label="Diff subjects, diff keys (Scenario U: own key)")
+    plt.hist(diff_subj_same_key_hd, bins=35, alpha=0.65, color="#c0392b", density=True, label="Diff subjects, same key (Scenario K: claimed-identity key)")
+    plt.axvline(tau_oper_eer, color="black", linestyle="--", linewidth=1.5, label=f"Val EER Operating Threshold ({tau_oper_eer:.3f})")
+    plt.axvline(tau_oper_fmr01, color="blue", linestyle=":", linewidth=1.5, label=f"Val FMR=0.1% Threshold ({tau_oper_fmr01:.3f})")
     plt.xlabel("Normalized Hamming Distance", fontsize=12)
     plt.ylabel("Density", fontsize=12)
     plt.title("Cancelable Biometric Revocability: Hamming Distributions", fontsize=13)
@@ -641,27 +666,57 @@ def run_revocability_and_unlinkability(
 
     revoc_results = {
         "m": chosen_m,
-        "operational_threshold": tau_oper,
+        "operational_threshold_val_eer": tau_oper_eer,
+        "operational_threshold_val_fmr01": tau_oper_fmr01,
         "same_subject_diff_keys_mean_hd": float(np.mean(same_subj_diff_keys_hd)),
         "same_subject_diff_keys_std_hd": float(np.std(same_subj_diff_keys_hd)),
         "diff_subject_diff_keys_mean_hd": float(np.mean(diff_subj_diff_keys_hd)),
         "diff_subject_same_key_mean_hd": float(np.mean(diff_subj_same_key_hd)),
-        "fnmr_after_revocation_pct": fnmr_revoked * 100.0,
-        "fnmr_restored_new_key_pct": fnmr_restored * 100.0,
+        "fnmr_after_revocation_at_val_eer_pct": fnmr_revoked_at_eer * 100.0,
+        "fnmr_restored_new_key_at_val_eer_pct": fnmr_restored_at_eer * 100.0,
+        "fnmr_after_revocation_at_val_fmr01_pct": fnmr_revoked_at_fmr01 * 100.0,
+        "fnmr_restored_new_key_at_val_fmr01_pct": fnmr_restored_at_fmr01 * 100.0,
     }
 
     # 2. Unlinkability evaluation per ISO/IEC 30136 standard histogram method
-    # Mated scores: same subject with different keys (same_subj_diff_keys_hd)
-    # Non-mated scores: different subjects with different keys (diff_subj_diff_keys_hd)
+    # NOTE: Mated scores MUST use DIFFERENT biological samples under different keys
+    # (e.g. enroll vector under key A vs probe vector under key B) to avoid sample correlation artifact.
+    mated_diff_samples_diff_keys_hd = []
+    for i in range(n_test):
+        for v1 in range(1, 4):
+            state_v1, r_v1 = derive_chaos_parameters(user_master_keys[i], "unlink_diff", v1)
+            t_v1 = chaoshash.transform(test_enroll_q[i], state_v1, r_v1, chosen_m)
+            for v2 in range(v1 + 1, 5):
+                state_v2, r_v2 = derive_chaos_parameters(user_master_keys[i], "unlink_diff", v2)
+                p_q = test_probes_q[i][(v2 - 1) % 3]
+                t_v2 = chaoshash.transform(p_q, state_v2, r_v2, chosen_m)
+                hd = chaoshash.hamming(t_v1, t_v2, chosen_m)
+                mated_diff_samples_diff_keys_hd.append(hd)
+
+    # Non-mated scores: different subjects with different keys and different samples
+    diff_subj_diff_keys_diff_samples_hd = []
+    for _ in range(len(mated_diff_samples_diff_keys_hd) * 4):
+        i = rng.randint(0, n_test)
+        j = rng.randint(0, n_test)
+        while i == j:
+            j = rng.randint(0, n_test)
+        v1 = rng.randint(1, 5)
+        v2 = rng.randint(1, 5)
+        state_v1, r_v1 = derive_chaos_parameters(user_master_keys[i], "unlink_diff", v1)
+        state_v2, r_v2 = derive_chaos_parameters(user_master_keys[j], "unlink_diff", v2)
+        p_q_j = test_probes_q[j][rng.randint(0, 3)]
+        t1 = chaoshash.transform(test_enroll_q[i], state_v1, r_v1, chosen_m)
+        t2 = chaoshash.transform(p_q_j, state_v2, r_v2, chosen_m)
+        diff_subj_diff_keys_diff_samples_hd.append(chaoshash.hamming(t1, t2, chosen_m))
+
     bins_unl = np.linspace(0.30, 0.70, 41)
     bin_centers = 0.5 * (bins_unl[:-1] + bins_unl[1:])
     bin_width = bins_unl[1] - bins_unl[0]
 
-    p_mated, _ = np.histogram(same_subj_diff_keys_hd, bins=bins_unl, density=True)
-    p_non_mated, _ = np.histogram(diff_subj_diff_keys_hd, bins=bins_unl, density=True)
+    p_mated, _ = np.histogram(mated_diff_samples_diff_keys_hd, bins=bins_unl, density=True)
+    p_non_mated, _ = np.histogram(diff_subj_diff_keys_diff_samples_hd, bins=bins_unl, density=True)
 
     # Local linkability D_lr(s)
-    # D_lr(s) = max(0, (p_mated - p_non_mated) / (p_mated + p_non_mated))
     sum_p = p_mated + p_non_mated
     diff_p = p_mated - p_non_mated
     d_lr = np.zeros_like(p_mated)
@@ -671,9 +726,7 @@ def run_revocability_and_unlinkability(
     # Global unlinkability metric D_sys = sum(d_lr(s) * p_mated(s) * bin_width)
     d_sys = float(np.sum(d_lr * p_mated * bin_width))
 
-    # Counterexample: reuse the SAME key across two "systems" (mated same-key scores)
-    # Mated same-key is genuine match (HD ~ 0.15 - 0.25)
-    # Non-mated same-key is Scenario K impostor (HD ~ 0.45 - 0.55)
+    # Counterexample: reuse the SAME key across two "systems" (mated same-key scores on diff samples)
     same_key_mated_hds = []
     for i in range(n_test):
         for pq in test_probes_q[i]:
@@ -690,18 +743,18 @@ def run_revocability_and_unlinkability(
     d_lr_counter[valid_c] = np.maximum(0.0, diff_c[valid_c] / sum_c[valid_c])
     d_sys_counter = float(np.sum(d_lr_counter * p_mated_counter * (bins_counter[1] - bins_counter[0])))
 
-    print("\nUnlinkability Metrics (ISO/IEC 30136):")
+    print("\nUnlinkability Metrics (ISO/IEC 30136, Evaluated with Different Biological Samples):")
     print(f"  Cancelable System (diff keys per system): Global D_sys = {d_sys:.4f} (target << 0.10, ideal = 0.0)")
     print(f"  Counterexample (same key reused):          Global D_sys = {d_sys_counter:.4f} (high linkability ~ 1.0)")
 
     # Plot Unlinkability
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5))
 
-    ax1.plot(bin_centers, p_mated, "r-", label="Mated Instances (same subject, diff keys)", linewidth=2)
-    ax1.plot(bin_centers, p_non_mated, "b--", label="Non-Mated Instances (diff subjects, diff keys)", linewidth=2)
+    ax1.plot(bin_centers, p_mated, "r-", label="Mated Instances (same subject, diff keys & samples)", linewidth=2)
+    ax1.plot(bin_centers, p_non_mated, "b--", label="Non-Mated Instances (diff subjects, diff keys & samples)", linewidth=2)
     ax1.set_xlabel("Normalized Hamming Distance", fontsize=11)
     ax1.set_ylabel("Probability Density", fontsize=11)
-    ax1.set_title("ISO/IEC 30136 Score Distributions", fontsize=12)
+    ax1.set_title("ISO/IEC 30136 Score Distributions (Different Samples)", fontsize=12)
     ax1.legend(fontsize=10)
     ax1.grid(True, alpha=0.3)
 
@@ -1104,8 +1157,8 @@ def main() -> None:
         results_dir,
     )
 
-    # Paired Bootstrap: Scenario K vs S3 Unprotected
-    diff_mean, ci_lower, ci_upper, excludes_zero = compute_paired_bootstrap_scenario_k_vs_s3(
+    # Paired Bootstrap: Scenario K vs S3 Unprotected (EER, FNMR@1%, FNMR@0.1%)
+    boot_res = compute_paired_bootstrap_scenario_k_vs_s3(
         fused_data,
         test_indices,
         test_dbs,
@@ -1176,11 +1229,24 @@ def main() -> None:
             "std_rank1_pct": scenario_k_results["std_rank1_pct"],
             "per_db": scenario_k_results["per_db"],
             "paired_bootstrap_vs_s3": {
-                "diff_mean_pct": diff_mean * 100.0,
-                "ci_lower_pct": ci_lower * 100.0,
-                "ci_upper_pct": ci_upper * 100.0,
-                "excludes_zero": excludes_zero,
-                "interpretation": "CI includes 0" if not excludes_zero else "CI excludes 0",
+                "delta_eer": {
+                    "diff_mean_pct": boot_res["eer"]["diff_mean"] * 100.0,
+                    "ci_lower_pct": boot_res["eer"]["ci_lower"] * 100.0,
+                    "ci_upper_pct": boot_res["eer"]["ci_upper"] * 100.0,
+                    "excludes_zero": boot_res["eer"]["excludes_zero"],
+                },
+                "delta_fnmr_at_1pct_fmr": {
+                    "diff_mean_pct": boot_res["fnmr_1pct"]["diff_mean"] * 100.0,
+                    "ci_lower_pct": boot_res["fnmr_1pct"]["ci_lower"] * 100.0,
+                    "ci_upper_pct": boot_res["fnmr_1pct"]["ci_upper"] * 100.0,
+                    "excludes_zero": boot_res["fnmr_1pct"]["excludes_zero"],
+                },
+                "delta_fnmr_at_01pct_fmr": {
+                    "diff_mean_pct": boot_res["fnmr_01pct"]["diff_mean"] * 100.0,
+                    "ci_lower_pct": boot_res["fnmr_01pct"]["ci_lower"] * 100.0,
+                    "ci_upper_pct": boot_res["fnmr_01pct"]["ci_upper"] * 100.0,
+                    "excludes_zero": boot_res["fnmr_01pct"]["excludes_zero"],
+                },
             },
         },
         "scenario_u": scenario_u_results,
@@ -1220,26 +1286,31 @@ def main() -> None:
 | **S1** | Face Only | Unprotected | {s1_eer:.2f}% (95% CI [1.11, 3.60]) | {unprot['systems']['S1_face']['pooled']['fnmr_at_fmr_1_percent']:.2f}% | {unprot['systems']['S1_face']['pooled']['fnmr_at_fmr_01_percent']:.2f}% | {unprot['systems']['S1_face']['pooled']['d_prime']:.2f} | {s1_r1:.2f}% |
 | **S2** | Fingerprint Only | Unprotected | {s2_eer:.2f}% (95% CI [4.72, 7.15]) | {unprot['systems']['S2_finger']['pooled']['fnmr_at_fmr_1_percent']:.2f}% | {unprot['systems']['S2_finger']['pooled']['fnmr_at_fmr_01_percent']:.2f}% | {unprot['systems']['S2_finger']['pooled']['d_prime']:.2f} | {s2_r1:.2f}% |
 | **S3** | Multimodal Fused ($w=0.60$) | Unprotected | {s3_eer:.2f}% (95% CI [0.29, 1.66]) | {unprot['systems']['S3_fused']['pooled']['fnmr_at_fmr_1_percent']:.2f}% | {unprot['systems']['S3_fused']['pooled']['fnmr_at_fmr_01_percent']:.2f}% | {unprot['systems']['S3_fused']['pooled']['d_prime']:.2f} | {s3_r1:.2f}% |
-| **Scenario K** | Multimodal Fused ($w=0.60, m={chosen_m}$) | **Known Key** (Worst-Case, Headline) | **{k_eer_str}** | **{scenario_k_results['mean_fnmr_at_1pct_fmr_pct']:.2f}% +/- {scenario_k_results['std_fnmr_at_1pct_fmr_pct']:.2f}%** | **{scenario_k_results['mean_fnmr_at_01pct_fmr_pct']:.2f}% +/- {scenario_k_results['std_fnmr_at_01pct_fmr_pct']:.2f}%** | **{scenario_k_results['mean_d_prime']:.2f}** | **{k_r1_str}** |
-| **Scenario U** | Multimodal Fused ($w=0.60, m={chosen_m}$) | Unique Key per User | {u_eer_str} | 0.00%* | 0.00%* | 7.92* | {u_r1_str} |
+| **Scenario K** | Multimodal Fused ($w=0.60, m={chosen_m}$) | **claimed-identity key (operational; equals stolen-key case)** | **{k_eer_str}** | **{scenario_k_results['mean_fnmr_at_1pct_fmr_pct']:.2f}% +/- {scenario_k_results['std_fnmr_at_1pct_fmr_pct']:.2f}%** | **{scenario_k_results['mean_fnmr_at_01pct_fmr_pct']:.2f}% +/- {scenario_k_results['std_fnmr_at_01pct_fmr_pct']:.2f}%** | **{scenario_k_results['mean_d_prime']:.2f}** | **{k_r1_str}** |
+| **Scenario U** | Multimodal Fused ($w=0.60, m={chosen_m}$) | **attacker presents own key/token (best case)** | {u_eer_str} | 0.00%* | 0.00%* | 7.92* | {u_r1_str} |
 
-\\* *Note on Scenario U: Measures cryptographic separation when each subject holds an independent secret key; cross-key impostor pairs yield random Hamming distance (~0.50). This demonstrates perfect key-space isolation but is NOT a measure of biometric recognition accuracy.*
+\\* *Note on Scenario U: Measures key separation when each subject holds an independent secret key; cross-key impostor pairs yield random Hamming distance (~0.50). This demonstrates perfect key separation but is NOT a measure of biometric recognition accuracy.*
 
 ## Key Findings & Performance Preservation vs S3
 
-1. **Performance Preservation**:
+1. **Performance Preservation & Paired Bootstrap CIs (1,000 subject-level resamples)**:
    - Scenario K EER: **{scenario_k_results['mean_eer_pct']:.2f}% +/- {scenario_k_results['std_eer_pct']:.2f}%** compared to unprotected S3 EER of **{s3_eer:.2f}%**.
-   - Paired bootstrap $\\Delta\\text{{EER}} = \\text{{EER}}_K - \\text{{EER}}_{{S3}} = {diff_mean*100:+.3f}\\%$ (95% CI [{ci_lower*100:+.3f}%, {ci_upper*100:+.3f}%]).
-   - Excludes zero? **{excludes_zero}**. {'The degradation is statistically indistinguishable from zero performance loss.' if not excludes_zero else 'Modest statistically detectable change.'}
-   - Genuine trial resolution: 120 test subjects $\\times 3$ probes = 360 genuine trials (discrete resolution $1/360 = 0.28\\%$).
+   - $\\Delta\\text{{EER}} (K - S3) = {boot_res['eer']['diff_mean']*100:+.3f}\\%$ (95% CI [{boot_res['eer']['ci_lower']*100:+.3f}%, {boot_res['eer']['ci_upper']*100:+.3f}%], excludes 0: **{boot_res['eer']['excludes_zero']}**).
+   - $\\Delta\\text{{FNMR@1\\%}} (K - S3) = {boot_res['fnmr_1pct']['diff_mean']*100:+.3f}\\%$ (95% CI [{boot_res['fnmr_1pct']['ci_lower']*100:+.3f}%, {boot_res['fnmr_1pct']['ci_upper']*100:+.3f}%], excludes 0: **{boot_res['fnmr_1pct']['excludes_zero']}**).
+   - $\\Delta\\text{{FNMR@0.1\\%}} (K - S3) = {boot_res['fnmr_01pct']['diff_mean']*100:+.3f}\\%$ (95% CI [{boot_res['fnmr_01pct']['ci_lower']*100:+.3f}%, {boot_res['fnmr_01pct']['ci_upper']*100:+.3f}%], excludes 0: **{boot_res['fnmr_01pct']['excludes_zero']}**).
+   - Genuine trial resolution: 120 test subjects $\\times 3$ probes = 360 genuine trials (discrete step size $1/360 = 0.28\\%$).
 
 2. **Revocability (ISO/IEC 30136)**:
-   - Genuine probes matched against template enrolled under revoked key: **FNMR = {revoc_results['fnmr_after_revocation_pct']:.2f}%** (100% rejection at operating threshold $\\tau={revoc_results['operational_threshold']:.3f}$).
-   - Re-enrollment with new key version: accuracy completely restored (FNMR = {revoc_results['fnmr_restored_new_key_pct']:.2f}%).
+   - Operating thresholds derived strictly from 30 VALIDATION subjects under Scenario K:
+     - Validation Scenario K EER threshold: $\\tau = {revoc_results['operational_threshold_val_eer']:.4f}$ (similarity 0.6496).
+     - Validation Scenario K FMR=0.1% threshold: $\\tau = {revoc_results['operational_threshold_val_fmr01']:.4f}$ (similarity 0.6990).
+   - FNMR with revoked key against enrolled template: **{revoc_results['fnmr_after_revocation_at_val_eer_pct']:.2f}%** at Val EER threshold and **{revoc_results['fnmr_after_revocation_at_val_fmr01_pct']:.2f}%** at Val FMR=0.1% threshold (100.00% rejection in both cases).
+   - Re-enrollment with new key version completely restores genuine recognition (FNMR = {revoc_results['fnmr_restored_new_key_at_val_eer_pct']:.2f}% at $\\tau={revoc_results['operational_threshold_val_eer']:.4f}$).
 
 3. **Unlinkability (ISO/IEC 30136)**:
-   - Cancelable multi-system unlinkability: **$D_\\leftrightarrow^{{sys}} = {unl_results['global_d_sys_cancelable']:.4f}$** (well below the ISO/IEC threshold of 0.10, indicating full unlinkability).
-   - Counterexample (reusing same key across two systems): **$D_\\leftrightarrow^{{sys}} = {unl_results['global_d_sys_reused_key_counterexample']:.4f}$** (proves that linkability is strictly controlled by key uniqueness).
+   - Evaluated using **DIFFERENT biological samples** ($e_i$ under key 1 vs $p_{{i, k}}$ under key 2) to eliminate within-sample correlation artifacts.
+   - Cancelable multi-system unlinkability: **$D_\\leftrightarrow^{{sys}} = {unl_results['global_d_sys_cancelable']:.4f}$** (well below the ISO/IEC 30136 benchmark threshold of 0.10, indicating unlinkability against a score-based adversary WITHOUT key access).
+   - Counterexample (reusing same key across two systems): **$D_\\leftrightarrow^{{sys}} = {unl_results['global_d_sys_reused_key_counterexample']:.4f}$** (demonstrates that linkability is strictly controlled by key uniqueness).
 """
     with open(summary_md_path, "w", encoding="utf-8") as f:
         f.write(summary_md)

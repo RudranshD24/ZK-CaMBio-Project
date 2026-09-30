@@ -1,0 +1,261 @@
+{
+  "phase": 6,
+  "protocol": "D-015",
+  "random_baseline": {
+    "s3_fused": {
+      "fmr_1pct": 0.0,
+      "fmr_01pct": 0.0
+    },
+    "face_only": {
+      "fmr_1pct": 0.0,
+      "fmr_01pct": 0.0
+    },
+    "finger_only": {
+      "fmr_1pct": 0.0,
+      "fmr_01pct": 0.0
+    }
+  },
+  "threat_a2_by_m": {
+    "64": {
+      "m": 64,
+      "best_attack": "Atk-4 (Small MLP)",
+      "cosine_mean": 0.634365439414978,
+      "cosine_std": 0.07647579908370972,
+      "attacks": {
+        "atk1_backproject": {
+          "mean": 0.22057317197322845,
+          "std": 0.021900730207562447
+        },
+        "atk2_ridge": {
+          "mean": 0.6228743055944415,
+          "std": 0.06036448148558453
+        },
+        "atk3_prior_regularized": {
+          "mean": 0.5703818202018738,
+          "std": 0.05629223585128784
+        },
+        "atk4_mlp": {
+          "mean": 0.634365439414978,
+          "std": 0.07647579908370972
+        }
+      },
+      "replay_success": {
+        "s3_fused": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 95.83333333333334
+        },
+        "face_only": {
+          "fmr_1pct": 93.33333333333333,
+          "fmr_01pct": 61.66666666666667
+        },
+        "finger_only": {
+          "fmr_1pct": 57.49999999999999,
+          "fmr_01pct": 18.333333333333332
+        }
+      }
+    },
+    "128": {
+      "m": 128,
+      "best_attack": "Atk-2 (Ridge Decoder)",
+      "cosine_mean": 0.7762848086026924,
+      "cosine_std": 0.03969237247859301,
+      "attacks": {
+        "atk1_backproject": {
+          "mean": 0.31140950322151184,
+          "std": 0.01909833960235119
+        },
+        "atk2_ridge": {
+          "mean": 0.7762848086026924,
+          "std": 0.03969237247859301
+        },
+        "atk3_prior_regularized": {
+          "mean": 0.7302646040916443,
+          "std": 0.04352349415421486
+        },
+        "atk4_mlp": {
+          "mean": 0.774640679359436,
+          "std": 0.04893185943365097
+        }
+      },
+      "replay_success": {
+        "s3_fused": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        },
+        "face_only": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        },
+        "finger_only": {
+          "fmr_1pct": 86.66666666666667,
+          "fmr_01pct": 41.66666666666667
+        }
+      }
+    },
+    "256": {
+      "m": 256,
+      "best_attack": "Atk-2 (Ridge Decoder)",
+      "cosine_mean": 0.8744741261569597,
+      "cosine_std": 0.02158977745376325,
+      "attacks": {
+        "atk1_backproject": {
+          "mean": 0.4217611253261566,
+          "std": 0.018503855913877487
+        },
+        "atk2_ridge": {
+          "mean": 0.8744741261569597,
+          "std": 0.02158977745376325
+        },
+        "atk3_prior_regularized": {
+          "mean": 0.8556477427482605,
+          "std": 0.02337556891143322
+        },
+        "atk4_mlp": {
+          "mean": 0.8655124306678772,
+          "std": 0.026149366050958633
+        }
+      },
+      "replay_success": {
+        "s3_fused": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        },
+        "face_only": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        },
+        "finger_only": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 95.83333333333334
+        }
+      }
+    },
+    "512": {
+      "m": 512,
+      "best_attack": "Atk-2 (Ridge Decoder)",
+      "cosine_mean": 0.9334609087359986,
+      "cosine_std": 0.011495305425473798,
+      "attacks": {
+        "atk1_backproject": {
+          "mean": 0.5519352555274963,
+          "std": 0.015928801149129868
+        },
+        "atk2_ridge": {
+          "mean": 0.9334609087359986,
+          "std": 0.011495305425473798
+        },
+        "atk3_prior_regularized": {
+          "mean": 0.9272587895393372,
+          "std": 0.01351059041917324
+        },
+        "atk4_mlp": {
+          "mean": 0.917537271976471,
+          "std": 0.014450926333665848
+        }
+      },
+      "replay_success": {
+        "s3_fused": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        },
+        "face_only": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        },
+        "finger_only": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        }
+      }
+    },
+    "768": {
+      "m": 768,
+      "best_attack": "Atk-2 (Ridge Decoder)",
+      "cosine_mean": 0.9522238922712561,
+      "cosine_std": 0.007797887328354156,
+      "attacks": {
+        "atk1_backproject": {
+          "mean": 0.6257884502410889,
+          "std": 0.014286873862147331
+        },
+        "atk2_ridge": {
+          "mean": 0.9522238922712561,
+          "std": 0.007797887328354156
+        },
+        "atk3_prior_regularized": {
+          "mean": 0.9489087462425232,
+          "std": 0.010141437873244286
+        },
+        "atk4_mlp": {
+          "mean": 0.9334884285926819,
+          "std": 0.011942555196583271
+        }
+      },
+      "replay_success": {
+        "s3_fused": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        },
+        "face_only": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        },
+        "finger_only": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        }
+      }
+    },
+    "1024": {
+      "m": 1024,
+      "best_attack": "Atk-2 (Ridge Decoder)",
+      "cosine_mean": 0.9613983047976693,
+      "cosine_std": 0.006284291685851872,
+      "attacks": {
+        "atk1_backproject": {
+          "mean": 0.677608847618103,
+          "std": 0.012693322263658047
+        },
+        "atk2_ridge": {
+          "mean": 0.9613983047976693,
+          "std": 0.006284291685851872
+        },
+        "atk3_prior_regularized": {
+          "mean": 0.9580814838409424,
+          "std": 0.008941578678786755
+        },
+        "atk4_mlp": {
+          "mean": 0.9398697018623352,
+          "std": 0.011573084630072117
+        }
+      },
+      "replay_success": {
+        "s3_fused": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        },
+        "face_only": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        },
+        "finger_only": {
+          "fmr_1pct": 100.0,
+          "fmr_01pct": 100.0
+        }
+      }
+    }
+  },
+  "threat_a3_linkage": {
+    "m": 512,
+    "roc_auc": 0.9980231481481481,
+    "eer_pct": 1.633333333333336,
+    "d_sys_with_keys_known": 0.9648518802742767,
+    "d_sys_score_only_phase5": 0.0245,
+    "conclusion": "Unlinkability collapses when keys are compromised (D_sys jumps from 0.0245 to 0.9649)."
+  },
+  "threat_a1_template_only": {
+    "effective_keyspace_bits": 126,
+    "measured_transform_time_sec": 0.00522,
+    "distinguisher_classifier_auc": 0.4767
+  }
+}

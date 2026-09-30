@@ -1,6 +1,28 @@
 # CHANGELOG.md
 Format: `## [phase-N] YYYY-MM-DD` then bullets Added / Changed / Fixed.
 
+## [phase-6] 2026-09-30
+- Phase 5 Follow-Ups Completed:
+  - Wording updated across evaluation documentation: replaced "cryptographic isolation" with "key separation"; qualified "full unlinkability" as "unlinkable against a score-based adversary WITHOUT key access"; renamed Scenario K as "claimed-identity key (operational; equals stolen-key case)" and Scenario U as "attacker presents own key/token (best case)".
+  - Grounded operating thresholds strictly on 30 validation subjects: $\tau_{oper, eer} = 0.3504$ and $\tau_{oper, 0.1\%} = 0.3010$, achieving 100.00% rejection on revoked keys under both thresholds.
+  - Re-evaluated unlinkability with cross-sample pairs ($e_i$ under key 1 vs $p_{i, k}$ under key 2) confirming score-only $D_\leftrightarrow^{sys} = 0.0245 \ll 0.10$.
+  - Reported paired bootstrap CIs (1,000 resamples, seed 42) for $\Delta\text{FNMR@1\%} = +0.276\%$ (95% CI $[-0.333\%, +1.167\%]$, excludes 0: False) and $\Delta\text{FNMR@0.1\%} = +1.311\%$ (95% CI $[+0.333\%, +2.722\%]$, excludes 0: True).
+  - Extended Hamming-vs-angle plot to include genuine pairs down to $\theta/\pi \sim 0.15$ (slope=1.0084, intercept=-0.0040, $r=0.9849$, $\text{MAE}=0.0170$).
+- Phase 6 Security & Non-Invertibility Evaluations (Protocol D-015):
+  - Strict attacker training data isolation: 180 TRAIN subjects only (1440 face & 1440 finger per-image embeddings paired into 10,000 synthetic fused vectors); verified zero test-subject leakage in unit tests.
+  - Verified Atk-1 back-projection sanity test on Gaussian unit vectors against theoretical formula $\frac{\sqrt{2/\pi} m}{\sqrt{(2/\pi)m^2 + dm}}$ within 0.0006 ($\le 0.03$).
+  - Implemented and evaluated inversion attack suite across $m \in \{64, 128, 256, 512, 768, 1024\}$ on 120 test victims under threat case A2 (key known):
+    - Linear decodability (Atk-2 Ridge regression) achieves $\cos(\hat{x}, x) = 0.9335 \pm 0.0115$ at $m=512$ ($0.6344$ at $m=64$, $0.7763$ at $m=128$, $0.8745$ at $m=256$, $0.9522$ at $m=768$, $0.9614$ at $m=1024$).
+    - Replay success against unprotected S3 matcher: 100.0% at $m=512$ under both FMR=1.0% and FMR=0.1% pre-fixed validation thresholds (vs 0.0% for random Gaussian baseline).
+    - Single-modality replay success at $m=512$: 100.0% vs face-only, 100.0% vs finger-only.
+  - Evaluated threat case A3 (linkage attack with both keys known):
+    - Linkage ROC AUC = 0.9980, EER = 1.63%, and ISO/IEC 30136 $D_\leftrightarrow^{sys} = 0.9649$ (surging from score-only $0.0245$). Disclosed that unlinkability does NOT survive key compromise.
+  - Evaluated threat case A1 (template-only, key unknown):
+    - Key-space accounting: 256-bit master key $\to 2^{126}$ operations ($> 10^{22}$ GPU-years).
+    - Template distinguisher classifier on subject A vs subject B under random keys achieves 5-fold CV AUC of 0.4767 (chance level ~0.50), proving zero identity leakage without the key.
+  - Generated privacy-utility trade-off curve `results/privacy_utility_tradeoff.png`, `results/security_eval.json`, and `results/security_summary.md`.
+  - Added "What non-invertibility means here" section and Phase 7 key-store separation / 2FA mitigations to `docs/SECURITY_THREAT_MODEL.md`.
+
 ## [phase-5] 2026-09-30
 - Phase 4 Follow-Ups & Sanity Checks:
   - Computed Hamming-vs-angle linear regression and MAE on centered vectors $\tilde{u} = u - \mu$: slope=1.0219, intercept=-0.0109, $r=0.8789$, MAE=0.0176 for $m=512$; slope=1.0197, intercept=-0.0101, $r=0.9127$, MAE=0.0144 for $m=768$. Regenerated `results/chaos_hd_vs_angle.png`.
