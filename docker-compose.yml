@@ -51,6 +51,7 @@ services:
       DEV_MODE: ${DEV_MODE:-true}
       PYTHONPATH: /app
     volumes:
+      - ./src:/app/src:ro
       - ./data/processed:/app/data/processed:ro
       - ./results:/app/results:ro
       - ./dataset:/app/dataset:ro

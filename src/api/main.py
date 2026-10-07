@@ -559,6 +559,8 @@ async def identify(
                 username=user_rec.username,
                 key_mode="server_key",
                 key_version=tmpl_rec.key_version,
+                user_id=str(user_rec.id),
+                user_kdf_salt=user_rec.kdf_salt,
             )
             probe_template = service.generate_cancelable_template(probe_fused, state, r_param)
             hd = service.compute_hamming_distance(tmpl_rec.template, probe_template)

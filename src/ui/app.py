@@ -293,7 +293,7 @@ if page == "Enroll":
                 for i, fb in enumerate(face_bytes_list[:5]):
                     files.append(("face_images", (f"face_{i}.jpg", fb, "image/jpeg")))
                 for i, finb in enumerate(finger_bytes_list[:5]):
-                    files.append(("fingerprint_images", (f"finger_{i}.tif", finb, "image/tiff")))
+                    files.append(("finger_images", (f"finger_{i}.tif", finb, "image/tiff")))
 
                 data = {"username": username, "key_mode": key_mode}
                 if key_mode == "user_secret":
@@ -438,7 +438,7 @@ elif page == "Verify (1:1)":
             with st.spinner("Authenticating probe..."):
                 files = [
                     ("face_image", ("probe_face.jpg", probe_face, "image/jpeg")),
-                    ("fingerprint_image", ("probe_finger.tif", probe_finger, "image/tiff")),
+                    ("finger_image", ("probe_finger.tif", probe_finger, "image/tiff")),
                 ]
                 data = {"username": v_username}
                 if v_secret:
@@ -513,6 +513,36 @@ elif page == "Identify (1:N)":
         unsafe_allow_html=True,
     )
 
+    with st.expander("🛠️ Gallery Status & Demo Seeding", expanded=False):
+        st.write(
+            "1:N search operates against enrolled accounts in **`server_key`** mode. "
+            "If your gallery is currently empty or you want to populate it with test subjects, click below."
+        )
+        if st.button("📥 Pre-populate Gallery (Enroll 5 Test Subjects in server_key mode)"):
+            if not demo_manifest:
+                st.error("Demo manifest not found.")
+            else:
+                with st.spinner("Enrolling 5 demo subjects into server_key gallery..."):
+                    enrolled_count = 0
+                    for sub in demo_manifest[:5]:
+                        s_id = sub["subject_id"]
+                        u_name = f"demo_gallery_{s_id}"
+                        f_files = [("face_images", (f"f_{idx}.jpg", read_file_bytes(fp), "image/jpeg")) for idx, fp in enumerate(sub["face_enroll_files"][:5])]
+                        g_files = [("finger_images", (f"g_{idx}.tif", read_file_bytes(gp), "image/tiff")) for idx, gp in enumerate(sub["finger_enroll_files"][:5])]
+                        try:
+                            s_resp = requests.post(
+                                f"{API_URL}/enroll",
+                                headers=get_headers(),
+                                data={"username": u_name, "key_mode": "server_key"},
+                                files=f_files + g_files,
+                                timeout=20,
+                            )
+                            if s_resp.status_code == 200:
+                                enrolled_count += 1
+                        except Exception:
+                            pass
+                    st.success(f"Gallery updated: enrolled {enrolled_count} demo subject(s) in server_key mode.")
+
     icol1, icol2 = st.columns([1, 1])
     with icol1:
         st.subheader("Probe Selection")
@@ -557,13 +587,13 @@ elif page == "Identify (1:N)":
             with st.spinner("Searching gallery templates across server_key accounts..."):
                 files = [
                     ("face_image", ("probe_face.jpg", id_probe_face, "image/jpeg")),
-                    ("fingerprint_image", ("probe_finger.tif", id_probe_finger, "image/tiff")),
+                    ("finger_image", ("probe_finger.tif", id_probe_finger, "image/tiff")),
                 ]
                 try:
                     resp = requests.post(
                         f"{API_URL}/identify",
                         headers=get_headers(),
-                        params={"top_k": top_k},
+                        data={"top_k": top_k},
                         files=files,
                         timeout=20,
                     )
@@ -572,9 +602,24 @@ elif page == "Identify (1:N)":
                         candidates = res.get("candidates", [])
                         st.subheader(f"Candidates Found ({len(candidates)})")
                         if candidates:
+                            top_cand = candidates[0]
+                            if top_cand.get("match"):
+                                st.markdown(
+                                    f'<div class="match-badge">🎯 MATCH IDENTIFIED: {top_cand["username"]} (Rank 1)</div>',
+                                    unsafe_allow_html=True,
+                                )
+                            else:
+                                st.markdown(
+                                    '<div class="no-match-badge">❌ NO GALLERY MATCH</div>',
+                                    unsafe_allow_html=True,
+                                )
                             st.table(candidates)
                         else:
-                            st.warning("No matching server_key accounts found in the database.")
+                            st.warning("⚠️ **No matching server_key accounts found in the database.**")
+                            st.info(
+                                "ℹ️ 1:N Identification requires enrolled accounts in `server_key` mode. "
+                                "Expand '🛠️ Gallery Status & Demo Seeding' above to seed demo subjects."
+                            )
                     else:
                         st.error(f"Identification failed (Status {resp.status_code}): {resp.text}")
                 except Exception as ex:
@@ -638,7 +683,7 @@ elif page == "Revoke":
             with st.spinner("Submitting probe against revoked account..."):
                 files = [
                     ("face_image", ("f.jpg", p_face, "image/jpeg")),
-                    ("fingerprint_image", ("fin.tif", p_fin, "image/tiff")),
+                    ("finger_image", ("fin.tif", p_fin, "image/tiff")),
                 ]
                 try:
                     r_verify = requests.post(

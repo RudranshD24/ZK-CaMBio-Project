@@ -59,6 +59,7 @@ cpp/out/
 Thumbs.db
 desktop.ini
 .DS_Store
+~$*
 
 # === Docker ===
 docker/*.log
